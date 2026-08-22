@@ -16,10 +16,11 @@
     theme: {
       extend: {
         colors: {
-          mustard: '#F5B914',
-          mustardDark: '#E2A300',
-          cream: '#FBF6EA',
-          ink: '#181712',
+          mustard: '#F4C430',
+          mustardDark: '#E6B800',
+          cream: '#F7F4EB',
+          ink: '#1A1A1A',
+          muted: '#7A7A7A',
           low: '#D6432E',
           ok: '#3E8B5C',
         },
@@ -32,7 +33,8 @@
   }
 </script>
 <style>
-  html,body{ background:#F4F3EF; font-family:'Inter',sans-serif; }
+  html,body{ background:#F7F4EB; font-family:'Inter',sans-serif; }
+  ::selection{ background:#F4C430; color:#1A1A1A; }
   ::-webkit-scrollbar{ width:8px; height:8px; }
   ::-webkit-scrollbar-thumb{ background:#DCD9CE; border-radius:8px; }
 </style>
@@ -108,7 +110,7 @@ const INITIAL_INVENTORY = [
     notes: "Revisar costuras de la lona beige antes de cada evento — tiene un remiendo en la esquina NE.",
   },
   {
-    id: 2, name: "Mesa plegable", stock: 2, location: "Sin ubicar", low: true, condition: "Disponible",
+    id: 2, name: "Mesa plegable", stock: 2, location: "Sin ubicar", low: true, lowSince: "18 sept · 09:40", condition: "Disponible",
     illustration: "table", status: "Borrador",
     description: "Mesa redonda plegable de 1.80 m con mantel blanco incluido, capacidad para 10 personas.",
     price: 12000, compareAtPrice: null, rentalPricePerDay: 4000, cost: 6500,
@@ -161,7 +163,7 @@ const INITIAL_INVENTORY = [
     notes: "2 focos en reparación por parpadeo — taller AudioMax, vuelven el 25/09.",
   },
   {
-    id: 5, name: "Tarima modular", stock: 1, location: "Depósito · Z1", low: true, condition: "Dañado",
+    id: 5, name: "Tarima modular", stock: 1, location: "Depósito · Z1", low: true, lowSince: "17 sept · 16:05", condition: "Dañado",
     illustration: "stage", status: "Activo",
     description: "Módulos de tarima de 1x1 m, altura ajustable, superficie antideslizante. Se combinan para armar escenarios a medida.",
     price: 9000, compareAtPrice: null, rentalPricePerDay: 3000, cost: 5000,
@@ -407,7 +409,7 @@ const LoginView = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F3EF] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F7F4EB] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-6">
           <img src={LOGO} alt="Quick Sale" className="w-14 h-14 object-contain mb-2" />
@@ -418,12 +420,12 @@ const LoginView = ({ onLogin }) => {
             <Field label="Tu nombre"><input value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder="Ej. Ana Llorente" /></Field>
             <Field label="Contraseña"><input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className={inputCls} placeholder="••••••••" /></Field>
             <div>
-              <label className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-1.5 block">Rol</label>
+              <label className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-1.5 block">Rol</label>
               <div className="flex flex-col gap-2">
                 {ROLES.map((r) => (
-                  <button type="button" key={r.id} onClick={() => setRole(r.id)} className={`text-left p-3 rounded-lg border ${role === r.id ? "bg-mustard/15 border-ink" : "border-black/10 hover:bg-black/[0.02]"}`}>
+                  <button type="button" key={r.id} onClick={() => setRole(r.id)} className={`text-left p-3 rounded-xl border ${role === r.id ? "bg-mustard/15 border-ink" : "border-black/10 hover:bg-black/[0.02]"}`}>
                     <div className="font-body text-sm font-semibold text-ink">{r.label}</div>
-                    <div className="font-body text-[11px] text-ink/45 mt-0.5">{r.desc}</div>
+                    <div className="font-body text-[11px] text-muted mt-0.5">{r.desc}</div>
                   </button>
                 ))}
               </div>
@@ -469,7 +471,7 @@ const CHANNEL_SUB = ["Catálogo", "Paquetes", "Páginas", "Checkout"];
 const NavItem = ({ active, onClick, Icon, children, badge }) => (
   <button
     onClick={onClick}
-    className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left mb-0.5 font-body text-sm
+    className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left mb-0.5 font-body text-sm
       ${active ? "bg-mustard/20 text-ink font-semibold" : "text-ink/65 hover:bg-black/[0.04]"}`}
   >
     <Icon className="w-[17px] h-[17px]" />
@@ -510,7 +512,7 @@ const Sidebar = ({ active, onChange, published, onTogglePublish, flash, allowed,
             <div className="flex items-center gap-2 cursor-pointer">
               <img src={LOGO} alt="Quick Sale" className="w-8 h-8 flex-shrink-0 object-contain" />
               <span className="font-display font-bold text-sm text-ink">Quick Sale</span>
-              <IChevronDown className="w-3.5 h-3.5 text-ink/40 ml-auto" />
+              <IChevronDown className="w-3.5 h-3.5 text-muted ml-auto" />
             </div>
           }
         >
@@ -518,7 +520,7 @@ const Sidebar = ({ active, onChange, published, onTogglePublish, flash, allowed,
           <DropdownItem onClick={() => { flash("Solo hay una tienda en esta demo"); setStoreMenu(false); }}>Cambiar de tienda</DropdownItem>
         </Dropdown>
         </div>
-        <button onClick={closeMobile} className="md:hidden p-1 text-ink/40 hover:text-ink flex-shrink-0" aria-label="Cerrar menú">
+        <button onClick={closeMobile} className="md:hidden p-1 text-muted hover:text-ink flex-shrink-0" aria-label="Cerrar menú">
           <IX className="w-4 h-4" />
         </button>
       </div>
@@ -530,7 +532,7 @@ const Sidebar = ({ active, onChange, published, onTogglePublish, flash, allowed,
 
         {productChildrenVisible.length > 0 && (
           <>
-            <div className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg font-body text-sm mb-0.5 ${productsActive ? "bg-mustard/20 text-ink font-semibold" : "text-ink/65 hover:bg-black/[0.04]"}`}>
+            <div className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl font-body text-sm mb-0.5 ${productsActive ? "bg-mustard/20 text-ink font-semibold" : "text-ink/65 hover:bg-black/[0.04]"}`}>
               <button onClick={() => setProductsOpen((s) => !s)} className="flex items-center gap-2.5 flex-1 text-left">
                 <IBox className="w-[17px] h-[17px]" />
                 <span onClick={(e) => { e.stopPropagation(); handleChange(productChildrenVisible[0].key); }}>Productos</span>
@@ -543,7 +545,7 @@ const Sidebar = ({ active, onChange, published, onTogglePublish, flash, allowed,
             {productsOpen && (
               <div className="ml-6 mb-1 flex flex-col">
                 {productChildrenVisible.map((c) => (
-                  <button key={c.key} onClick={() => handleChange(c.key)} className={`text-left px-2.5 py-1.5 rounded-lg font-body text-sm ${active === c.key ? "text-ink font-semibold" : "text-ink/55 hover:bg-black/[0.04]"}`}>
+                  <button key={c.key} onClick={() => handleChange(c.key)} className={`text-left px-2.5 py-1.5 rounded-xl font-body text-sm ${active === c.key ? "text-ink font-semibold" : "text-ink/55 hover:bg-black/[0.04]"}`}>
                     {c.label}
                   </button>
                 ))}
@@ -561,7 +563,7 @@ const Sidebar = ({ active, onChange, published, onTogglePublish, flash, allowed,
             <div className="mt-4 mb-1 px-2.5 flex items-center justify-between">
               <span className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/35">Canales de venta</span>
             </div>
-            <div className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg font-body text-sm ${active === "tienda" ? "bg-mustard/20 text-ink font-semibold" : "text-ink/65 hover:bg-black/[0.04]"}`}>
+            <div className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl font-body text-sm ${active === "tienda" ? "bg-mustard/20 text-ink font-semibold" : "text-ink/65 hover:bg-black/[0.04]"}`}>
               <button onClick={() => setChannelOpen((s) => !s)} className="flex items-center gap-2.5 flex-1 text-left">
                 <IStore className="w-[17px] h-[17px]" />
                 <span onClick={(e) => { e.stopPropagation(); handleChange("tienda"); }}>Tienda online</span>
@@ -577,7 +579,7 @@ const Sidebar = ({ active, onChange, published, onTogglePublish, flash, allowed,
         {channelOpen && (
           <div className="ml-6 mt-0.5 flex flex-col">
             {CHANNEL_SUB.map((s) => (
-              <button key={s} onClick={() => handleChange("tienda")} className="text-left px-2.5 py-1.5 rounded-lg font-body text-sm text-ink/55 hover:bg-black/[0.04]">
+              <button key={s} onClick={() => handleChange("tienda")} className="text-left px-2.5 py-1.5 rounded-xl font-body text-sm text-ink/55 hover:bg-black/[0.04]">
                 {s}
               </button>
             ))}
@@ -587,7 +589,7 @@ const Sidebar = ({ active, onChange, published, onTogglePublish, flash, allowed,
         )}
       </nav>
 
-      <button onClick={() => handleChange("configuracion")} className={`mx-2 mb-3 flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left font-body text-sm ${active === "configuracion" ? "bg-mustard/20 text-ink font-semibold" : "text-ink/65 hover:bg-black/[0.04]"}`}>
+      <button onClick={() => handleChange("configuracion")} className={`mx-2 mb-3 flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left font-body text-sm ${active === "configuracion" ? "bg-mustard/20 text-ink font-semibold" : "text-ink/65 hover:bg-black/[0.04]"}`}>
         <ISettings className="w-[17px] h-[17px]" /> Configuración
       </button>
     </aside>
@@ -600,6 +602,9 @@ const TopBar = ({ navigate, flash, inventory, orders: orderList, user, onLogout,
   const [query, setQuery] = useState("");
   const [accountOpen, setAccountOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const notifCloseTimer = useRef(null);
+  const showNotif = () => { clearTimeout(notifCloseTimer.current); setNotifOpen(true); };
+  const hideNotif = () => { notifCloseTimer.current = setTimeout(() => setNotifOpen(false), 150); };
   const searchRef = useRef(null);
   const initials = user.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 
@@ -630,7 +635,7 @@ const TopBar = ({ navigate, flash, inventory, orders: orderList, user, onLogout,
 
   return (
     <header className="h-14 border-b border-black/10 bg-white flex items-center px-4 md:px-5 gap-3 md:gap-4 sticky top-0 z-10">
-      <button onClick={onOpenMenu} className="md:hidden p-2 -ml-1 text-ink/70 hover:bg-black/[0.04] rounded-lg flex-shrink-0" aria-label="Abrir menú">
+      <button onClick={onOpenMenu} className="md:hidden p-2 -ml-1 text-ink/70 hover:bg-black/[0.04] rounded-xl flex-shrink-0" aria-label="Abrir menú">
         <IMenu className="w-5 h-5" />
       </button>
       <div className="flex-1 max-w-md relative">
@@ -641,7 +646,7 @@ const TopBar = ({ navigate, flash, inventory, orders: orderList, user, onLogout,
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Búsqueda (o tocá /)"
           aria-label="Buscar en Quick Sale"
-          className="w-full bg-[#F4F3EF] rounded-lg pl-9 pr-3 py-2 font-body text-sm outline-none placeholder:text-ink/35"
+          className="w-full bg-[#F7F4EB] rounded-xl pl-9 pr-3 py-2 font-body text-sm outline-none placeholder:text-ink/35"
         />
         {results.length > 0 && (
           <>
@@ -662,39 +667,59 @@ const TopBar = ({ navigate, flash, inventory, orders: orderList, user, onLogout,
         )}
       </div>
 
-      <Dropdown
-        align="right"
-        open={notifOpen}
-        setOpen={setNotifOpen}
-        trigger={
-          <button className="relative p-2 rounded-lg hover:bg-black/[0.04]" aria-label="Notificaciones">
-            <IBell className="w-[18px] h-[18px] text-ink/60" />
-            {notifCount > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-low" />
+      <div className="relative" onMouseEnter={showNotif} onMouseLeave={hideNotif}>
+        <button
+          onClick={() => setNotifOpen((o) => !o)}
+          className="relative p-2 rounded-xl hover:bg-black/[0.04]"
+          aria-label="Notificaciones"
+        >
+          <IBell className="w-[18px] h-[18px] text-ink/60" />
+          {notifCount > 0 && (
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-low" />
+          )}
+        </button>
+        {notifOpen && (
+          <Panel className="absolute right-0 top-full mt-2 w-72 z-30 p-2 flex flex-col gap-1.5 shadow-lg">
+            <div className="px-1.5 pt-1 font-display font-bold text-xs uppercase text-ink">Notificaciones</div>
+            {lowStock.map((i) => (
+              <button key={i.id} onClick={() => { navigate("inventario"); setNotifOpen(false); }} className="text-left">
+                <Panel className="p-2.5 flex items-start gap-2 border-black/10">
+                  <span className="w-2 h-2 rounded-full bg-low flex-shrink-0 mt-1" />
+                  <div>
+                    <span className="font-body text-xs text-ink/80 block">Stock bajo: {i.name} ({i.stock})</span>
+                    <span className="font-body text-[10px] text-muted">{i.lowSince || "—"}</span>
+                  </div>
+                </Panel>
+              </button>
+            ))}
+            {pendingDeposits.map((o) => (
+              <button key={o.id} onClick={() => { navigate("pedidos"); setNotifOpen(false); }} className="text-left">
+                <Panel className="p-2.5 flex items-start gap-2 border-black/10">
+                  <span className="w-2 h-2 rounded-full bg-mustardDark flex-shrink-0 mt-1" />
+                  <div>
+                    <span className="font-body text-xs text-ink/80 block">Fianza pendiente: {o.id}</span>
+                    <span className="font-body text-[10px] text-muted">{o.date}</span>
+                  </div>
+                </Panel>
+              </button>
+            ))}
+            {nextReservation && (
+              <button onClick={() => { navigate("calendario"); setNotifOpen(false); }} className="text-left">
+                <Panel className="p-2.5 flex items-start gap-2 border-black/10">
+                  <span className="w-2 h-2 rounded-full bg-ok flex-shrink-0 mt-1" />
+                  <div>
+                    <span className="font-body text-xs text-ink/80 block">Próximo evento: {nextReservation.client}</span>
+                    <span className="font-body text-[10px] text-muted">{fmtDate(nextReservation.from)} SEP</span>
+                  </div>
+                </Panel>
+              </button>
             )}
-          </button>
-        }
-      >
-        <div className="px-3.5 py-2 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">Notificaciones</div>
-        {lowStock.map((i) => (
-          <DropdownItem key={i.id} onClick={() => { navigate("inventario"); setNotifOpen(false); }}>
-            <span className="text-low">● </span>Stock bajo: {i.name} ({i.stock})
-          </DropdownItem>
-        ))}
-        {pendingDeposits.map((o) => (
-          <DropdownItem key={o.id} onClick={() => { navigate("pedidos"); setNotifOpen(false); }}>
-            <span className="text-mustardDark">● </span>Fianza pendiente: {o.id}
-          </DropdownItem>
-        ))}
-        {nextReservation && (
-          <DropdownItem onClick={() => { navigate("calendario"); setNotifOpen(false); }}>
-            <span className="text-ok">● </span>Próximo evento: {nextReservation.client} ({fmtDate(nextReservation.from)})
-          </DropdownItem>
+            {notifCount === 0 && !nextReservation && (
+              <p className="font-body text-xs text-muted px-1.5 py-2">Sin novedades</p>
+            )}
+          </Panel>
         )}
-        {notifCount === 0 && !nextReservation && (
-          <div className="px-3.5 py-3 font-body text-sm text-ink/40">Sin novedades</div>
-        )}
-      </Dropdown>
+      </div>
 
       <div className="ml-auto">
         <Dropdown
@@ -728,7 +753,7 @@ const TopBar = ({ navigate, flash, inventory, orders: orderList, user, onLogout,
 
 /* ---------------- CARD ---------------- */
 const Panel = ({ children, className = "" }) => (
-  <div className={`bg-white rounded-xl border border-black/10 ${className}`}>{children}</div>
+  <div className={`${/\bbg-/.test(className) ? "" : "bg-white"} rounded-xl border border-black/10 ${className}`}>{children}</div>
 );
 const Btn = ({ children, variant = "primary", className = "", ...rest }) => {
   const styles = {
@@ -736,7 +761,7 @@ const Btn = ({ children, variant = "primary", className = "", ...rest }) => {
     outline: "bg-white text-ink border border-black/15 hover:bg-black/[0.03]",
   };
   return (
-    <button className={`font-body text-sm font-semibold rounded-lg px-4 py-2 transition disabled:opacity-40 disabled:cursor-not-allowed ${styles[variant]} ${className}`} {...rest}>
+    <button className={`font-body text-sm font-semibold rounded-xl px-4 py-2 transition disabled:opacity-40 disabled:cursor-not-allowed ${styles[variant]} ${className}`} {...rest}>
       {children}
     </button>
   );
@@ -783,7 +808,7 @@ const Modal = ({ title, onClose, children, wide }) => {
       <div className={`relative bg-white rounded-2xl border border-black/10 shadow-xl w-full ${wide ? "max-w-lg" : "max-w-sm"} max-h-[85vh] overflow-y-auto`}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-black/10 sticky top-0 bg-white">
           <span className="font-display font-bold text-base text-ink">{title}</span>
-          <button onClick={onClose} className="p-1 text-ink/40 hover:text-ink" aria-label="Cerrar"><IX className="w-4 h-4" /></button>
+          <button onClick={onClose} className="p-1 text-muted hover:text-ink" aria-label="Cerrar"><IX className="w-4 h-4" /></button>
         </div>
         <div className="p-5">{children}</div>
       </div>
@@ -805,7 +830,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Panel principal</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Panel principal</h1>
         <button onClick={() => setPreview(true)} className="flex items-center gap-1.5 font-body text-sm font-medium text-ink/70 hover:text-ink">
           <IEye className="w-4 h-4" /> Ver tu tienda
         </button>
@@ -814,16 +839,16 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
       <div className="mb-3">
         <div className="font-body text-sm font-semibold text-ink mb-1 flex items-center gap-2">
           Evento activo
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${published ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-ink/40 border-black/10"}`}>
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${published ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-muted border-black/10"}`}>
             {published ? "Publicada" : "Oculta"}
           </span>
         </div>
-        <p className="font-body text-sm text-ink/50 mb-3">Este es el catálogo que ven los clientes cuando entran a tu tienda.</p>
+        <p className="font-body text-sm text-muted mb-3">Este es el catálogo que ven los clientes cuando entran a tu tienda.</p>
       </div>
       <Panel className="p-5 mb-8 flex gap-6 items-start flex-wrap">
         <div className="flex-1 min-w-[220px]">
           <div className="font-display font-bold text-base text-ink">Feria Primavera</div>
-          <p className="font-body text-xs text-ink/45 mt-1 leading-relaxed">
+          <p className="font-body text-xs text-muted mt-1 leading-relaxed">
             Guardado por última vez el: 15 sept 2026, CEST<br />
             Catálogo versión 3.2
           </p>
@@ -841,7 +866,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
           </div>
         </div>
         <div className="flex-1 min-w-[280px] flex gap-3 justify-end">
-          <div className="w-52 h-32 rounded-lg border border-black/10 bg-gradient-to-br from-cream to-mustard/25 overflow-hidden relative">
+          <div className="w-52 h-32 rounded-xl border border-black/10 bg-gradient-to-br from-cream to-mustard/25 overflow-hidden relative">
             <div className="h-6 bg-ink flex items-center px-2 gap-1">
               <div className="w-1.5 h-1.5 rounded-full bg-mustard/60" /><div className="w-1.5 h-1.5 rounded-full bg-cream/40" />
             </div>
@@ -850,7 +875,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
               <div className="mt-1 w-10 h-3 bg-ink rounded-sm" />
             </div>
           </div>
-          <div className="w-20 h-32 rounded-lg border border-black/10 bg-gradient-to-br from-cream to-mustard/25 overflow-hidden">
+          <div className="w-20 h-32 rounded-xl border border-black/10 bg-gradient-to-br from-cream to-mustard/25 overflow-hidden">
             <div className="h-6 bg-ink flex items-center justify-center"><div className="w-6 h-1 bg-cream/50 rounded-full" /></div>
             <div className="p-1.5">
               <div className="font-display font-bold text-[8px] text-ink leading-tight">Últimas unidades</div>
@@ -860,7 +885,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
       </Panel>
 
       <div className="font-body text-sm font-semibold text-ink mb-1">Rendimiento del evento</div>
-      <p className="font-body text-sm text-ink/50 mb-3">La puntuación refleja qué tan bien vas de stock y reservas frente a eventos similares.</p>
+      <p className="font-body text-sm text-muted mb-3">La puntuación refleja qué tan bien vas de stock y reservas frente a eventos similares.</p>
       <Panel className="p-5 flex items-center gap-5 flex-wrap">
         <div className="relative w-16 h-16 flex-shrink-0">
           <svg viewBox="0 0 36 36" className="w-16 h-16 -rotate-90">
@@ -871,7 +896,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
         </div>
         <div className="flex-1 min-w-[240px]">
           <div className="font-body text-sm font-semibold text-ink">Puntuación de ocupación</div>
-          <p className="font-body text-xs text-ink/50 mt-0.5">Una puntuación de 72 significa una ocupación de stock saludable para las próximas fechas del evento.</p>
+          <p className="font-body text-xs text-muted mt-0.5">Una puntuación de 72 significa una ocupación de stock saludable para las próximas fechas del evento.</p>
         </div>
         <Btn variant="outline" onClick={() => navigate("informes")}>Ver informe</Btn>
       </Panel>
@@ -885,7 +910,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
           <button key={s.label} onClick={() => navigate(s.go)} className="text-left">
             <Panel className="p-4 hover:border-ink/25 transition">
               <div className="font-display font-extrabold text-2xl text-ink">{s.val}</div>
-              <div className="font-body text-xs text-ink/45 mt-1">{s.label}</div>
+              <div className="font-body text-xs text-muted mt-1">{s.label}</div>
             </Panel>
           </button>
         ))}
@@ -893,14 +918,14 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
 
       <div className="flex items-center justify-between mt-6 mb-1">
         <div className="font-body text-sm font-semibold text-ink">Próximos eventos</div>
-        <button onClick={() => navigate("calendario")} className="font-body text-xs font-semibold text-ink/45 hover:text-ink">Ver calendario</button>
+        <button onClick={() => navigate("calendario")} className="font-body text-xs font-semibold text-muted hover:text-ink">Ver calendario</button>
       </div>
       <Panel className="p-2 divide-y divide-black/5">
         {[...RESERVATIONS].sort((a, b) => (a.from > b.from ? 1 : -1)).slice(0, 3).map((r) => (
-          <button key={r.id} onClick={() => navigate("calendario")} className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-black/[0.02] rounded-lg text-left">
+          <button key={r.id} onClick={() => navigate("calendario")} className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-black/[0.02] rounded-xl text-left">
             <div>
               <div className="font-body text-sm font-medium text-ink">{r.client}</div>
-              <div className="font-body text-xs text-ink/40">{r.itemName} · ×{r.qty}</div>
+              <div className="font-body text-xs text-muted">{r.itemName} · ×{r.qty}</div>
             </div>
             <span className="font-display font-bold text-xs text-ink/60">{fmtDate(r.from)}–{fmtDate(r.to)} SEP</span>
           </button>
@@ -911,7 +936,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
         <Modal title="Vista previa de la tienda" onClose={() => setPreview(false)} wide>
           <div className="grid grid-cols-2 gap-3">
             {STORE_PRODUCTS.slice(0, 4).map((p) => (
-              <div key={p.id} className="rounded-lg border border-black/10 overflow-hidden">
+              <div key={p.id} className="rounded-xl border border-black/10 overflow-hidden">
                 <div className="h-16 bg-gradient-to-br from-cream to-mustard/25" />
                 <div className="p-2 flex justify-between">
                   <span className="font-body text-xs text-ink">{p.name}</span>
@@ -920,7 +945,7 @@ const InicioView = ({ inventory, orders: allOrders, navigate, flash, published }
               </div>
             ))}
           </div>
-          <p className="font-body text-xs text-ink/40 mt-3">Así ven tus clientes el catálogo publicado.</p>
+          <p className="font-body text-xs text-muted mt-3">Así ven tus clientes el catálogo publicado.</p>
         </Modal>
       )}
     </div>
@@ -942,13 +967,13 @@ const ORDER_FILTERS = [
 const OrderStatusBadge = ({ status }) => (
   <span className={`text-xs font-semibold px-2 py-1 rounded-full border whitespace-nowrap ${
     status === "Pendiente" ? "bg-low/10 text-low border-low/25" :
-    status === "Cancelado" ? "bg-black/5 text-ink/40 border-black/10" : "bg-ok/10 text-ok border-ok/25"
+    status === "Cancelado" ? "bg-black/5 text-muted border-black/10" : "bg-ok/10 text-ok border-ok/25"
   }`}>{status}</span>
 );
 const FulfillmentBadge = ({ status }) => (
   <span className={`text-xs font-semibold px-2 py-1 rounded-full border whitespace-nowrap ${
     status === "Devuelto" ? "bg-ok/10 text-ok border-ok/30" :
-    status === "Entregado" ? "bg-mustard/15 text-ink/70 border-mustard/40" : "bg-ink/5 text-ink/50 border-ink/15"
+    status === "Entregado" ? "bg-mustard/15 text-ink/70 border-mustard/40" : "bg-ink/5 text-muted border-ink/15"
   }`}>{status || "Pendiente de entrega"}</span>
 );
 
@@ -984,7 +1009,7 @@ const NewOrderModal = ({ onClose, onCreate }) => {
         </div>
 
         <div>
-          <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-2">Artículos</div>
+          <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-2">Artículos</div>
           <div className="flex flex-col gap-2">
             {lines.map((l) => (
               <div key={l.id} className="flex gap-2 items-end">
@@ -1104,7 +1129,7 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Pedidos</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Pedidos</h1>
         <div className="flex gap-2">
           <Btn variant="outline" onClick={() => exportCSV()}>Exportar CSV</Btn>
           <Btn variant="primary" onClick={() => setShowNew(true)}>+ Crear pedido</Btn>
@@ -1112,10 +1137,10 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
       </div>
 
       <div className="grid grid-cols-4 gap-3 mb-5">
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.total}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Pedidos</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{fmt(stats.facturado)}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Facturado</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-low">{stats.pendienteCobro}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Pendientes de cobro</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.pendienteEntrega}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Por entregar</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.total}</div><div className="font-body text-[11px] text-muted mt-0.5">Pedidos</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{fmt(stats.facturado)}</div><div className="font-body text-[11px] text-muted mt-0.5">Facturado</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-low">{stats.pendienteCobro}</div><div className="font-body text-[11px] text-muted mt-0.5">Pendientes de cobro</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.pendienteEntrega}</div><div className="font-body text-[11px] text-muted mt-0.5">Por entregar</div></Panel>
       </div>
 
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
@@ -1147,7 +1172,7 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               <th className="px-4 py-2.5 w-8"><input type="checkbox" checked={checked.length === filtered.length && filtered.length > 0} onChange={toggleCheckAll} className="w-4 h-4 accent-ink" /></th>
               {["Pedido", "Cliente / evento", "Fecha", "Total", "Fianza", "Estado", "Entrega"].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -1159,15 +1184,15 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
                 </td>
                 <td className="px-4 py-3 font-body text-sm font-semibold text-ink cursor-pointer" onClick={() => setSelected(o)}>{o.id}</td>
                 <td className="px-4 py-3 font-body text-sm text-ink/70 cursor-pointer" onClick={() => setSelected(o)}>{o.client}</td>
-                <td className="px-4 py-3 font-body text-sm text-ink/50 cursor-pointer" onClick={() => setSelected(o)}>{o.date}</td>
+                <td className="px-4 py-3 font-body text-sm text-muted cursor-pointer" onClick={() => setSelected(o)}>{o.date}</td>
                 <td className="px-4 py-3 font-body text-sm font-semibold text-ink cursor-pointer" onClick={() => setSelected(o)}>{fmt(o.total)}</td>
-                <td className="px-4 py-3 font-body text-xs text-ink/50 cursor-pointer" onClick={() => setSelected(o)}>{fmt(o.deposit)} · {o.depositStatus}</td>
+                <td className="px-4 py-3 font-body text-xs text-muted cursor-pointer" onClick={() => setSelected(o)}>{fmt(o.deposit)} · {o.depositStatus}</td>
                 <td className="px-4 py-3 cursor-pointer" onClick={() => setSelected(o)}><OrderStatusBadge status={o.status} /></td>
                 <td className="px-4 py-3 cursor-pointer" onClick={() => setSelected(o)}><FulfillmentBadge status={o.fulfillment} /></td>
               </tr>
             ))}
             {filtered.length === 0 && (
-              <tr><td colSpan="8" className="px-4 py-8 text-center font-body text-sm text-ink/40">Sin pedidos en este filtro</td></tr>
+              <tr><td colSpan="8" className="px-4 py-8 text-center font-body text-sm text-muted">Sin pedidos en este filtro</td></tr>
             )}
           </tbody>
         </table>
@@ -1181,9 +1206,9 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
             <div className="flex items-start justify-between">
               <div>
                 <div className="font-body text-sm font-semibold text-ink">{selected.client}</div>
-                <div className="font-body text-xs text-ink/40 mt-0.5">{selected.date}</div>
+                <div className="font-body text-xs text-muted mt-0.5">{selected.date}</div>
                 {(selected.email || selected.phone) && (
-                  <div className="font-body text-[11px] text-ink/40 mt-0.5">{selected.email} {selected.phone && `· ${selected.phone}`}</div>
+                  <div className="font-body text-[11px] text-muted mt-0.5">{selected.email} {selected.phone && `· ${selected.phone}`}</div>
                 )}
               </div>
               <button onClick={() => deleteOrder(selected.id)} className="text-ink/30 hover:text-low flex-shrink-0" aria-label="Eliminar pedido"><ITrash className="w-4 h-4" /></button>
@@ -1198,7 +1223,7 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
             )}
 
             <div>
-              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-1.5">Artículos</div>
+              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-1.5">Artículos</div>
               <Panel className="p-3 flex flex-col divide-y divide-dashed divide-black/10">
                 {(selected.items || []).map((it, idx) => (
                   <div key={idx} className="flex justify-between py-1.5 font-body text-sm first:pt-0 last:pb-0">
@@ -1206,7 +1231,7 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
                     <span className="font-semibold text-ink">{fmt(it.qty * it.price)}</span>
                   </div>
                 ))}
-                {(!selected.items || selected.items.length === 0) && <p className="font-body text-xs text-ink/40">Sin artículos detallados</p>}
+                {(!selected.items || selected.items.length === 0) && <p className="font-body text-xs text-muted">Sin artículos detallados</p>}
               </Panel>
             </div>
 
@@ -1221,7 +1246,7 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
 
             <div className="border-t border-dashed border-black/10 pt-3">
               <div className="flex justify-between mb-1.5">
-                <span className="font-body text-xs text-ink/45">Fianza / depósito de garantía</span>
+                <span className="font-body text-xs text-muted">Fianza / depósito de garantía</span>
                 <span className="font-display font-bold text-sm text-ink">{fmt(selected.deposit)}</span>
               </div>
               <Field label="Estado de la fianza">
@@ -1229,17 +1254,17 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
                   {DEPOSIT_STATUSES.map((s) => <option key={s}>{s}</option>)}
                 </select>
               </Field>
-              <p className="font-body text-[11px] text-ink/40 mt-1.5">Separada del pago del alquiler — se devuelve si el material vuelve sin daños.</p>
+              <p className="font-body text-[11px] text-muted mt-1.5">Separada del pago del alquiler — se devuelve si el material vuelve sin daños.</p>
             </div>
 
             <div className="border-t border-dashed border-black/10 pt-3">
-              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-2">Estado de entrega</div>
+              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-2">Estado de entrega</div>
               <div className="grid grid-cols-3 gap-1.5">
                 {FULFILLMENT_STATUSES.map((f) => (
                   <button
                     key={f}
                     onClick={() => updateFulfillment(selected.id, f)}
-                    className={`text-[11px] font-semibold px-2 py-2 rounded-lg border text-center leading-tight ${
+                    className={`text-[11px] font-semibold px-2 py-2 rounded-xl border text-center leading-tight ${
                       (selected.fulfillment || "Pendiente de entrega") === f ? "bg-ink text-mustard border-ink" : "bg-white text-ink/60 border-ink/15"
                     }`}
                   >
@@ -1250,7 +1275,7 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
             </div>
 
             <div className="border-t border-dashed border-black/10 pt-3">
-              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-2">Notas internas</div>
+              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-2">Notas internas</div>
               <div className="flex gap-2 mb-3">
                 <input value={noteInput} onChange={(e) => setNoteInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addNote()} placeholder="Agregar una nota..." className={`${inputCls} flex-1`} />
                 <Btn variant="outline" onClick={addNote}>Añadir</Btn>
@@ -1258,7 +1283,7 @@ const PedidosView = ({ orders: list, setOrders: setList, flash }) => {
               <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
                 {(selected.notes || []).map((n) => (
                   <div key={n.id} className="font-body text-xs text-ink/60 border-l-2 border-mustard/50 pl-2.5">
-                    <span className="text-ink/40">{n.time}</span> — {n.text}
+                    <span className="text-muted">{n.time}</span> — {n.text}
                   </div>
                 ))}
                 {(!selected.notes || selected.notes.length === 0) && <p className="font-body text-xs text-ink/35">Sin notas todavía</p>}
@@ -1280,7 +1305,7 @@ const ToggleRow = ({ label, checked, onChange, hint }) => (
   <label className="flex items-center justify-between py-2.5 border-b border-black/5 last:border-0 cursor-pointer">
     <div>
       <div className="font-body text-sm text-ink">{label}</div>
-      {hint && <div className="font-body text-[11px] text-ink/40 mt-0.5">{hint}</div>}
+      {hint && <div className="font-body text-[11px] text-muted mt-0.5">{hint}</div>}
     </div>
     <input type="checkbox" checked={checked} onChange={onChange} className="w-4 h-4 accent-ink flex-shrink-0 ml-3" />
   </label>
@@ -1315,17 +1340,17 @@ const ProductDetailModal = ({ product, onClose, onSave, flash }) => {
       <div className="relative bg-white rounded-2xl border border-black/10 shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-black/10">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-lg overflow-hidden border border-black/10 flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl overflow-hidden border border-black/10 flex-shrink-0">
               <ProductIllustration type={p.illustration} />
             </div>
             <span className="font-display font-bold text-base text-ink truncate">{p.name || "Nuevo producto"}</span>
           </div>
-          <button onClick={onClose} className="p-1 text-ink/40 hover:text-ink flex-shrink-0" aria-label="Cerrar"><IX className="w-4 h-4" /></button>
+          <button onClick={onClose} className="p-1 text-muted hover:text-ink flex-shrink-0" aria-label="Cerrar"><IX className="w-4 h-4" /></button>
         </div>
 
         <div className="flex gap-1 px-5 pt-3 border-b border-black/10 overflow-x-auto no-scrollbar">
           {PRODUCT_TABS.map((t) => (
-            <button key={t} onClick={() => setTab(t)} className={`px-3 py-2 font-body text-sm font-semibold border-b-2 -mb-px whitespace-nowrap ${tab === t ? "border-ink text-ink" : "border-transparent text-ink/40 hover:text-ink/70"}`}>
+            <button key={t} onClick={() => setTab(t)} className={`px-3 py-2 font-body text-sm font-semibold border-b-2 -mb-px whitespace-nowrap ${tab === t ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink/70"}`}>
               {t}
             </button>
           ))}
@@ -1335,10 +1360,10 @@ const ProductDetailModal = ({ product, onClose, onSave, flash }) => {
           {tab === "General" && (
             <div className="flex flex-col gap-4">
               <div>
-                <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-2">Imágenes</div>
+                <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-2">Imágenes</div>
                 <div className="flex gap-2">
                   {["tent", "table", "chairs", "lights", "stage", "speaker"].map((t) => (
-                    <button key={t} onClick={() => set({ illustration: t })} className={`w-14 h-14 rounded-lg overflow-hidden border-2 flex-shrink-0 ${p.illustration === t ? "border-ink" : "border-black/10 opacity-50"}`}>
+                    <button key={t} onClick={() => set({ illustration: t })} className={`w-14 h-14 rounded-xl overflow-hidden border-2 flex-shrink-0 ${p.illustration === t ? "border-ink" : "border-black/10 opacity-50"}`}>
                       <ProductIllustration type={t} />
                     </button>
                   ))}
@@ -1361,12 +1386,12 @@ const ProductDetailModal = ({ product, onClose, onSave, flash }) => {
               </div>
               <Field label="Proveedor"><input value={p.vendor || ""} onChange={(e) => set({ vendor: e.target.value })} className={inputCls} /></Field>
               <div>
-                <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-1.5">Etiquetas</div>
+                <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-1.5">Etiquetas</div>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {(p.tags || []).map((t) => (
                     <span key={t} className="flex items-center gap-1 bg-mustard/15 border border-mustard/40 text-[11px] font-semibold text-ink/70 px-2 py-1 rounded-full">
                       {t}
-                      <button onClick={() => removeTag(t)} className="text-ink/40 hover:text-low"><IX className="w-2.5 h-2.5" /></button>
+                      <button onClick={() => removeTag(t)} className="text-muted hover:text-low"><IX className="w-2.5 h-2.5" /></button>
                     </span>
                   ))}
                 </div>
@@ -1415,7 +1440,7 @@ const ProductDetailModal = ({ product, onClose, onSave, flash }) => {
                   {CONDITIONS.map((c) => <option key={c}>{c}</option>)}
                 </select>
               </Field>
-              <div className="border border-black/10 rounded-lg px-3">
+              <div className="border border-black/10 rounded-xl px-3">
                 <ToggleRow label="Rastrear inventario" hint="Descuenta stock automáticamente en cada venta" checked={!!p.trackInventory} onChange={() => set({ trackInventory: !p.trackInventory })} />
                 <ToggleRow label="Permitir venta sin stock" hint="Sigue vendiéndose aunque llegue a 0" checked={!!p.allowBackorder} onChange={() => set({ allowBackorder: !p.allowBackorder })} />
               </div>
@@ -1424,7 +1449,7 @@ const ProductDetailModal = ({ product, onClose, onSave, flash }) => {
 
           {tab === "Variantes" && (
             <div className="flex flex-col gap-3">
-              {(p.variants || []).length === 0 && <p className="font-body text-sm text-ink/40">Este producto no tiene variantes (color, tamaño, etc.)</p>}
+              {(p.variants || []).length === 0 && <p className="font-body text-sm text-muted">Este producto no tiene variantes (color, tamaño, etc.)</p>}
               {(p.variants || []).map((v) => (
                 <Panel key={v.id} className="p-3 flex flex-wrap gap-2 items-end">
                   <Field label="Nombre"><input value={v.name} onChange={(e) => updateVariant(v.id, { name: e.target.value })} className={`${inputCls} w-32`} /></Field>
@@ -1443,7 +1468,7 @@ const ProductDetailModal = ({ product, onClose, onSave, flash }) => {
                 <Field label="Peso"><input value={p.weight || ""} onChange={(e) => set({ weight: e.target.value })} className={inputCls} placeholder="Ej. 18 kg" /></Field>
                 <Field label="Dimensiones"><input value={p.dimensions || ""} onChange={(e) => set({ dimensions: e.target.value })} className={inputCls} placeholder="Ej. 300 x 300 x 250 cm" /></Field>
               </div>
-              <div className="border border-black/10 rounded-lg px-3">
+              <div className="border border-black/10 rounded-xl px-3">
                 <ToggleRow label="Requiere montaje" hint="El equipo de logística debe armarlo en el lugar" checked={!!p.requiresAssembly} onChange={() => set({ requiresAssembly: !p.requiresAssembly })} />
               </div>
               {p.requiresAssembly && (
@@ -1457,7 +1482,7 @@ const ProductDetailModal = ({ product, onClose, onSave, flash }) => {
               <Field label="Título SEO"><input value={p.seoTitle || ""} onChange={(e) => set({ seoTitle: e.target.value })} className={inputCls} /></Field>
               <Field label="Descripción SEO"><textarea rows={2} value={p.seoDescription || ""} onChange={(e) => set({ seoDescription: e.target.value })} className={`${inputCls} resize-none`} /></Field>
               <Field label="URL amigable">
-                <div className="flex items-center gap-1 font-body text-xs text-ink/40">
+                <div className="flex items-center gap-1 font-body text-xs text-muted">
                   <span className="whitespace-nowrap">quicksale.com/productos/</span>
                   <input value={p.slug || ""} onChange={(e) => set({ slug: e.target.value })} className={`${inputCls} flex-1 text-ink`} />
                 </div>
@@ -1503,7 +1528,7 @@ const InventarioView = ({ inventory, addProduct, updateCondition, updateProduct,
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Productos</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Productos</h1>
         <div className="flex gap-2">
           <Btn variant="outline" onClick={exportCSV}>Exportar CSV</Btn>
           <Btn variant="primary" onClick={() => setShowForm((s) => !s)}>{showForm ? "Cancelar" : "+ Añadir producto"}</Btn>
@@ -1542,7 +1567,7 @@ const InventarioView = ({ inventory, addProduct, updateCondition, updateProduct,
                   <span className={`font-display font-extrabold text-sm ${i.low ? "text-low" : "text-ink/60"}`}>{i.stock} u.</span>
                 </div>
                 <div className="flex items-center gap-1.5 mt-1.5">
-                  <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded border ${i.condition === "Dañado" ? "bg-low/10 text-low border-low/25" : i.condition === "En reparación" ? "bg-mustard/15 text-ink/70 border-mustard/30" : "bg-ok/10 text-ok border-ok/25"}`}>{i.condition || "Disponible"}</span>
+                  <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-xl border ${i.condition === "Dañado" ? "bg-low/10 text-low border-low/25" : i.condition === "En reparación" ? "bg-mustard/15 text-ink/70 border-mustard/30" : "bg-ok/10 text-ok border-ok/25"}`}>{i.condition || "Disponible"}</span>
                   {i.sku && <span className="font-body text-[9px] text-ink/35">{i.sku}</span>}
                 </div>
               </div>
@@ -1556,7 +1581,7 @@ const InventarioView = ({ inventory, addProduct, updateCondition, updateProduct,
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Producto", "Ubicación", "Stock", "Estado del material"].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -1565,7 +1590,7 @@ const InventarioView = ({ inventory, addProduct, updateCondition, updateProduct,
               <tr key={i.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.015]">
                 <td className="px-4 py-3">
                   <button onClick={() => setEditing(i)} className="flex items-center gap-2.5 font-body text-sm font-semibold text-ink hover:underline">
-                    <div className="w-8 h-8 rounded-md overflow-hidden border border-black/10 flex-shrink-0"><ProductIllustration type={i.illustration} /></div>
+                    <div className="w-8 h-8 rounded-xl overflow-hidden border border-black/10 flex-shrink-0"><ProductIllustration type={i.illustration} /></div>
                     {i.name}
                   </button>
                 </td>
@@ -1579,7 +1604,7 @@ const InventarioView = ({ inventory, addProduct, updateCondition, updateProduct,
                   <select
                     value={i.condition || "Disponible"}
                     onChange={(e) => updateCondition(i.id, e.target.value)}
-                    className={`text-xs font-semibold px-2 py-1.5 rounded-lg border outline-none ${
+                    className={`text-xs font-semibold px-2 py-1.5 rounded-xl border outline-none ${
                       i.condition === "Dañado" ? "bg-low/10 text-low border-low/25" : i.condition === "En reparación" ? "bg-mustard/15 text-ink/70 border-mustard/40" : "bg-ok/10 text-ok border-ok/25"
                     }`}
                   >
@@ -1612,86 +1637,86 @@ const Chip = ({ children, active, onClick }) => (
 
 const Field = ({ label, children }) => (
   <div className="flex flex-col gap-1">
-    <label className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45">{label}</label>
+    <label className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted">{label}</label>
     {children}
   </div>
 );
-const inputCls = "bg-[#F4F3EF] border border-black/10 focus:border-ink rounded-lg px-3 py-2 font-body text-sm outline-none";
+const inputCls = "bg-[#F7F4EB] border border-black/10 focus:border-ink rounded-xl px-3 py-2 font-body text-sm outline-none";
 
 /* ---------------- ILUSTRACIONES DE PRODUCTO ---------------- */
 const ProductIllustration = ({ type, className = "w-full h-full" }) => {
-  const bg = <rect width="200" height="140" fill="#FBF6EA" />;
+  const bg = <rect width="200" height="140" fill="#F7F4EB" />;
   const illustrations = {
     tent: (
       <svg viewBox="0 0 200 140" className={className}>
         {bg}
-        <path d="M100 25 L165 95 H35 Z" fill="#F5B914" stroke="#181712" strokeWidth="3" strokeLinejoin="round" />
-        <path d="M100 25 L100 95" stroke="#181712" strokeWidth="2.5" />
-        <path d="M60 95 L60 122 M140 95 L140 122" stroke="#181712" strokeWidth="4" strokeLinecap="round" />
-        <path d="M50 95 h20 M130 95 h20" stroke="#181712" strokeWidth="3" />
-        <rect x="35" y="95" width="130" height="6" fill="#181712" />
+        <path d="M100 25 L165 95 H35 Z" fill="#F4C430" stroke="#1A1A1A" strokeWidth="3" strokeLinejoin="round" />
+        <path d="M100 25 L100 95" stroke="#1A1A1A" strokeWidth="2.5" />
+        <path d="M60 95 L60 122 M140 95 L140 122" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
+        <path d="M50 95 h20 M130 95 h20" stroke="#1A1A1A" strokeWidth="3" />
+        <rect x="35" y="95" width="130" height="6" fill="#1A1A1A" />
       </svg>
     ),
     table: (
       <svg viewBox="0 0 200 140" className={className}>
         {bg}
-        <ellipse cx="100" cy="60" rx="55" ry="18" fill="#FFFFFF" stroke="#181712" strokeWidth="3" />
-        <path d="M50 60 L60 110 M150 60 L140 110" stroke="#181712" strokeWidth="3" fill="none" />
-        <path d="M100 60 L100 118" stroke="#181712" strokeWidth="2" strokeDasharray="3 4" />
-        <ellipse cx="100" cy="60" rx="55" ry="18" fill="none" stroke="#F5B914" strokeWidth="5" strokeDasharray="10 6" opacity="0.7" />
-        <path d="M62 108 h76" stroke="#181712" strokeWidth="4" strokeLinecap="round" />
+        <ellipse cx="100" cy="60" rx="55" ry="18" fill="#FFFFFF" stroke="#1A1A1A" strokeWidth="3" />
+        <path d="M50 60 L60 110 M150 60 L140 110" stroke="#1A1A1A" strokeWidth="3" fill="none" />
+        <path d="M100 60 L100 118" stroke="#1A1A1A" strokeWidth="2" strokeDasharray="3 4" />
+        <ellipse cx="100" cy="60" rx="55" ry="18" fill="none" stroke="#F4C430" strokeWidth="5" strokeDasharray="10 6" opacity="0.7" />
+        <path d="M62 108 h76" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
       </svg>
     ),
     chairs: (
       <svg viewBox="0 0 200 140" className={className}>
         {bg}
         <g transform="translate(58,20)">
-          <path d="M0 10 h44 v54 h-44 z" fill="none" stroke="#181712" strokeWidth="3" />
-          <path d="M0 40 h44" stroke="#F5B914" strokeWidth="8" />
-          <path d="M4 64 l-6 30 M40 64 l6 30 M4 94 h36" stroke="#181712" strokeWidth="4" strokeLinecap="round" />
+          <path d="M0 10 h44 v54 h-44 z" fill="none" stroke="#1A1A1A" strokeWidth="3" />
+          <path d="M0 40 h44" stroke="#F4C430" strokeWidth="8" />
+          <path d="M4 64 l-6 30 M40 64 l6 30 M4 94 h36" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
         </g>
         <g transform="translate(108,32)" opacity="0.55">
-          <path d="M0 10 h44 v54 h-44 z" fill="none" stroke="#181712" strokeWidth="3" />
-          <path d="M0 40 h44" stroke="#F5B914" strokeWidth="8" />
-          <path d="M4 64 l-6 30 M40 64 l6 30 M4 94 h36" stroke="#181712" strokeWidth="4" strokeLinecap="round" />
+          <path d="M0 10 h44 v54 h-44 z" fill="none" stroke="#1A1A1A" strokeWidth="3" />
+          <path d="M0 40 h44" stroke="#F4C430" strokeWidth="8" />
+          <path d="M4 64 l-6 30 M40 64 l6 30 M4 94 h36" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
         </g>
       </svg>
     ),
     lights: (
       <svg viewBox="0 0 200 140" className={className}>
         {bg}
-        <path d="M60 20 L40 100 H80 Z" fill="#F5B914" opacity="0.35" />
+        <path d="M60 20 L40 100 H80 Z" fill="#F4C430" opacity="0.35" />
         <path d="M140 20 L120 100 H160 Z" fill="#B4402F" opacity="0.3" />
-        <circle cx="60" cy="20" r="10" fill="#181712" />
-        <circle cx="140" cy="20" r="10" fill="#181712" />
-        <rect x="20" y="10" width="160" height="8" fill="#181712" rx="2" />
-        <circle cx="60" cy="20" r="4" fill="#F5B914" />
+        <circle cx="60" cy="20" r="10" fill="#1A1A1A" />
+        <circle cx="140" cy="20" r="10" fill="#1A1A1A" />
+        <rect x="20" y="10" width="160" height="8" fill="#1A1A1A" rx="2" />
+        <circle cx="60" cy="20" r="4" fill="#F4C430" />
         <circle cx="140" cy="20" r="4" fill="#B4402F" />
       </svg>
     ),
     stage: (
       <svg viewBox="0 0 200 140" className={className}>
         {bg}
-        <path d="M20 90 L60 55 H150 L180 90 Z" fill="#FFFFFF" stroke="#181712" strokeWidth="3" />
-        <path d="M60 55 v35 M100 55 v35 M140 55 v35" stroke="#181712" strokeWidth="1.5" opacity="0.3" />
-        <rect x="20" y="90" width="160" height="10" fill="#181712" />
-        <rect x="35" y="100" width="8" height="18" fill="#181712" /><rect x="157" y="100" width="8" height="18" fill="#181712" />
-        <path d="M60 55 H150" stroke="#F5B914" strokeWidth="4" />
+        <path d="M20 90 L60 55 H150 L180 90 Z" fill="#FFFFFF" stroke="#1A1A1A" strokeWidth="3" />
+        <path d="M60 55 v35 M100 55 v35 M140 55 v35" stroke="#1A1A1A" strokeWidth="1.5" opacity="0.3" />
+        <rect x="20" y="90" width="160" height="10" fill="#1A1A1A" />
+        <rect x="35" y="100" width="8" height="18" fill="#1A1A1A" /><rect x="157" y="100" width="8" height="18" fill="#1A1A1A" />
+        <path d="M60 55 H150" stroke="#F4C430" strokeWidth="4" />
       </svg>
     ),
     speaker: (
       <svg viewBox="0 0 200 140" className={className}>
         {bg}
-        <rect x="75" y="15" width="50" height="110" rx="6" fill="#181712" />
-        <circle cx="100" cy="45" r="16" fill="#FBF6EA" stroke="#F5B914" strokeWidth="4" />
-        <circle cx="100" cy="45" r="6" fill="#181712" />
-        <circle cx="100" cy="90" r="11" fill="#FBF6EA" stroke="#F5B914" strokeWidth="4" />
-        <circle cx="100" cy="90" r="4" fill="#181712" />
+        <rect x="75" y="15" width="50" height="110" rx="6" fill="#1A1A1A" />
+        <circle cx="100" cy="45" r="16" fill="#F7F4EB" stroke="#F4C430" strokeWidth="4" />
+        <circle cx="100" cy="45" r="6" fill="#1A1A1A" />
+        <circle cx="100" cy="90" r="11" fill="#F7F4EB" stroke="#F4C430" strokeWidth="4" />
+        <circle cx="100" cy="90" r="4" fill="#1A1A1A" />
       </svg>
     ),
   };
   return illustrations[type] || (
-    <svg viewBox="0 0 200 140" className={className}>{bg}<rect x="70" y="45" width="60" height="50" fill="#EFEBDD" stroke="#181712" strokeWidth="2" /></svg>
+    <svg viewBox="0 0 200 140" className={className}>{bg}<rect x="70" y="45" width="60" height="50" fill="#EFEBDD" stroke="#1A1A1A" strokeWidth="2" /></svg>
   );
 };
 
@@ -1701,9 +1726,9 @@ const BarChart = ({ data }) => {
     <div className="flex items-end gap-3 h-40 px-1">
       {data.map((d) => (
         <div key={d.d} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-          <span className="font-body text-[10px] text-ink/40">{fmt(d.v)}</span>
-          <div className="w-full bg-ink rounded-t-md transition-all" style={{ height: `${(d.v / max) * 100}%` }} />
-          <span className="font-body text-[10px] font-semibold text-ink/50">{d.d}</span>
+          <span className="font-body text-[10px] text-muted">{fmt(d.v)}</span>
+          <div className="w-full bg-ink rounded-t-xl transition-all" style={{ height: `${(d.v / max) * 100}%` }} />
+          <span className="font-body text-[10px] font-semibold text-muted">{d.d}</span>
         </div>
       ))}
     </div>
@@ -1760,7 +1785,7 @@ const PaymentMethodForm = ({ onSave, onCancel }) => {
         <Field label="Vencimiento (MM/AA)"><input value={expiry} onChange={(e) => setExpiry(e.target.value)} className={`${inputCls} w-28`} placeholder="12/28" /></Field>
         <Field label="CVV"><input value={cvv} onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))} type="password" className={`${inputCls} w-20`} inputMode="numeric" /></Field>
       </div>
-      <p className="font-body text-[10px] text-ink/40 leading-relaxed flex items-start gap-1.5">
+      <p className="font-body text-[10px] text-muted leading-relaxed flex items-start gap-1.5">
         <span>🔒</span>
         <span>Estos datos se envían directo a la pasarela de pago para tokenizar la tarjeta. Quick Sale nunca guarda el número completo ni el CVV — solo la marca, los últimos 4 dígitos y el vencimiento.</span>
       </p>
@@ -1773,7 +1798,7 @@ const PaymentMethodForm = ({ onSave, onCancel }) => {
 };
 
 const CardBrandIcon = ({ brand }) => (
-  <div className={`w-9 h-6 rounded flex items-center justify-center flex-shrink-0 font-display font-extrabold text-[9px] ${
+  <div className={`w-9 h-6 rounded-xl flex items-center justify-center flex-shrink-0 font-display font-extrabold text-[9px] ${
     brand === "Visa" ? "bg-[#1A1F71] text-white" : brand === "Mastercard" ? "bg-ink text-mustard" : brand === "American Express" ? "bg-[#2E77BC] text-white" : "bg-black/10 text-ink/60"
   }`}>
     {brand === "Visa" ? "VISA" : brand === "Mastercard" ? "MC" : brand === "American Express" ? "AMEX" : "•••"}
@@ -1857,15 +1882,15 @@ const ClientesView = ({ orders: allOrders, flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Clientes</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Clientes</h1>
         <Btn variant="outline" onClick={exportCSV}>Exportar CSV</Btn>
       </div>
 
       <div className="grid grid-cols-4 gap-3 mb-5">
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.total}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Clientes</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.vip}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">VIP</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{fmt(stats.avgSpend)}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Gasto promedio</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.nuevos}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Nuevos</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.total}</div><div className="font-body text-[11px] text-muted mt-0.5">Clientes</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.vip}</div><div className="font-body text-[11px] text-muted mt-0.5">VIP</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{fmt(stats.avgSpend)}</div><div className="font-body text-[11px] text-muted mt-0.5">Gasto promedio</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.nuevos}</div><div className="font-body text-[11px] text-muted mt-0.5">Nuevos</div></Panel>
       </div>
 
       <Panel className="p-4 mb-5 flex flex-col gap-3">
@@ -1898,7 +1923,7 @@ const ClientesView = ({ orders: allOrders, flash }) => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Cliente / evento", "Contacto", "Segmento", "Gastado", ""].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -1908,17 +1933,17 @@ const ClientesView = ({ orders: allOrders, flash }) => {
                 <td className="px-4 py-3 font-body text-sm font-semibold text-ink whitespace-nowrap">
                   <button onClick={() => { setProfile(c); setShowCardForm(false); }} className="hover:underline">{c.name}</button>
                 </td>
-                <td className="px-4 py-3 font-body text-xs text-ink/50">{c.email || "—"}{c.phone && <div>{c.phone}</div>}</td>
+                <td className="px-4 py-3 font-body text-xs text-muted">{c.email || "—"}{c.phone && <div>{c.phone}</div>}</td>
                 <td className="px-4 py-3">
                   <span className={`text-[10px] font-semibold px-2 py-1 rounded-full border ${c.segment === "VIP" ? "bg-mustard/20 text-ink border-mustard/50" : "bg-black/[0.03] text-ink/55 border-black/10"}`}>{c.segment}</span>
                 </td>
                 <td className="px-4 py-3 font-body text-sm font-semibold text-ink">{fmt(clientSpend(c.name))}</td>
                 <td className="px-4 py-3 text-right">
-                  <button onClick={() => setEditing(c)} className="text-ink/40 hover:text-ink" aria-label={`Editar ${c.name}`}><IEdit className="w-4 h-4" /></button>
+                  <button onClick={() => setEditing(c)} className="text-muted hover:text-ink" aria-label={`Editar ${c.name}`}><IEdit className="w-4 h-4" /></button>
                 </td>
               </tr>
             ))}
-            {filtered.length === 0 && <tr><td colSpan="5" className="px-4 py-6 text-center font-body text-sm text-ink/40">Sin resultados</td></tr>}
+            {filtered.length === 0 && <tr><td colSpan="5" className="px-4 py-6 text-center font-body text-sm text-muted">Sin resultados</td></tr>}
           </tbody>
         </table>
       </Panel>
@@ -1939,7 +1964,7 @@ const ClientesView = ({ orders: allOrders, flash }) => {
             <Field label="Notas internas"><textarea rows={3} value={editing.notes} onChange={(e) => setEditing({ ...editing, notes: e.target.value })} className={`${inputCls} resize-none`} /></Field>
             <div className="flex gap-2 mt-1">
               <Btn variant="primary" className="flex-1" onClick={saveEdit}>Guardar cambios</Btn>
-              <button onClick={() => remove(editing.id)} className="px-3 rounded-lg border border-low/30 text-low hover:bg-low/5" aria-label="Eliminar cliente"><ITrash className="w-4 h-4" /></button>
+              <button onClick={() => remove(editing.id)} className="px-3 rounded-xl border border-low/30 text-low hover:bg-low/5" aria-label="Eliminar cliente"><ITrash className="w-4 h-4" /></button>
             </div>
           </div>
         </Modal>
@@ -1950,17 +1975,17 @@ const ClientesView = ({ orders: allOrders, flash }) => {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <span className={`text-[10px] font-semibold px-2 py-1 rounded-full border ${profile.segment === "VIP" ? "bg-mustard/20 text-ink border-mustard/50" : "bg-black/[0.03] text-ink/55 border-black/10"}`}>{profile.segment}</span>
-              {profile.email && <span className="font-body text-xs text-ink/45">{profile.email}</span>}
-              {profile.phone && <span className="font-body text-xs text-ink/45">· {profile.phone}</span>}
+              {profile.email && <span className="font-body text-xs text-muted">{profile.email}</span>}
+              {profile.phone && <span className="font-body text-xs text-muted">· {profile.phone}</span>}
             </div>
             <div>
-              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-1">Notas internas</div>
+              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-1">Notas internas</div>
               <p className="font-body text-sm text-ink/70">{profile.notes || "Sin notas"}</p>
             </div>
             <div>
-              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-1.5">Pedidos</div>
+              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-1.5">Pedidos</div>
               {clientOrders(profile.name).length === 0 ? (
-                <p className="font-body text-xs text-ink/40">Sin pedidos registrados con este nombre</p>
+                <p className="font-body text-xs text-muted">Sin pedidos registrados con este nombre</p>
               ) : (
                 <div className="flex flex-col gap-1.5">
                   {clientOrders(profile.name).map((o) => (
@@ -1978,29 +2003,29 @@ const ClientesView = ({ orders: allOrders, flash }) => {
             </div>
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45">Métodos de pago</div>
+                <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted">Métodos de pago</div>
                 {!showCardForm && (
                   <button onClick={() => setShowCardForm(true)} className="font-body text-xs font-semibold text-ink/60 hover:text-ink">+ Agregar tarjeta</button>
                 )}
               </div>
 
               {profile.paymentMethods.length === 0 && !showCardForm && (
-                <p className="font-body text-xs text-ink/40">Sin tarjetas guardadas</p>
+                <p className="font-body text-xs text-muted">Sin tarjetas guardadas</p>
               )}
 
               {profile.paymentMethods.length > 0 && (
                 <div className="flex flex-col gap-2 mb-2">
                   {profile.paymentMethods.map((pm) => (
-                    <div key={pm.id} className="flex items-center gap-3 p-2.5 rounded-lg border border-black/10">
+                    <div key={pm.id} className="flex items-center gap-3 p-2.5 rounded-xl border border-black/10">
                       <CardBrandIcon brand={pm.brand} />
                       <div className="flex-1 min-w-0">
-                        <div className="font-body text-sm font-semibold text-ink">•••• {pm.last4} <span className="font-normal text-ink/40">· vence {pm.expiry}</span></div>
-                        <div className="font-body text-[11px] text-ink/40">{pm.holder}</div>
+                        <div className="font-body text-sm font-semibold text-ink">•••• {pm.last4} <span className="font-normal text-muted">· vence {pm.expiry}</span></div>
+                        <div className="font-body text-[11px] text-muted">{pm.holder}</div>
                       </div>
                       {pm.isDefault ? (
                         <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full border bg-ok/10 text-ok border-ok/30 flex-shrink-0">Predeterminada</span>
                       ) : (
-                        <button onClick={() => setDefaultCard(profile, pm.id)} className="font-body text-[11px] font-semibold text-ink/45 hover:text-ink flex-shrink-0">Predeterminar</button>
+                        <button onClick={() => setDefaultCard(profile, pm.id)} className="font-body text-[11px] font-semibold text-muted hover:text-ink flex-shrink-0">Predeterminar</button>
                       )}
                       <button onClick={() => removeCard(profile, pm.id)} className="text-ink/30 hover:text-low flex-shrink-0" aria-label="Eliminar tarjeta"><ITrash className="w-3.5 h-3.5" /></button>
                     </div>
@@ -2013,9 +2038,9 @@ const ClientesView = ({ orders: allOrders, flash }) => {
               )}
             </div>
             <div>
-              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-1.5">Reseñas</div>
+              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-1.5">Reseñas</div>
               {clientReviews(profile.name).length === 0 ? (
-                <p className="font-body text-xs text-ink/40">Sin reseñas todavía</p>
+                <p className="font-body text-xs text-muted">Sin reseñas todavía</p>
               ) : (
                 clientReviews(profile.name).map((r) => (
                   <div key={r.id} className="font-body text-sm text-ink/70 mb-1">"{r.comment}" — {r.rating}★</div>
@@ -2035,12 +2060,12 @@ const InformesView = () => {
   const avgTicket = Math.round(orders.reduce((a, o) => a + o.total, 0) / orders.length);
   return (
     <div className="max-w-5xl">
-      <h1 className="font-display font-extrabold text-2xl text-ink mb-5">Informes y estadísticas</h1>
+      <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-5">Informes y estadísticas</h1>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <Panel className="p-4"><div className="font-display font-extrabold text-2xl text-ink">{fmt(totalWeek)}</div><div className="font-body text-xs text-ink/45 mt-1">Ventas de la semana</div></Panel>
-        <Panel className="p-4"><div className="font-display font-extrabold text-2xl text-ink">{fmt(avgTicket)}</div><div className="font-body text-xs text-ink/45 mt-1">Ticket promedio</div></Panel>
-        <Panel className="p-4"><div className="font-display font-extrabold text-2xl text-ink">72%</div><div className="font-body text-xs text-ink/45 mt-1">Ocupación de stock</div></Panel>
+        <Panel className="p-4"><div className="font-display font-extrabold text-2xl text-ink">{fmt(totalWeek)}</div><div className="font-body text-xs text-muted mt-1">Ventas de la semana</div></Panel>
+        <Panel className="p-4"><div className="font-display font-extrabold text-2xl text-ink">{fmt(avgTicket)}</div><div className="font-body text-xs text-muted mt-1">Ticket promedio</div></Panel>
+        <Panel className="p-4"><div className="font-display font-extrabold text-2xl text-ink">72%</div><div className="font-body text-xs text-muted mt-1">Ocupación de stock</div></Panel>
       </div>
 
       <div className="font-body text-sm font-semibold text-ink mb-2">Ventas de la semana</div>
@@ -2052,7 +2077,7 @@ const InformesView = () => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Producto", "Unidades vendidas", "Ingresos"].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -2109,7 +2134,7 @@ const CalendarioView = ({ inventory }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Calendario · Septiembre 2026</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Calendario · Septiembre 2026</h1>
         <Btn variant="outline" onClick={() => setPublicView(true)}>Vista pública</Btn>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
@@ -2124,15 +2149,15 @@ const CalendarioView = ({ inventory }) => {
               const isSel = iso === selected;
               return (
                 <button key={d} onClick={() => setSelected(iso)}
-                  className={`aspect-square rounded-md font-body text-xs font-semibold flex items-center justify-center border
-                    ${status === "busy" ? "bg-low text-white border-low" : status === "partial" ? "bg-mustard text-ink border-ink/20" : "bg-[#F4F3EF] text-ink/55 border-black/5"}
+                  className={`aspect-square rounded-xl font-body text-xs font-semibold flex items-center justify-center border
+                    ${status === "busy" ? "bg-low text-white border-low" : status === "partial" ? "bg-mustard text-ink border-ink/20" : "bg-[#F7F4EB] text-ink/55 border-black/5"}
                     ${isSel ? "ring-2 ring-ink ring-offset-1" : ""}`}>
                   {d}
                 </button>
               );
             })}
           </div>
-          <div className="flex gap-4 mt-4 font-body text-[11px] text-ink/50">
+          <div className="flex gap-4 mt-4 font-body text-[11px] text-muted">
             <span className="flex items-center gap-1.5"><i className="w-3 h-3 rounded-sm bg-low inline-block" />Todo reservado</span>
             <span className="flex items-center gap-1.5"><i className="w-3 h-3 rounded-sm bg-mustard inline-block" />Parcial</span>
           </div>
@@ -2163,7 +2188,7 @@ const CalendarioView = ({ inventory }) => {
               <input value={from} onChange={(e) => setFrom(e.target.value)} type="date" className={`${inputCls} flex-1`} />
               <input value={to} onChange={(e) => setTo(e.target.value)} type="date" className={`${inputCls} flex-1`} />
             </div>
-            {error && <div className="bg-low/10 border border-low/25 text-low text-xs font-semibold rounded-lg p-2">{error}</div>}
+            {error && <div className="bg-low/10 border border-low/25 text-low text-xs font-semibold rounded-xl p-2">{error}</div>}
             <Btn variant="primary" onClick={submit}>Confirmar y bloquear</Btn>
           </Panel>
         </div>
@@ -2171,7 +2196,7 @@ const CalendarioView = ({ inventory }) => {
 
       {publicView && (
         <Modal title="Vista pública de disponibilidad" onClose={() => setPublicView(false)} wide>
-          <p className="font-body text-xs text-ink/45 mb-3">Así vería un cliente la disponibilidad, sin acceso al panel — solo ve si hay fechas libres, nunca qué cliente reservó qué.</p>
+          <p className="font-body text-xs text-muted mb-3">Así vería un cliente la disponibilidad, sin acceso al panel — solo ve si hay fechas libres, nunca qué cliente reservó qué.</p>
           <div className="grid grid-cols-7 gap-1.5 text-center mb-1.5">
             {["L", "M", "X", "J", "V", "S", "D"].map((d) => <span key={d} className="font-body text-[10px] font-bold text-ink/35">{d}</span>)}
           </div>
@@ -2179,14 +2204,14 @@ const CalendarioView = ({ inventory }) => {
             {days.map((d) => {
               const status = statusFor(dayIso(d));
               return (
-                <div key={d} className={`aspect-square rounded-md font-body text-xs font-semibold flex items-center justify-center border
+                <div key={d} className={`aspect-square rounded-xl font-body text-xs font-semibold flex items-center justify-center border
                   ${status === "busy" ? "bg-low text-white border-low" : status === "partial" ? "bg-mustard text-ink border-ink/20" : "bg-ok/10 text-ok border-ok/20"}`}>
                   {d}
                 </div>
               );
             })}
           </div>
-          <div className="flex gap-4 mt-4 font-body text-[11px] text-ink/50">
+          <div className="flex gap-4 mt-4 font-body text-[11px] text-muted">
             <span className="flex items-center gap-1.5"><i className="w-3 h-3 rounded-sm bg-ok/40 inline-block" />Disponible</span>
             <span className="flex items-center gap-1.5"><i className="w-3 h-3 rounded-sm bg-mustard inline-block" />Parcial</span>
             <span className="flex items-center gap-1.5"><i className="w-3 h-3 rounded-sm bg-low inline-block" />Ocupado</span>
@@ -2237,18 +2262,18 @@ const DescuentosView = ({ flash }) => {
 
   return (
     <div className="max-w-5xl">
-      <h1 className="font-display font-extrabold text-2xl text-ink mb-5">Descuentos</h1>
+      <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-5">Descuentos</h1>
 
       <div className="grid grid-cols-3 gap-3 mb-5">
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{discounts.length}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Descuentos creados</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ok">{stats.activos}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Activos</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.usos}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Usos totales</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{discounts.length}</div><div className="font-body text-[11px] text-muted mt-0.5">Descuentos creados</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ok">{stats.activos}</div><div className="font-body text-[11px] text-muted mt-0.5">Activos</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{stats.usos}</div><div className="font-body text-[11px] text-muted mt-0.5">Usos totales</div></Panel>
       </div>
 
       <Panel className="p-4 mb-5 flex flex-wrap gap-3 items-end">
         <Field label="Nombre"><input value={name} onChange={(e) => setName(e.target.value)} className={`${inputCls} w-52`} placeholder="Ej. Cliente VIP" /></Field>
         <Field label="Tipo">
-          <div className="flex border border-black/15 rounded-lg overflow-hidden">
+          <div className="flex border border-black/15 rounded-xl overflow-hidden">
             <button onClick={() => setType("percent")} className={`px-3 py-2 font-body text-sm font-semibold ${type === "percent" ? "bg-ink text-mustard" : "bg-white text-ink"}`}>%</button>
             <button onClick={() => setType("fixed")} className={`px-3 py-2 font-body text-sm font-semibold border-l border-black/15 ${type === "fixed" ? "bg-ink text-mustard" : "bg-white text-ink"}`}>$</button>
           </div>
@@ -2272,7 +2297,7 @@ const DescuentosView = ({ flash }) => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Nombre", "Tipo", "Valor", "Aplica a", "Usos", "Estado", ""].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -2287,9 +2312,9 @@ const DescuentosView = ({ flash }) => {
                 <td className="px-4 py-3">
                   <span className="text-xs font-semibold px-2 py-1 rounded-full border bg-mustard/15 text-ink/70 border-mustard/40">{d.scope}</span>
                 </td>
-                <td className="px-4 py-3 font-body text-sm text-ink/50">{d.uses}</td>
+                <td className="px-4 py-3 font-body text-sm text-muted">{d.uses}</td>
                 <td className="px-4 py-3">
-                  <button onClick={() => toggle(d.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${d.active ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-ink/40 border-black/10"}`}>
+                  <button onClick={() => toggle(d.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${d.active ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-muted border-black/10"}`}>
                     {d.active ? "Activo" : "Pausado"}
                   </button>
                 </td>
@@ -2369,7 +2394,7 @@ const AppsView = ({ flash }) => {
 
   return (
     <div className="max-w-5xl">
-      <h1 className="font-display font-extrabold text-2xl text-ink mb-5">Aplicaciones</h1>
+      <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-5">Aplicaciones</h1>
       <div className="grid grid-cols-2 gap-4">
         {APPS_LIST.map((a) => (
           <Panel key={a.id} className="p-4 flex flex-col gap-3">
@@ -2377,7 +2402,7 @@ const AppsView = ({ flash }) => {
               <div className="font-body text-sm font-semibold text-ink pr-2">{a.name}</div>
               <span className="text-[10px] font-bold px-2 py-1 rounded-full border bg-ok/10 text-ok border-ok/30 whitespace-nowrap">{a.status}</span>
             </div>
-            <p className="font-body text-xs text-ink/50 leading-relaxed flex-1">{a.desc}</p>
+            <p className="font-body text-xs text-muted leading-relaxed flex-1">{a.desc}</p>
             <Btn variant="outline" className="self-start" onClick={() => openApp(a)}>Configurar</Btn>
           </Panel>
         ))}
@@ -2455,10 +2480,10 @@ const TiendaView = ({ flash }) => {
 
   return (
     <div className="max-w-5xl">
-      <h1 className="font-display font-extrabold text-2xl text-ink mb-4">Tienda online</h1>
+      <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-4">Tienda online</h1>
       <div className="flex gap-2 mb-6 border-b border-black/10">
         {["Catálogo", "Paquetes", "Páginas", "Checkout"].map((s) => (
-          <button key={s} onClick={() => setSub(s)} className={`px-3 py-2 font-body text-sm font-semibold border-b-2 -mb-px ${sub === s ? "border-ink text-ink" : "border-transparent text-ink/40 hover:text-ink/70"}`}>
+          <button key={s} onClick={() => setSub(s)} className={`px-3 py-2 font-body text-sm font-semibold border-b-2 -mb-px ${sub === s ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink/70"}`}>
             {s}
           </button>
         ))}
@@ -2531,12 +2556,12 @@ const TiendaView = ({ flash }) => {
       {sub === "Páginas" && (
         <Panel className="overflow-hidden">
           <table className="w-full text-left">
-            <thead><tr className="border-b border-black/10 bg-[#FAFAF7]"><th className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase">Página</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase">Actualizada</th><th></th></tr></thead>
+            <thead><tr className="border-b border-black/10 bg-[#FAFAF7]"><th className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase">Página</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase">Actualizada</th><th></th></tr></thead>
             <tbody>
               {pages.map((p) => (
                 <tr key={p.id} className="border-b border-black/5 last:border-0">
                   <td className="px-4 py-3 font-body text-sm font-semibold text-ink">{p.name}</td>
-                  <td className="px-4 py-3 font-body text-sm text-ink/45">{p.updated}</td>
+                  <td className="px-4 py-3 font-body text-sm text-muted">{p.updated}</td>
                   <td className="px-4 py-3 text-right"><Btn variant="outline" onClick={() => setEditingPage(p)}>Editar</Btn></td>
                 </tr>
               ))}
@@ -2561,7 +2586,7 @@ const TiendaView = ({ flash }) => {
             <input type="range" min="0" max="100" step="5" value={deposito} onChange={(e) => setDeposito(e.target.value)} className="accent-ink" />
           </Field>
           <div>
-            <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-2">Métodos de pago aceptados</div>
+            <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-2">Métodos de pago aceptados</div>
             {Object.entries(metodos).map(([k, v]) => (
               <label key={k} className="flex items-center justify-between py-2 border-b border-black/5 last:border-0">
                 <span className="font-body text-sm text-ink capitalize">{k}</span>
@@ -2613,14 +2638,14 @@ const BorradoresView = ({ onConvert, flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Borradores de pedidos</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Borradores de pedidos</h1>
         <Btn variant="primary" onClick={() => setShow((s) => !s)}>{show ? "Cancelar" : "+ Nuevo presupuesto"}</Btn>
       </div>
-      <p className="font-body text-sm text-ink/45 mb-5 -mt-3">Presupuestos y cotizaciones que aún no se confirmaron como pedido.</p>
+      <p className="font-body text-sm text-muted mb-5 -mt-3">Presupuestos y cotizaciones que aún no se confirmaron como pedido.</p>
 
       <div className="grid grid-cols-2 gap-3 mb-5">
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{drafts.length}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Presupuestos abiertos</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{fmt(totalEstimado)}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Valor estimado total</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{drafts.length}</div><div className="font-body text-[11px] text-muted mt-0.5">Presupuestos abiertos</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{fmt(totalEstimado)}</div><div className="font-body text-[11px] text-muted mt-0.5">Valor estimado total</div></Panel>
       </div>
 
       {show && (
@@ -2640,14 +2665,14 @@ const BorradoresView = ({ onConvert, flash }) => {
       )}
 
       {filtered.length === 0 ? (
-        <Panel className="p-10 text-center"><p className="font-body text-sm text-ink/40">No hay presupuestos pendientes</p></Panel>
+        <Panel className="p-10 text-center"><p className="font-body text-sm text-muted">No hay presupuestos pendientes</p></Panel>
       ) : (
         <div className="flex flex-col gap-3">
           {filtered.map((d) => (
             <Panel key={d.id} className="p-4 flex items-center justify-between flex-wrap gap-3">
               <div>
                 <div className="font-body text-sm font-semibold text-ink">{d.id} · {d.client}</div>
-                <div className="font-body text-xs text-ink/45 mt-0.5">{d.date}{d.note ? ` · ${d.note}` : ""}</div>
+                <div className="font-body text-xs text-muted mt-0.5">{d.date}{d.note ? ` · ${d.note}` : ""}</div>
               </div>
               <div className="flex items-center gap-3">
                 <span className="font-display font-extrabold text-base text-ink">{fmt(d.total)}</span>
@@ -2689,10 +2714,10 @@ const MarketingView = ({ flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Marketing</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Marketing</h1>
         <Btn variant="primary" onClick={() => setShow((s) => !s)}>{show ? "Cancelar" : "+ Nueva campaña"}</Btn>
       </div>
-      <p className="font-body text-sm text-ink/45 mb-5 -mt-3">Recordatorios y avisos automáticos a tus clientes.</p>
+      <p className="font-body text-sm text-muted mb-5 -mt-3">Recordatorios y avisos automáticos a tus clientes.</p>
 
       {show && (
         <Panel className="p-4 mb-5 flex flex-wrap gap-3 items-end">
@@ -2716,7 +2741,7 @@ const MarketingView = ({ flash }) => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Campaña", "Canal", "Se activa cuando", "Estado", ""].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -2727,7 +2752,7 @@ const MarketingView = ({ flash }) => {
                 <td className="px-4 py-3 font-body text-sm text-ink/55">{c.type}</td>
                 <td className="px-4 py-3 font-body text-sm text-ink/55">{c.trigger}</td>
                 <td className="px-4 py-3">
-                  <button onClick={() => toggle(c.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${c.active ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-ink/40 border-black/10"}`}>
+                  <button onClick={() => toggle(c.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${c.active ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-muted border-black/10"}`}>
                     {c.active ? "Activa" : "Pausada"}
                   </button>
                 </td>
@@ -2742,12 +2767,12 @@ const MarketingView = ({ flash }) => {
 
       {log.length > 0 && (
         <>
-          <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mt-6 mb-2">Bitácora de envíos (demo)</div>
+          <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mt-6 mb-2">Bitácora de envíos (demo)</div>
           <div className="flex flex-col gap-2">
             {log.map((l) => (
               <Panel key={l.id} className="p-3 flex items-center justify-between">
-                <span className="font-body text-sm text-ink">{l.name} <span className="text-ink/40">· {l.type}</span></span>
-                <span className="font-body text-xs text-ink/45">{l.count} enviados · {l.time}</span>
+                <span className="font-body text-sm text-ink">{l.name} <span className="text-muted">· {l.type}</span></span>
+                <span className="font-body text-xs text-muted">{l.count} enviados · {l.time}</span>
               </Panel>
             ))}
           </div>
@@ -2788,15 +2813,15 @@ const AutomatizacionesView = ({ flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-2">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Automatizaciones</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Automatizaciones</h1>
         <Btn variant="primary" onClick={() => setShowForm((s) => !s)}>{showForm ? "Cancelar" : "+ Crear automatización"}</Btn>
       </div>
-      <p className="font-body text-sm text-ink/45 mb-5">Reglas del tipo "cuando pasa X, hacé Y" — corren solas sin que tengas que estar mirando la app.</p>
+      <p className="font-body text-sm text-muted mb-5">Reglas del tipo "cuando pasa X, hacé Y" — corren solas sin que tengas que estar mirando la app.</p>
 
       <div className="grid grid-cols-3 gap-3 mb-5">
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{automations.length}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Reglas creadas</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ok">{activas}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Activas</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{totalRuns}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Ejecuciones totales</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{automations.length}</div><div className="font-body text-[11px] text-muted mt-0.5">Reglas creadas</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ok">{activas}</div><div className="font-body text-[11px] text-muted mt-0.5">Activas</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ink">{totalRuns}</div><div className="font-body text-[11px] text-muted mt-0.5">Ejecuciones totales</div></Panel>
       </div>
 
       {showForm && (
@@ -2830,7 +2855,7 @@ const AutomatizacionesView = ({ flash }) => {
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <span className="font-body text-[11px] text-ink/35">{a.runs} veces</span>
-                <button onClick={() => toggle(a.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${a.active ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-ink/40 border-black/10"}`}>
+                <button onClick={() => toggle(a.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${a.active ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-muted border-black/10"}`}>
                   {a.active ? "Activa" : "Pausada"}
                 </button>
               </div>
@@ -2845,12 +2870,12 @@ const AutomatizacionesView = ({ flash }) => {
 
       {log.length > 0 && (
         <>
-          <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mt-6 mb-2">Registro de ejecuciones (demo)</div>
+          <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mt-6 mb-2">Registro de ejecuciones (demo)</div>
           <div className="flex flex-col gap-2">
             {log.map((l) => (
               <Panel key={l.id} className="p-3 flex items-center justify-between">
                 <span className="font-body text-sm text-ink">{l.name}</span>
-                <span className="font-body text-xs text-ink/45">{l.action} · {l.time}</span>
+                <span className="font-body text-xs text-muted">{l.action} · {l.time}</span>
               </Panel>
             ))}
           </div>
@@ -2885,7 +2910,7 @@ const BandejaView = () => {
 
   return (
     <div className="max-w-5xl">
-      <h1 className="font-display font-extrabold text-2xl text-ink mb-5">Bandeja de entrada</h1>
+      <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-5">Bandeja de entrada</h1>
       <Panel className="overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] min-h-[420px]">
           <div className="border-b md:border-b-0 md:border-r border-black/10 overflow-y-auto">
@@ -2899,9 +2924,9 @@ const BandejaView = () => {
                   <span className="font-body text-sm font-semibold text-ink truncate">{c.client}</span>
                   {c.unread && <span className="w-2 h-2 rounded-full bg-low flex-shrink-0" />}
                 </div>
-                <div className="font-body text-xs text-ink/45 truncate mt-0.5">{c.lastMessage}</div>
+                <div className="font-body text-xs text-muted truncate mt-0.5">{c.lastMessage}</div>
                 <div className="flex items-center justify-between mt-1">
-                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded border bg-black/[0.03] text-ink/40 border-black/10">{c.channel}</span>
+                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-xl border bg-black/[0.03] text-muted border-black/10">{c.channel}</span>
                   <span className="font-body text-[10px] text-ink/35">{c.time}</span>
                 </div>
               </button>
@@ -2913,7 +2938,7 @@ const BandejaView = () => {
               <>
                 <div className="px-4 py-3 border-b border-black/10">
                   <div className="font-body text-sm font-semibold text-ink">{active.client}</div>
-                  <div className="font-body text-[11px] text-ink/40">vía {active.channel}</div>
+                  <div className="font-body text-[11px] text-muted">vía {active.channel}</div>
                 </div>
                 <div className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto max-h-72">
                   {active.messages.map((m, idx) => (
@@ -2929,7 +2954,7 @@ const BandejaView = () => {
                 </div>
               </>
             ) : (
-              <div className="flex-1 flex items-center justify-center font-body text-sm text-ink/40">Elegí una conversación</div>
+              <div className="flex-1 flex items-center justify-center font-body text-sm text-muted">Elegí una conversación</div>
             )}
           </div>
         </div>
@@ -2975,7 +3000,7 @@ const ColeccionesView = ({ inventory, flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Colecciones</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Colecciones</h1>
         <Btn variant="primary" onClick={() => setShowForm((s) => !s)}>{showForm ? "Cancelar" : "+ Crear colección"}</Btn>
       </div>
       {showForm && (
@@ -2989,17 +3014,17 @@ const ColeccionesView = ({ inventory, flash }) => {
           <button key={c.id} onClick={() => setEditing(c)} className="text-left">
             <Panel className="p-4 hover:border-ink/25 transition">
               {c.productIds.length > 0 ? (
-                <div className="grid grid-cols-3 gap-1 h-20 mb-3 rounded-lg overflow-hidden">
+                <div className="grid grid-cols-3 gap-1 h-20 mb-3 rounded-xl overflow-hidden">
                   {c.productIds.slice(0, 3).map((pid) => {
                     const prod = inventory.find((i) => i.id === pid);
                     return <div key={pid} className="bg-cream"><ProductIllustration type={prod?.illustration} /></div>;
                   })}
                 </div>
               ) : (
-                <div className="w-full h-20 rounded-lg bg-gradient-to-br from-cream to-mustard/25 mb-3" />
+                <div className="w-full h-20 rounded-xl bg-gradient-to-br from-cream to-mustard/25 mb-3" />
               )}
               <div className="font-body text-sm font-semibold text-ink">{c.name}</div>
-              <div className="font-body text-xs text-ink/45 mt-0.5">{c.productIds.length} productos</div>
+              <div className="font-body text-xs text-muted mt-0.5">{c.productIds.length} productos</div>
             </Panel>
           </button>
         ))}
@@ -3010,13 +3035,13 @@ const ColeccionesView = ({ inventory, flash }) => {
           <div className="flex flex-col gap-4">
             <Field label="Nombre de la colección"><input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className={inputCls} /></Field>
             <div>
-              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-2">Productos incluidos</div>
+              <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-2">Productos incluidos</div>
               <div className="grid grid-cols-2 gap-2 max-h-72 overflow-y-auto">
                 {inventory.map((p) => {
                   const checked = editing.productIds.includes(p.id);
                   return (
-                    <button key={p.id} onClick={() => toggleProduct(p.id)} className={`flex items-center gap-2.5 p-2 rounded-lg border text-left ${checked ? "bg-mustard/15 border-ink" : "border-black/10"}`}>
-                      <div className="w-9 h-9 rounded-md overflow-hidden border border-black/10 flex-shrink-0"><ProductIllustration type={p.illustration} /></div>
+                    <button key={p.id} onClick={() => toggleProduct(p.id)} className={`flex items-center gap-2.5 p-2 rounded-xl border text-left ${checked ? "bg-mustard/15 border-ink" : "border-black/10"}`}>
+                      <div className="w-9 h-9 rounded-xl overflow-hidden border border-black/10 flex-shrink-0"><ProductIllustration type={p.illustration} /></div>
                       <span className="font-body text-xs font-semibold text-ink flex-1 truncate">{p.name}</span>
                       {checked && <span className="text-ok font-bold flex-shrink-0">✓</span>}
                     </button>
@@ -3079,13 +3104,13 @@ const TransferenciasView = ({ inventory, updateLocation, flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Transferencias</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Transferencias</h1>
         <Btn variant="primary" onClick={() => setShowForm((s) => !s)}>{showForm ? "Cancelar" : "+ Nueva transferencia"}</Btn>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-5">
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-mustardDark">{stats.transito}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">En tránsito</div></Panel>
-        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ok">{stats.completadas}</div><div className="font-body text-[11px] text-ink/45 mt-0.5">Completadas</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-mustardDark">{stats.transito}</div><div className="font-body text-[11px] text-muted mt-0.5">En tránsito</div></Panel>
+        <Panel className="p-3.5"><div className="font-display font-extrabold text-xl text-ok">{stats.completadas}</div><div className="font-body text-[11px] text-muted mt-0.5">Completadas</div></Panel>
       </div>
 
       {showForm && (
@@ -3127,7 +3152,7 @@ const TransferenciasView = ({ inventory, updateLocation, flash }) => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Producto", "Cantidad", "De → A", "Estado", ""].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -3171,7 +3196,7 @@ const TarjetasRegaloView = ({ flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Tarjetas de regalo</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Tarjetas de regalo</h1>
         <Btn variant="primary" onClick={() => setShowForm((s) => !s)}>{showForm ? "Cancelar" : "+ Emitir tarjeta"}</Btn>
       </div>
       {showForm && (
@@ -3186,7 +3211,7 @@ const TarjetasRegaloView = ({ flash }) => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Código", "Saldo", "Inicial", "Cliente"].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -3195,7 +3220,7 @@ const TarjetasRegaloView = ({ flash }) => {
               <tr key={c.id} className="border-b border-black/5 last:border-0">
                 <td className="px-4 py-3 font-body text-sm font-semibold text-ink tracking-wide">{c.code}</td>
                 <td className="px-4 py-3 font-body text-sm font-semibold text-ink">{fmt(c.balance)}</td>
-                <td className="px-4 py-3 font-body text-sm text-ink/45">{fmt(c.initial)}</td>
+                <td className="px-4 py-3 font-body text-sm text-muted">{fmt(c.initial)}</td>
                 <td className="px-4 py-3 font-body text-sm text-ink/55">{c.customer}</td>
               </tr>
             ))}
@@ -3218,7 +3243,7 @@ const ArchivosView = ({ flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Archivos</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Archivos</h1>
         <Btn variant="primary" onClick={upload}>+ Subir archivo</Btn>
       </div>
       <Panel className="overflow-hidden">
@@ -3226,16 +3251,16 @@ const ArchivosView = ({ flash }) => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Archivo", "Tamaño", "Subido"].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {files.map((f) => (
               <tr key={f.id} className="border-b border-black/5 last:border-0">
-                <td className="px-4 py-3 flex items-center gap-2 font-body text-sm font-semibold text-ink"><IFile className="w-4 h-4 text-ink/40" /> {f.name}</td>
-                <td className="px-4 py-3 font-body text-sm text-ink/45">{f.size}</td>
-                <td className="px-4 py-3 font-body text-sm text-ink/45">{f.date}</td>
+                <td className="px-4 py-3 flex items-center gap-2 font-body text-sm font-semibold text-ink"><IFile className="w-4 h-4 text-muted" /> {f.name}</td>
+                <td className="px-4 py-3 font-body text-sm text-muted">{f.size}</td>
+                <td className="px-4 py-3 font-body text-sm text-muted">{f.date}</td>
               </tr>
             ))}
           </tbody>
@@ -3282,10 +3307,10 @@ const MarketsView = ({ flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-2">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Mercados</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Mercados</h1>
         <Btn variant="primary" onClick={() => setShowForm((s) => !s)}>{showForm ? "Cancelar" : "+ Crear mercado"}</Btn>
       </div>
-      <p className="font-body text-sm text-ink/45 mb-4">Elegí en qué países vendés y con qué moneda se muestra cada uno.</p>
+      <p className="font-body text-sm text-muted mb-4">Elegí en qué países vendés y con qué moneda se muestra cada uno.</p>
 
       <div className="relative mb-5 max-w-xs">
         <ISearch className="w-3.5 h-3.5 text-ink/35 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -3310,7 +3335,7 @@ const MarketsView = ({ flash }) => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Mercado", "Estado", "Incluye", "Moneda", ""].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -3321,19 +3346,19 @@ const MarketsView = ({ flash }) => {
                   <button onClick={() => setEditing(m)} className="font-body text-sm font-semibold text-ink hover:underline">{m.name}</button>
                 </td>
                 <td className="px-4 py-3">
-                  <button onClick={() => toggleStatus(m.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${m.status === "Activo" ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-ink/40 border-black/10"}`}>
+                  <button onClick={() => toggleStatus(m.id)} className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${m.status === "Activo" ? "bg-ok/10 text-ok border-ok/30" : "bg-black/5 text-muted border-black/10"}`}>
                     {m.status}
                   </button>
                 </td>
                 <td className="px-4 py-3 font-body text-sm text-ink/60">{m.flag} {m.countries.join(", ")}</td>
-                <td className="px-4 py-3 font-body text-sm text-ink/45">{m.currency}</td>
+                <td className="px-4 py-3 font-body text-sm text-muted">{m.currency}</td>
                 <td className="px-4 py-3 text-right">
-                  <button onClick={() => setEditing(m)} className="text-ink/40 hover:text-ink" aria-label={`Configurar ${m.name}`}><ISettings className="w-4 h-4" /></button>
+                  <button onClick={() => setEditing(m)} className="text-muted hover:text-ink" aria-label={`Configurar ${m.name}`}><ISettings className="w-4 h-4" /></button>
                 </td>
               </tr>
             ))}
             {filteredMarkets.length === 0 && (
-              <tr><td colSpan="5" className="px-4 py-6 text-center font-body text-sm text-ink/40">Sin resultados para "{query}"</td></tr>
+              <tr><td colSpan="5" className="px-4 py-6 text-center font-body text-sm text-muted">Sin resultados para "{query}"</td></tr>
             )}
           </tbody>
         </table>
@@ -3345,7 +3370,7 @@ const MarketsView = ({ flash }) => {
           <Panel key={s.name} className="p-4 flex items-center justify-between">
             <div>
               <div className="font-body text-sm font-semibold text-ink">{s.flags} {s.name}</div>
-              <div className="font-body text-xs text-ink/40 mt-0.5">{s.countries.join(", ")}</div>
+              <div className="font-body text-xs text-muted mt-0.5">{s.countries.join(", ")}</div>
             </div>
             <Btn variant="outline" onClick={() => createFromSuggested(s)}>Crear</Btn>
           </Panel>
@@ -3395,7 +3420,7 @@ const FinanzasView = () => {
 
   return (
     <div className="max-w-5xl">
-      <h1 className="font-display font-extrabold text-2xl text-ink mb-5">Finanzas</h1>
+      <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-5">Finanzas</h1>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         <Panel className="p-5 bg-ink border-ink">
@@ -3403,16 +3428,16 @@ const FinanzasView = () => {
           <div className="font-display font-extrabold text-2xl text-mustard mt-1">{fmt(balance)}</div>
         </Panel>
         <Panel className="p-5">
-          <div className="font-body text-xs text-ink/45">Próximo pago</div>
+          <div className="font-body text-xs text-muted">Próximo pago</div>
           <div className="font-display font-extrabold text-2xl text-ink mt-1">{fmt(nextPayout.amount)}</div>
-          <div className="font-body text-[11px] text-ink/40 mt-0.5">{nextPayout.date}</div>
+          <div className="font-body text-[11px] text-muted mt-0.5">{nextPayout.date}</div>
         </Panel>
       </div>
 
       <div className="font-body text-sm font-semibold text-ink mb-2">Ingresos de la semana</div>
       <Panel className="p-5 mb-6">
         <BarChart data={FINANCE_WEEK} />
-        <div className="text-right font-body text-xs text-ink/45 mt-2">Total: <span className="font-semibold text-ink">{fmt(totalWeek)}</span></div>
+        <div className="text-right font-body text-xs text-muted mt-2">Total: <span className="font-semibold text-ink">{fmt(totalWeek)}</span></div>
       </Panel>
 
       <div className="font-body text-sm font-semibold text-ink mb-2">Historial de pagos</div>
@@ -3421,7 +3446,7 @@ const FinanzasView = () => {
           <thead>
             <tr className="border-b border-black/10 bg-[#FAFAF7]">
               {["Fecha", "Monto", "Método", "Estado"].map((h) => (
-                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase tracking-wide">{h}</th>
+                <th key={h} className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
@@ -3430,7 +3455,7 @@ const FinanzasView = () => {
               <tr key={p.id} className="border-b border-black/5 last:border-0">
                 <td className="px-4 py-3 font-body text-sm text-ink/70">{p.date}</td>
                 <td className="px-4 py-3 font-body text-sm font-semibold text-ink">{fmt(p.amount)}</td>
-                <td className="px-4 py-3 font-body text-sm text-ink/45">{p.method}</td>
+                <td className="px-4 py-3 font-body text-sm text-muted">{p.method}</td>
                 <td className="px-4 py-3"><span className="text-xs font-semibold px-2 py-1 rounded-full border bg-ok/10 text-ok border-ok/25">{p.status}</span></td>
               </tr>
             ))}
@@ -3459,10 +3484,10 @@ const CatalogosView = ({ flash }) => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center justify-between mb-2">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Catálogos</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Catálogos</h1>
         <Btn variant="primary" onClick={() => setShowForm((s) => !s)}>{showForm ? "Cancelar" : "+ Crear catálogo"}</Btn>
       </div>
-      <p className="font-body text-sm text-ink/45 mb-5">Mostrá precios distintos según el tipo de cliente (mayorista, corporativo, etc.).</p>
+      <p className="font-body text-sm text-muted mb-5">Mostrá precios distintos según el tipo de cliente (mayorista, corporativo, etc.).</p>
 
       {showForm && (
         <Panel className="p-4 mb-5 flex flex-wrap gap-3 items-end">
@@ -3484,8 +3509,8 @@ const CatalogosView = ({ flash }) => {
               <span className="font-body text-sm font-semibold text-ink">{c.name}</span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border bg-mustard/15 text-ink/70 border-mustard/40">{c.priceRule}</span>
             </div>
-            <div className="font-body text-xs text-ink/45">{c.audience}</div>
-            <div className="font-body text-xs text-ink/40 mt-1">{c.products} productos incluidos</div>
+            <div className="font-body text-xs text-muted">{c.audience}</div>
+            <div className="font-body text-xs text-muted mt-1">{c.products} productos incluidos</div>
           </Panel>
         ))}
       </div>
@@ -3499,11 +3524,11 @@ const ReseñasView = () => {
   return (
     <div className="max-w-5xl">
       <div className="flex items-center gap-3 mb-5">
-        <h1 className="font-display font-extrabold text-2xl text-ink">Reseñas</h1>
+        <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight">Reseñas</h1>
         <span className="flex items-center gap-1 bg-mustard/15 border border-mustard/40 rounded-full px-2.5 py-1">
-          <IStar className="w-3.5 h-3.5 text-mustard" />
+          <IStar className="w-3.5 h-3.5 text-mustardDark" />
           <span className="font-display font-bold text-sm text-ink">{avg}</span>
-          <span className="font-body text-xs text-ink/45">({REVIEWS.length})</span>
+          <span className="font-body text-xs text-muted">({REVIEWS.length})</span>
         </span>
       </div>
       <div className="flex flex-col gap-3">
@@ -3513,7 +3538,7 @@ const ReseñasView = () => {
               <span className="font-body text-sm font-semibold text-ink">{r.client}</span>
               <div className="flex gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  i < r.rating ? <IStar key={i} className="w-3.5 h-3.5 text-mustard" /> : <IStarOutline key={i} className="w-3.5 h-3.5 text-ink/20" />
+                  i < r.rating ? <IStar key={i} className="w-3.5 h-3.5 text-mustardDark" /> : <IStarOutline key={i} className="w-3.5 h-3.5 text-ink/20" />
                 ))}
               </div>
             </div>
@@ -3591,7 +3616,7 @@ const SettingsPlan = () => (
     <div className="font-body text-sm font-semibold text-ink">Facturas recientes</div>
     <Panel className="overflow-hidden">
       <table className="w-full text-left">
-        <thead><tr className="border-b border-black/10 bg-[#FAFAF7]"><th className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase">Fecha</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase">Monto</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase">Estado</th></tr></thead>
+        <thead><tr className="border-b border-black/10 bg-[#FAFAF7]"><th className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase">Fecha</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase">Monto</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase">Estado</th></tr></thead>
         <tbody>
           {[["1 sept 2026", 49900, "Pagada"], ["1 ago 2026", 49900, "Pagada"], ["1 jul 2026", 49900, "Pagada"]].map(([d, a, s]) => (
             <tr key={d} className="border-b border-black/5 last:border-0">
@@ -3637,13 +3662,13 @@ const SettingsUsers = ({ flash }) => {
       )}
       <Panel className="overflow-hidden">
         <table className="w-full text-left">
-          <thead><tr className="border-b border-black/10 bg-[#FAFAF7]"><th className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase">Usuario</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-ink/45 uppercase">Rol</th></tr></thead>
+          <thead><tr className="border-b border-black/10 bg-[#FAFAF7]"><th className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase">Usuario</th><th className="px-4 py-2.5 font-body text-xs font-semibold text-muted uppercase">Rol</th></tr></thead>
           <tbody>
             {team.map((u) => (
               <tr key={u.id} className="border-b border-black/5 last:border-0">
                 <td className="px-4 py-3">
                   <div className="font-body text-sm font-semibold text-ink">{u.name}</div>
-                  <div className="font-body text-xs text-ink/40">{u.email}</div>
+                  <div className="font-body text-xs text-muted">{u.email}</div>
                 </td>
                 <td className="px-4 py-3"><span className="text-xs font-semibold px-2 py-1 rounded-full border bg-mustard/15 text-ink/70 border-mustard/40">{ROLES.find((r) => r.id === u.role)?.label || u.role}</span></td>
               </tr>
@@ -3667,7 +3692,7 @@ const SettingsPagos = ({ defaultDeposit, setDefaultDeposit, gateway, setGateway 
         <option value="redsys">Redsys</option>
       </select>
     </Field>
-    <p className="font-body text-[11px] text-ink/40">Conexión simulada — en producción se pediría la clave API de {gateway === "mercadopago" ? "Mercado Pago" : gateway === "stripe" ? "Stripe" : "Redsys"}.</p>
+    <p className="font-body text-[11px] text-muted">Conexión simulada — en producción se pediría la clave API de {gateway === "mercadopago" ? "Mercado Pago" : gateway === "stripe" ? "Stripe" : "Redsys"}.</p>
   </Panel>
 );
 
@@ -3675,7 +3700,7 @@ const SettingsCheckout = () => {
   const [metodos, setMetodos] = useState({ efectivo: true, transferencia: true, tarjeta: false });
   return (
     <Panel className="p-5">
-      <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-2">Métodos de pago aceptados</div>
+      <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-2">Métodos de pago aceptados</div>
       {Object.entries(metodos).map(([k, v]) => (
         <label key={k} className="flex items-center justify-between py-2 border-b border-black/5 last:border-0">
           <span className="font-body text-sm text-ink capitalize">{k}</span>
@@ -3712,7 +3737,7 @@ const SettingsImpuestos = ({ taxId, setTaxId, invoicePrefix, setInvoicePrefix, n
     <Field label={`IVA aplicado: ${taxRate}%`}>
       <input type="range" min="0" max="27" value={taxRate} onChange={(e) => setTaxRate(e.target.value)} className="accent-ink" />
     </Field>
-    <p className="font-body text-[11px] text-ink/40">Próxima factura: {invoicePrefix}{nextInvoice}</p>
+    <p className="font-body text-[11px] text-muted">Próxima factura: {invoicePrefix}{nextInvoice}</p>
   </Panel>
 );
 
@@ -3733,16 +3758,16 @@ const SettingsIdiomas = ({ flash }) => {
   return (
     <div className="flex flex-col gap-4">
       <Panel className="p-5">
-        <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-ink/45 mb-3">Idiomas de la tienda</div>
+        <div className="font-body text-[11px] font-semibold uppercase tracking-wide text-muted mb-3">Idiomas de la tienda</div>
         <div className="flex flex-col divide-y divide-black/5">
           {languages.map((l) => (
             <div key={l.code} className="flex items-center justify-between py-3">
               <div>
-                <div className="font-body text-sm font-semibold text-ink">{l.name} {l.isDefault && <span className="text-[10px] font-semibold text-ink/40 ml-1">(predeterminado)</span>}</div>
+                <div className="font-body text-sm font-semibold text-ink">{l.name} {l.isDefault && <span className="text-[10px] font-semibold text-muted ml-1">(predeterminado)</span>}</div>
                 <div className="w-40 h-1.5 bg-black/5 rounded-full mt-1.5 overflow-hidden">
                   <div className="h-full bg-mustard" style={{ width: `${l.progress}%` }} />
                 </div>
-                <div className="font-body text-[10px] text-ink/40 mt-1">{l.progress}% traducido</div>
+                <div className="font-body text-[10px] text-muted mt-1">{l.progress}% traducido</div>
               </div>
               {!l.isDefault && (
                 <button onClick={() => removeLanguage(l.code)} className="text-ink/30 hover:text-low" aria-label={`Quitar ${l.name}`}><ITrash className="w-4 h-4" /></button>
@@ -3762,7 +3787,7 @@ const SettingsIdiomas = ({ flash }) => {
       <label className="flex items-center justify-between py-2 mt-2">
         <div>
           <span className="font-body text-sm text-ink">Detectar idioma automáticamente</span>
-          <p className="font-body text-[11px] text-ink/40 mt-0.5">Muestra la tienda en el idioma del navegador del visitante, si está disponible.</p>
+          <p className="font-body text-[11px] text-muted mt-0.5">Muestra la tienda en el idioma del navegador del visitante, si está disponible.</p>
         </div>
         <input type="checkbox" checked={autoDetect} onChange={() => setAutoDetect((a) => !a)} className="w-4 h-4 accent-ink flex-shrink-0 ml-3" />
       </label>
@@ -3800,7 +3825,7 @@ const SettingsSucursales = ({ flash }) => {
         {locations.map((l) => (
           <Panel key={l.id} className="p-4">
             <div className="font-body text-sm font-semibold text-ink">{l.name}</div>
-            <div className="font-body text-xs text-ink/45 mt-0.5">{l.address}</div>
+            <div className="font-body text-xs text-muted mt-0.5">{l.address}</div>
           </Panel>
         ))}
       </div>
@@ -3825,7 +3850,7 @@ const SettingsCanales = ({ flash }) => {
           <IStore className="w-5 h-5 text-ink/60" />
           <div>
             <div className="font-body text-sm font-semibold text-ink">Tienda online</div>
-            <div className="font-body text-[11px] text-ink/40">Catálogo publicado y disponible para clientes</div>
+            <div className="font-body text-[11px] text-muted">Catálogo publicado y disponible para clientes</div>
           </div>
         </div>
         <span className="text-xs font-semibold px-2 py-1 rounded-full border bg-ok/10 text-ok border-ok/25">Conectado</span>
@@ -3849,7 +3874,7 @@ const SettingsCanales = ({ flash }) => {
 
       {showModal && (
         <Modal title="Agregar canal de ventas" onClose={() => setShowModal(false)} wide>
-          <p className="font-body text-xs text-ink/45 mb-3">Nuestras mejores recomendaciones para ventas como la tuya</p>
+          <p className="font-body text-xs text-muted mb-3">Nuestras mejores recomendaciones para ventas como la tuya</p>
           <div className="flex flex-col divide-y divide-black/5">
             {SALES_CHANNEL_OPTIONS.map((ch) => {
               const isConnected = connected.includes(ch.key);
@@ -3858,12 +3883,12 @@ const SettingsCanales = ({ flash }) => {
                   <span className="text-2xl flex-shrink-0">{ch.icon}</span>
                   <div className="flex-1 min-w-0">
                     <div className="font-body text-sm font-semibold text-ink">{ch.name}</div>
-                    <div className="font-body text-[11px] text-ink/45 mt-0.5">{ch.desc}</div>
+                    <div className="font-body text-[11px] text-muted mt-0.5">{ch.desc}</div>
                   </div>
                   <button
                     onClick={() => !isConnected && addChannel(ch.key, ch.name)}
                     disabled={isConnected}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-lg ${isConnected ? "bg-ok/15 text-ok" : "bg-ok text-white hover:bg-ok/90"}`}
+                    className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-lg ${isConnected ? "bg-ok/15 text-ok" : "bg-ok text-white hover:bg-ok/90"}`}
                     aria-label={isConnected ? `${ch.name} ya conectado` : `Agregar ${ch.name}`}
                   >
                     {isConnected ? "✓" : "+"}
@@ -3928,14 +3953,14 @@ const ConfiguracionView = ({ flash, role }) => {
 
   return (
     <div className="max-w-4xl">
-      <h1 className="font-display font-extrabold text-2xl text-ink mb-5">Configuración</h1>
+      <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-5">Configuración</h1>
       <div className="grid grid-cols-1 md:grid-cols-[210px_1fr] gap-6">
         <nav className="flex md:flex-col gap-1 overflow-x-auto no-scrollbar md:overflow-visible">
           {visibleSections.map((s) => (
             <button
               key={s.key}
               onClick={() => setSection(s.key)}
-              className={`text-left px-3 py-2 rounded-lg font-body text-sm whitespace-nowrap ${section === s.key ? "bg-mustard/20 text-ink font-semibold" : "text-ink/60 hover:bg-black/[0.03]"}`}
+              className={`text-left px-3 py-2 rounded-xl font-body text-sm whitespace-nowrap ${section === s.key ? "bg-mustard/20 text-ink font-semibold" : "text-ink/60 hover:bg-black/[0.03]"}`}
             >
               {s.label}
             </button>
@@ -3952,9 +3977,9 @@ const ConfiguracionView = ({ flash, role }) => {
 
 const PlaceholderView = ({ title }) => (
   <div className="max-w-5xl">
-    <h1 className="font-display font-extrabold text-2xl text-ink mb-3">{title}</h1>
+    <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight mb-3">{title}</h1>
     <Panel className="p-10 text-center">
-      <p className="font-body text-sm text-ink/40">Sección en construcción</p>
+      <p className="font-body text-sm text-muted">Sección en construcción</p>
     </Panel>
   </div>
 );
@@ -4034,7 +4059,7 @@ function App() {
   const pendingOrdersCount = ordersList.filter((o) => o.status === "Pendiente").length;
 
   return (
-    <div className="flex min-h-screen bg-[#F4F3EF]">
+    <div className="flex min-h-screen bg-[#F7F4EB]">
       <Sidebar active={activeKey} onChange={setActive} published={published} onTogglePublish={togglePublish} flash={flash} allowed={allowed} lowStockCount={lowStockCount} pendingOrdersCount={pendingOrdersCount} mobileOpen={sidebarOpen} closeMobile={() => setSidebarOpen(false)} />
       <div className="flex-1 min-w-0">
         <TopBar navigate={navigate} flash={flash} inventory={inventory} orders={ordersList} user={user} onLogout={logout} onOpenMenu={() => setSidebarOpen(true)} />

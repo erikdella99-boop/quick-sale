@@ -18,10 +18,11 @@
     theme: {
       extend: {
         colors: {
-          mustard: '#F5B914',
-          mustardDark: '#E2A300',
-          cream: '#FBF6EA',
-          ink: '#181712',
+          mustard: '#F4C430',
+          mustardDark: '#E6B800',
+          cream: '#F7F4EB',
+          ink: '#1A1A1A',
+          muted: '#7A7A7A',
           low: '#D6432E',
           ok: '#3E8B5C',
         },
@@ -30,15 +31,16 @@
           body: ['Inter', 'sans-serif'],
         },
         boxShadow: {
-          brut: '4px 4px 0 #181712',
-          brutSm: '2px 2px 0 #181712',
+          brut: '4px 4px 0 #1A1A1A',
+          brutSm: '2px 2px 0 #1A1A1A',
         }
       }
     }
   }
 </script>
 <style>
-  html,body{ background:#E7E2D3; font-family:'Inter',sans-serif; }
+  html,body{ background:#F7F4EB; font-family:'Inter',sans-serif; }
+  ::selection{ background:#F4C430; color:#1A1A1A; }
   #root{ min-height:100vh; }
   ::-webkit-scrollbar{ width:0; height:0; }
   .no-scrollbar::-webkit-scrollbar{ display:none; }
@@ -69,6 +71,11 @@ const IconChevron = (p) => <Icon {...p} path={<path d="M9 6l6 6-6 6"/>} />;
 const IconLock = (p) => <Icon {...p} path={<><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></>} />;
 const IconX = (p) => <Icon {...p} path={<><path d="M18 6L6 18"/><path d="M6 6l12 12"/></>} />;
 const IconCalendar = (p) => <Icon {...p} path={<><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4"/><path d="M16 3v4"/></>} />;
+const IconSort = (p) => <Icon {...p} path={<><path d="M6 8l6-5 6 5"/><path d="M6 16l6 5 6-5"/><path d="M12 3v18"/></>} />;
+const IconChat = (p) => <Icon {...p} path={<><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.5 8.7 8.7 0 0 1-4-.9L3 21l1.9-5a8.4 8.4 0 0 1-.9-4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></>} />;
+const IconUsers2 = (p) => <Icon {...p} path={<><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15.5 20a5.5 5.5 0 0 1 6.5-5.2"/></>} />;
+const IconImage = (p) => <Icon {...p} path={<><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/></>} />;
+const IconMail = (p) => <Icon {...p} path={<><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></>} />;
 const IconQr = (p) => <Icon {...p} path={<><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3"/><path d="M20 14v3h-3"/><path d="M14 20h7"/></>} />;
 const IconUsers = (p) => <Icon {...p} path={<><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15.5 20a5.5 5.5 0 0 1 6.5-5.2"/></>} />;
 const IconFile = (p) => <Icon {...p} path={<><path d="M6 2h9l4 4v16H6z"/><path d="M15 2v4h4"/><path d="M9 13h6"/><path d="M9 17h6"/></>} />;
@@ -103,41 +110,42 @@ const INITIAL_INVENTORY = [
 ];
 
 const STORE_PRODUCTS = [
-  { id: 1, name: "Pack Básico", price: 32000, category: "paquetes", badge: "Últimas 3", sold: 9 },
-  { id: 2, name: "Carpa 3x3", price: 45000, category: "extras", badge: "Nuevo", sold: 14 },
-  { id: 3, name: "Set Sillas x4", price: 18000, category: "extras", sold: 22 },
-  { id: 4, name: "Montaje extra", price: 8000, category: "extras", sold: 6 },
-  { id: 5, name: "Pack Premium", price: 68000, category: "paquetes", badge: "Nuevo", sold: 4 },
-  { id: 6, name: "Iluminación LED", price: 15000, category: "extras", sold: 11 },
-];
-
-const RETURN_REASONS = ["Cliente canceló", "Producto dañado", "Error de carga", "Cambio de fecha", "Otro"];
-
-const INITIAL_RESERVATIONS = [
-  { id: 1, itemId: 1, itemName: "Carpa 3x3", qty: 1, from: "2026-09-12", to: "2026-09-15", client: "Feria Primavera" },
-  { id: 2, itemId: 3, itemName: "Silla apilable", qty: 20, from: "2026-09-12", to: "2026-09-15", client: "Feria Primavera" },
-  { id: 3, itemId: 4, itemName: "Set de luces LED", qty: 5, from: "2026-09-20", to: "2026-09-20", client: "Boda Martínez" },
-];
-
-const INITIAL_STAFF = [
-  { id: 1, name: "Marcos Ríos", role: "Montador", date: "2026-09-12" },
-  { id: 2, name: "Lucía Paz", role: "Técnica de sonido", date: "2026-09-15" },
-  { id: 3, name: "Iván Soto", role: "Camarero", date: "2026-09-20" },
-];
-
-const INITIAL_PROVIDERS = [
-  { id: 1, itemName: "Carpa 3x3", provider: "Estructuras del Sur" },
-  { id: 2, itemName: "Sonido portátil", provider: "AudioMax" },
-];
-
-const INITIAL_CLIENTS = [
-  { id: 1, name: "Organizador Feria Primavera", notes: "Prefiere carpas blancas. Pago siempre por transferencia. 4 eventos anteriores." },
-  { id: 2, name: "Boda Martínez", notes: "Restricción: sin humo ni pirotecnia. Muy puntuales con la seña." },
-];
-
-const INITIAL_EXPENSES = [
-  { id: 1, concept: "Combustible traslado", amount: 8000, category: "Transporte" },
-  { id: 2, concept: "Cinta y precintos", amount: 2500, category: "Compra urgente" },
+  {
+    id: 1, name: "Pack Básico", price: 32000, category: "paquetes", badge: "Últimas 3", sold: 9, illustration: "tent",
+    description: "Combo de entrada para eventos chicos: una carpa 3x3 más el montaje incluido, listo para armar en menos de una hora.",
+    specs: { medidas: "300 x 300 x 250 cm", material: "Aluminio + lona impermeable", capacidad: "Hasta 15 personas a la sombra", color: "Blanco" },
+    includes: ["1 carpa plegable 3x3", "Montaje y desmontaje", "Bolsas de peso para viento"],
+  },
+  {
+    id: 2, name: "Carpa 3x3", price: 45000, category: "extras", badge: "Nuevo", sold: 14, illustration: "tent",
+    description: "Carpa plegable de aluminio con lona impermeable, ideal para ferias y stands al aire libre.",
+    specs: { medidas: "300 x 300 x 250 cm", material: "Aluminio + lona impermeable", capacidad: "Hasta 15 personas a la sombra", color: "Blanco o beige" },
+    includes: ["1 carpa plegable 3x3", "Estacas y bolsas de peso"],
+  },
+  {
+    id: 3, name: "Set Sillas x4", price: 18000, category: "extras", sold: 22, illustration: "chairs",
+    description: "Sillas plegables de resina, apilables y resistentes a la intemperie. Se alquilan en sets de 4.",
+    specs: { medidas: "45 x 45 x 90 cm c/u", material: "Resina blanca reforzada", capacidad: "4 unidades por set", color: "Blanco o negro" },
+    includes: ["4 sillas plegables", "Fundas de transporte"],
+  },
+  {
+    id: 4, name: "Montaje extra", price: 8000, category: "extras", sold: 6, illustration: "stage",
+    description: "Servicio de montaje y desmontaje adicional a cargo de nuestro equipo técnico.",
+    specs: { medidas: "—", material: "—", capacidad: "1 equipo de 2 personas", color: "—" },
+    includes: ["Armado en el lugar", "Desmontaje al finalizar", "Traslado del material"],
+  },
+  {
+    id: 5, name: "Pack Premium", price: 68000, category: "paquetes", badge: "Nuevo", sold: 4, illustration: "table",
+    description: "El combo más completo: mesas con mantel, sillas e iluminación para un evento de nivel superior.",
+    specs: { medidas: "Mesa 180 cm diámetro", material: "Madera + mantel textil", capacidad: "Hasta 40 personas", color: "Blanco / beige" },
+    includes: ["4 mesas redondas con mantel", "16 sillas", "Kit de iluminación LED", "Montaje incluido"],
+  },
+  {
+    id: 6, name: "Iluminación LED", price: 15000, category: "extras", sold: 11, illustration: "lights",
+    description: "Kit de iluminación LED RGB con controlador DMX, ideal para pistas de baile y escenarios.",
+    specs: { medidas: "40 x 40 x 20 cm por foco", material: "Aluminio + LED RGB", capacidad: "4 focos con trípode", color: "Multicolor (RGB)" },
+    includes: ["4 focos LED RGB", "Controlador DMX", "Trípodes"],
+  },
 ];
 
 const BUNDLE_OPTIONS = {
@@ -167,7 +175,7 @@ const overlaps = (aFrom, aTo, bFrom, bTo) => aFrom <= bTo && bFrom <= aTo;
 
 /* ---------------- SHARED UI ---------------- */
 const Card = ({ children, className = "" }) => (
-  <div className={`bg-white rounded-2xl border-2 border-ink shadow-brutSm ${className}`}>{children}</div>
+  <div className={`${/\bbg-/.test(className) ? "" : "bg-white"} rounded-2xl border-2 border-ink shadow-brutSm ${className}`}>{children}</div>
 );
 
 const Button = ({ children, onClick, variant = "primary", className = "", ...rest }) => {
@@ -210,7 +218,6 @@ const ScreenTitle = ({ children, action }) => (
 /* ---------------- BOTTOM NAV ---------------- */
 const NAV_ITEMS = [
   { key: "inicio", label: "Inicio", Icon: IconHome },
-  { key: "inventario", label: "Inventario", Icon: IconBox },
   { key: "tienda", label: "Tienda", Icon: IconStore },
   { key: "ventas", label: "Pedidos", Icon: IconCart },
 ];
@@ -240,106 +247,69 @@ const BottomNav = ({ active, onChange }) => (
 const StatBox = ({ num, label, tone }) => (
   <Card className={`p-4 ${tone === "low" ? "bg-low/5" : tone === "warn" ? "bg-mustard/15" : "bg-cream"}`}>
     <div className={`font-display font-extrabold text-3xl leading-none ${tone === "low" ? "text-low" : "text-ink"}`}>{num}</div>
-    <div className="font-body text-[10px] font-semibold uppercase tracking-wide text-ink/50 mt-1">{label}</div>
+    <div className="font-body text-[10px] font-semibold uppercase tracking-wide text-muted mt-1">{label}</div>
   </Card>
 );
 
-const TOOLS = [
-  { key: "calendario", label: "Calendario", desc: "Disponibilidad y bloqueos", Icon: IconCalendar },
-  { key: "scanner", label: "Escáner", desc: "Carga, descarga y devoluciones", Icon: IconQr },
-  { key: "portal", label: "Portal cliente", desc: "Cronograma, factura y firma", Icon: IconPen },
-  { key: "staff", label: "Personal", desc: "Turnos y proveedores", Icon: IconUsers },
-  { key: "docs", label: "Documentos", desc: "Albaranes y hojas de ruta", Icon: IconFile },
-  { key: "clientes", label: "Clientes", desc: "Historial y notas internas", Icon: IconTag },
-  { key: "gastos", label: "Caja chica", desc: "Gastos del evento", Icon: IconWallet },
-  { key: "fichaje", label: "Fichaje", desc: "Entrada y salida con ubicación", Icon: IconClock },
-  { key: "arqueo", label: "Cuadre de caja", desc: "Arqueo diario: sistema vs físico", Icon: IconScale },
-  { key: "anulaciones", label: "Anulaciones", desc: "Devoluciones y cancelaciones con motivo", Icon: IconUndo },
-  { key: "borradores", label: "Borradores", desc: "Presupuestos sin cobrar todavía", Icon: IconDraft },
-  { key: "analiticas", label: "Analíticas", desc: "Ventas de la semana y más vendidos", Icon: IconChartBar },
-  { key: "ajustes", label: "Ajustes", desc: "Seña, moneda y notificaciones", Icon: IconSettings },
-];
+const LIVE_NOTIF_TEXTS = { 1: "Tu pago fue aprobado", 2: "Estamos preparando tu material", 3: "El equipo va en camino a tu evento", 4: "Tu material fue entregado" };
+const getNotificationItems = (orders) => {
+  const pendingOrders = orders.filter((o) => o.pending > 0);
+  return [
+    ...pendingOrders.map((o) => ({ tone: "warn", text: `Seña pendiente de tu pedido ${o.id}`, go: "ventas", time: `${o.date} · ${o.time}` })),
+    ...orders.filter((o) => LIVE_NOTIF_TEXTS[o.liveStep]).map((o) => ({ tone: "ok", text: `${o.id}: ${LIVE_NOTIF_TEXTS[o.liveStep]}`, go: "ventas", time: `${o.date} · ${o.liveStepTime || o.time}` })),
+  ].sort((a, b) => (a.time < b.time ? 1 : -1));
+};
 
-const AHORA_KEYS = ["fichaje", "scanner"];
-const HOY_KEYS = ["calendario", "clientes", "staff", "anulaciones", "portal", "gastos"];
-const CIERRE_KEYS = ["arqueo", "analiticas", "docs", "borradores", "ajustes"];
-const toolByKey = (key) => TOOLS.find((t) => t.key === key);
-
-const AhoraSection = ({ onOpen }) => (
-  <div className="grid grid-cols-2 gap-3 mb-5">
-    {AHORA_KEYS.map((key) => {
-      const t = toolByKey(key);
-      return (
-        <button key={key} onClick={() => onOpen(key)}>
-          <Card className="p-4 h-full flex flex-col items-start gap-2.5 bg-ink border-ink">
-            <div className="w-10 h-10 rounded-xl bg-mustard border-2 border-ink flex items-center justify-center">
-              <t.Icon className="w-5 h-5 text-ink" />
-            </div>
-            <div className="text-left">
-              <div className="font-display font-bold text-sm text-cream leading-tight">{t.label}</div>
-              <div className="font-body text-[10px] text-cream/45 mt-0.5">{t.desc}</div>
-            </div>
-          </Card>
-        </button>
-      );
-    })}
-  </div>
-);
-
-const ToolCard = ({ tool, onOpen }) => (
-  <button onClick={() => onOpen(tool.key)} className="text-left">
-    <Card className="p-3.5 h-full flex flex-col gap-2">
-      <div className="w-9 h-9 rounded-lg bg-mustard border-2 border-ink flex items-center justify-center">
-        <tool.Icon className="w-4.5 h-4.5 text-ink" />
-      </div>
-      <div>
-        <div className="font-display font-bold text-sm text-ink leading-tight">{tool.label}</div>
-        <div className="font-body text-[10px] text-ink/45 mt-0.5">{tool.desc}</div>
-      </div>
-    </Card>
-  </button>
-);
-
-const HoySection = ({ onOpen }) => (
-  <div className="mt-5">
-    <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Hoy</div>
-    <div className="grid grid-cols-2 gap-3">
-      {HOY_KEYS.map((key) => <ToolCard key={key} tool={toolByKey(key)} onOpen={onOpen} />)}
-    </div>
-  </div>
-);
-
-const CierreSection = ({ onOpen }) => {
+const NotificationBell = ({ orders, navigate, onOpenFull }) => {
   const [open, setOpen] = useState(false);
+  const closeTimer = useRef(null);
+  const items = getNotificationItems(orders).slice(0, 4);
+
+  const show = () => { clearTimeout(closeTimer.current); setOpen(true); };
+  const hide = () => { closeTimer.current = setTimeout(() => setOpen(false), 150); };
+
   return (
-    <div className="mt-5">
-      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center justify-between py-1">
-        <span className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40">Cierre del día</span>
-        <IconChevron className={`w-3.5 h-3.5 text-ink/30 transition-transform ${open ? "rotate-90" : ""}`} />
+    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
+      <button
+        onClick={() => (open ? onOpenFull() : setOpen(true))}
+        className="relative w-9 h-9 flex items-center justify-center bg-white border-2 border-ink rounded-xl"
+      >
+        <IconBell className="w-4 h-4 text-ink" />
+        {items.length > 0 && <span className="absolute -top-1.5 -right-1.5 bg-low text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">{items.length}</span>}
       </button>
       {open && (
-        <div className="grid grid-cols-2 gap-3 mt-2">
-          {CIERRE_KEYS.map((key) => <ToolCard key={key} tool={toolByKey(key)} onOpen={onOpen} />)}
-        </div>
+        <Card className="absolute right-0 top-full mt-2 w-64 z-30 p-2 flex flex-col gap-1.5">
+          <div className="flex items-center justify-between px-1.5 pt-1">
+            <span className="font-display font-bold text-xs uppercase text-ink">Notificaciones</span>
+            <button onClick={onOpenFull} className="font-body text-[10px] font-semibold text-muted hover:text-ink">Ver todas</button>
+          </div>
+          {items.length === 0 ? (
+            <p className="font-body text-xs text-muted px-1.5 py-2">Sin novedades por ahora</p>
+          ) : (
+            items.map((it, idx) => (
+              <button key={idx} onClick={() => { navigate(it.go); setOpen(false); }} className="text-left">
+                <Card className="p-2.5 flex items-start gap-2">
+                  <span className={`w-2 h-2 rounded-full flex-shrink-0 mt-1 ${it.tone === "low" ? "bg-low" : it.tone === "warn" ? "bg-mustardDark" : "bg-ok"}`} />
+                  <div>
+                    <span className="font-body text-xs text-ink/80 leading-snug block">{it.text}</span>
+                    <span className="font-body text-[10px] text-muted">{it.time}</span>
+                  </div>
+                </Card>
+              </button>
+            ))
+          )}
+        </Card>
       )}
     </div>
   );
 };
 
-const InicioScreen = ({ inventory, reservations, orders, onOpenTool, onOpenNotifications, online, navigate }) => {
-  const lowCount = inventory.filter((i) => i.low).length;
-  const critical = inventory
-    .filter((i) => i.low)
-    .map((i) => ({ ...i, nextReservation: reservations.filter((r) => r.itemId === i.id).sort((a, b) => (a.from > b.from ? 1 : -1))[0] }))
-    .filter((i) => i.nextReservation);
-  const vendidoHoy = orders.reduce((a, o) => a + o.paid, 0);
+const InicioScreen = ({ orders, customer, onOpenTool, onOpenNotifications, online, navigate }) => {
   const senasPendientes = orders.filter((o) => o.pending > 0).length;
-  const notifCount = critical.length + senasPendientes;
 
   const [query, setQuery] = useState("");
   const results = query.trim()
     ? [
-        ...inventory.filter((i) => i.name.toLowerCase().includes(query.toLowerCase()) || (i.sku || "").toLowerCase().includes(query.toLowerCase())).map((i) => ({ label: i.name, sub: "Inventario", go: "inventario" })),
         ...STORE_PRODUCTS.filter((p) => p.name.toLowerCase().includes(query.toLowerCase())).map((p) => ({ label: p.name, sub: "Tienda", go: "tienda" })),
         ...orders.filter((o) => o.client.toLowerCase().includes(query.toLowerCase()) || o.id.toLowerCase().includes(query.toLowerCase())).map((o) => ({ label: `${o.client} · ${o.id}`, sub: "Pedidos", go: "ventas" })),
       ].slice(0, 6)
@@ -356,18 +326,32 @@ const InicioScreen = ({ inventory, reservations, orders, onOpenTool, onOpenNotif
       <div className="flex items-center gap-2 mb-4">
         <img src={LOGO} alt="Quick Sale" className="w-8 h-8 object-contain" />
         <h1 className="font-display font-extrabold text-2xl text-ink uppercase tracking-tight flex-1">Inicio</h1>
-        <button onClick={onOpenNotifications} className="relative w-9 h-9 flex items-center justify-center bg-white border-2 border-ink rounded-lg">
-          <IconBell className="w-4 h-4 text-ink" />
-          {notifCount > 0 && <span className="absolute -top-1.5 -right-1.5 bg-low text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">{notifCount}</span>}
+        <button onClick={() => onOpenTool("registro")} className="relative w-9 h-9 flex items-center justify-center bg-white border-2 border-ink rounded-xl" aria-label="Mi registro">
+          <IconUsers className="w-4 h-4 text-ink" />
         </button>
+        <NotificationBell orders={orders} navigate={navigate} onOpenFull={onOpenNotifications} />
       </div>
+
+      {customer ? (
+        <Card className="p-3 mb-4 bg-ok/10 border-ok/30 flex items-center justify-between">
+          <span className="font-body text-xs text-ink/70">Descuento por tu perfil ({customer.label})</span>
+          <span className="font-display font-bold text-sm text-ok">{customer.discountPct > 0 ? `-${customer.discountPct}%` : "Registrado"}</span>
+        </Card>
+      ) : (
+        <button onClick={() => onOpenTool("registro")} className="w-full mb-4">
+          <Card className="p-3 flex items-center justify-between bg-mustard/10 border-mustard/40">
+            <span className="font-body text-xs text-ink/70 text-left">Registrate para obtener descuentos según tu perfil</span>
+            <IconChevron className="w-4 h-4 text-muted flex-shrink-0" />
+          </Card>
+        </button>
+      )}
 
       <div className="relative mb-4">
         <IconSearch className="w-4 h-4 text-ink/35 absolute left-3.5 top-1/2 -translate-y-1/2" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar producto, pedido, cliente..."
+          placeholder="Buscar producto o pedido..."
           className="w-full bg-white border-2 border-ink/10 rounded-xl pl-10 pr-3 py-2.5 font-body text-sm outline-none focus:border-ink"
         />
         {results.length > 0 && (
@@ -389,35 +373,101 @@ const InicioScreen = ({ inventory, reservations, orders, onOpenTool, onOpenNotif
       <div className="bg-ink rounded-2xl p-5 mb-4 shadow-brut border-2 border-ink relative overflow-hidden">
         <div className="absolute -right-6 -top-6 w-24 h-24 bg-mustard rounded-full opacity-90" />
         <div className="relative">
-          <span className="font-body text-[10px] font-bold uppercase tracking-widest text-mustard">Evento activo · 3 días</span>
-          <h2 className="font-display font-extrabold text-2xl text-cream mt-1">Feria Primavera</h2>
+          <span className="font-body text-[10px] font-bold uppercase tracking-widest text-mustard">Tu evento · Feria Primavera</span>
+          <h2 className="font-display font-extrabold text-2xl text-cream mt-1">¡Bienvenido/a!</h2>
+          <p className="font-body text-xs text-cream/60 mt-1">Elegí tu paquete, hacé el seguimiento de tu pedido y firmá el contrato, todo desde acá.</p>
         </div>
       </div>
 
-      {critical.length > 0 && (
-        <Card className="p-3 mb-4 bg-low/5 border-low/40 flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <IconAlert className="w-4 h-4 text-low" />
-            <span className="font-display font-bold text-xs uppercase text-low">Stock crítico para próximas fechas</span>
-          </div>
-          {critical.map((i) => (
-            <div key={i.id} className="flex justify-between font-body text-xs text-ink/70 pl-6">
-              <span>{i.name} · reservado {fmtDate(i.nextReservation.from)}</span><span className="font-semibold text-low">{i.stock} u. libres</span>
-            </div>
-          ))}
+      {senasPendientes > 0 && (
+        <Card className="p-3 mb-4 bg-mustard/10 border-mustard/40 flex items-center gap-2">
+          <IconAlert className="w-4 h-4 text-ink/60" />
+          <span className="font-body text-xs text-ink/70">Tenés {senasPendientes} pedido{senasPendientes > 1 ? "s" : ""} con saldo pendiente</span>
         </Card>
       )}
 
-      <AhoraSection onOpen={onOpenTool} />
-
-      <div className="grid grid-cols-2 gap-3">
-        <StatBox num={inventory.reduce((a, i) => a + i.stock, 0)} label="En stock" />
-        <StatBox num={fmt(vendidoHoy)} label="Vendido hoy" />
-        <StatBox num={lowCount} label="Stock bajo" tone="low" />
-        <StatBox num={senasPendientes} label="Señas pend." tone="warn" />
+      <div className="grid grid-cols-2 gap-3 mb-5">
+        <button onClick={() => navigate("tienda")}>
+          <Card className="p-4 h-full flex flex-col items-start gap-2.5 bg-ink border-ink">
+            <div className="w-10 h-10 rounded-xl bg-mustard border-2 border-ink flex items-center justify-center">
+              <IconStore className="w-5 h-5 text-ink" />
+            </div>
+            <div className="text-left">
+              <div className="font-display font-bold text-sm text-cream leading-tight">Ver catálogo</div>
+              <div className="font-body text-[10px] text-cream/45 mt-0.5">Paquetes y extras para tu evento</div>
+            </div>
+          </Card>
+        </button>
+        <button onClick={() => onOpenTool("portal")}>
+          <Card className="p-4 h-full flex flex-col items-start gap-2.5 bg-ink border-ink">
+            <div className="w-10 h-10 rounded-xl bg-mustard border-2 border-ink flex items-center justify-center">
+              <IconPen className="w-5 h-5 text-ink" />
+            </div>
+            <div className="text-left">
+              <div className="font-display font-bold text-sm text-cream leading-tight">Mi evento</div>
+              <div className="font-body text-[10px] text-cream/45 mt-0.5">Cronograma, factura y firma</div>
+            </div>
+          </Card>
+        </button>
       </div>
-      <HoySection onOpen={onOpenTool} />
-      <CierreSection onOpen={onOpenTool} />
+
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Planificá tu evento</div>
+      <div className="grid grid-cols-3 gap-2 mb-5">
+        <button onClick={() => onOpenTool("capacidad")}>
+          <Card className="p-2.5 h-full flex flex-col items-center text-center gap-1.5">
+            <IconUsers2 className="w-5 h-5 text-ink/60" />
+            <span className="font-body text-[10px] font-semibold text-ink leading-tight">Calculadora de capacidad</span>
+          </Card>
+        </button>
+        <button onClick={() => onOpenTool("galeria")}>
+          <Card className="p-2.5 h-full flex flex-col items-center text-center gap-1.5">
+            <IconImage className="w-5 h-5 text-ink/60" />
+            <span className="font-body text-[10px] font-semibold text-ink leading-tight">Galería de inspiración</span>
+          </Card>
+        </button>
+        <button onClick={() => onOpenTool("invitados")}>
+          <Card className="p-2.5 h-full flex flex-col items-center text-center gap-1.5">
+            <IconUsers className="w-5 h-5 text-ink/60" />
+            <span className="font-body text-[10px] font-semibold text-ink leading-tight">Lista de invitados</span>
+          </Card>
+        </button>
+      </div>
+
+      <button onClick={() => onOpenTool("soporte")} className="w-full mb-5">
+        <Card className="p-3.5 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-ok/15 border-2 border-ok/40 flex items-center justify-center flex-shrink-0">
+            <IconChat className="w-4.5 h-4.5 text-ok" />
+          </div>
+          <div className="text-left flex-1">
+            <div className="font-display font-bold text-sm text-ink">¿Necesitás ayuda?</div>
+            <div className="font-body text-[10px] text-muted">WhatsApp, email y preguntas frecuentes</div>
+          </div>
+          <IconChevron className="w-4 h-4 text-ink/30" />
+        </Card>
+      </button>
+
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Mis pedidos</div>
+      {orders.length === 0 ? (
+        <Card className="p-6 text-center">
+          <p className="font-body text-sm text-muted">Todavía no hiciste ningún pedido</p>
+        </Card>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {orders.slice(0, 3).map((o) => (
+            <button key={o.id} onClick={() => navigate("ventas")} className="text-left">
+              <Card className="p-3.5 flex items-center justify-between">
+                <div>
+                  <div className="font-body font-semibold text-sm text-ink">{o.client}</div>
+                  <div className="font-body text-[11px] text-muted mt-0.5">{o.id} · {o.date}</div>
+                </div>
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${o.pending > 0 ? "bg-mustard/15 text-ink/70 border-mustard/40" : "bg-ok/10 text-ok border-ok/30"}`}>
+                  {o.pending > 0 ? "Saldo pendiente" : "Pagado"}
+                </span>
+              </Card>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -425,7 +475,7 @@ const InicioScreen = ({ inventory, reservations, orders, onOpenTool, onOpenNotif
 /* ---------------- TOOL SCREEN HEADER ---------------- */
 const ToolHeader = ({ title, onBack }) => (
   <div className="flex items-center gap-2 mb-4">
-    <button onClick={onBack} className="w-8 h-8 flex items-center justify-center bg-white border-2 border-ink rounded-lg">
+    <button onClick={onBack} className="w-8 h-8 flex items-center justify-center bg-white border-2 border-ink rounded-xl">
       <IconBack className="w-4 h-4 text-ink" />
     </button>
     <h1 className="font-display font-extrabold text-xl text-ink uppercase tracking-tight">{title}</h1>
@@ -433,240 +483,6 @@ const ToolHeader = ({ title, onBack }) => (
 );
 
 /* ---------------- CALENDARIO / DISPONIBILIDAD ---------------- */
-const CalendarioScreen = ({ inventory, reservations, onAddReservation, onBack }) => {
-  const [selected, setSelected] = useState("2026-09-15");
-  const [showForm, setShowForm] = useState(false);
-  const [itemId, setItemId] = useState(inventory[0]?.id);
-  const [qty, setQty] = useState(1);
-  const [from, setFrom] = useState("2026-09-12");
-  const [to, setTo] = useState("2026-09-15");
-  const [client, setClient] = useState("");
-  const [error, setError] = useState("");
-  const [confirmed, setConfirmed] = useState(false);
-
-  const days = Array.from({ length: 30 }, (_, i) => i + 1);
-  const dayIso = (d) => `2026-09-${String(d).padStart(2, "0")}`;
-
-  const statusFor = (iso) => {
-    const dayRes = reservations.filter((r) => overlaps(r.from, r.to, iso, iso));
-    if (dayRes.length === 0) return null;
-    const isEdge = dayRes.some((r) => r.from === iso || r.to === iso);
-    return dayRes.length > 1 || !isEdge ? "busy" : "partial";
-  };
-
-  const dayReservations = reservations.filter((r) => overlaps(r.from, r.to, selected, selected));
-
-  const checkAndSubmit = () => {
-    setError("");
-    setConfirmed(false);
-    const item = inventory.find((i) => i.id === Number(itemId));
-    if (!item) return;
-    const overlapping = reservations.filter((r) => r.itemId === item.id && overlaps(r.from, r.to, from, to));
-    const reservedQty = overlapping.reduce((a, r) => a + r.qty, 0);
-    if (reservedQty + Number(qty) > item.stock) {
-      setError(`No disponible para esas fechas — quedan ${Math.max(item.stock - reservedQty, 0)} unidades libres`);
-      return;
-    }
-    onAddReservation({
-      id: Date.now(),
-      itemId: item.id,
-      itemName: item.name,
-      qty: Number(qty),
-      from,
-      to,
-      client: client || "Sin nombre",
-    });
-    setConfirmed(true);
-    setClient("");
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Calendario" onBack={onBack} />
-
-      <div className="flex items-center justify-between mb-2">
-        <span className="font-display font-bold text-sm uppercase">Septiembre 2026</span>
-        <button onClick={() => setShowForm((s) => !s)} className="font-body text-xs font-bold text-ink underline">
-          {showForm ? "Cerrar" : "+ Nueva reserva"}
-        </button>
-      </div>
-
-      {showForm && (
-        <Card className="p-3 mb-3 flex flex-col gap-2.5 bg-cream">
-          <select value={itemId} onChange={(e) => setItemId(e.target.value)} className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none">
-            {inventory.map((i) => <option key={i.id} value={i.id}>{i.name} (stock {i.stock})</option>)}
-          </select>
-          <div className="flex gap-2">
-            <input value={qty} onChange={(e) => setQty(e.target.value)} type="number" min="1" placeholder="Cantidad" className="w-24 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-            <input value={client} onChange={(e) => setClient(e.target.value)} placeholder="Cliente / evento" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-          </div>
-          <div className="flex gap-2">
-            <input value={from} onChange={(e) => setFrom(e.target.value)} type="date" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-xs outline-none" />
-            <input value={to} onChange={(e) => setTo(e.target.value)} type="date" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-xs outline-none" />
-          </div>
-          {error && <div className="bg-low/10 border border-low/30 text-low text-xs font-semibold rounded-lg p-2">{error}</div>}
-          {confirmed && <div className="bg-ok/10 border border-ok/30 text-ok text-xs font-semibold rounded-lg p-2">🔒 Bloqueado automáticamente para esas fechas</div>}
-          <Button variant="accent" onClick={checkAndSubmit}>Confirmar reserva</Button>
-        </Card>
-      )}
-
-      <div className="grid grid-cols-7 gap-1 text-center mb-1">
-        {["L", "M", "X", "J", "V", "S", "D"].map((d) => (
-          <span key={d} className="font-body text-[9px] font-bold text-ink/35">{d}</span>
-        ))}
-      </div>
-      <div className="grid grid-cols-7 gap-1 mb-4">
-        {days.map((d) => {
-          const iso = dayIso(d);
-          const status = statusFor(iso);
-          const isSelected = iso === selected;
-          return (
-            <button
-              key={d}
-              onClick={() => setSelected(iso)}
-              className={`aspect-square rounded-md font-body text-[11px] font-semibold flex items-center justify-center border-2
-                ${status === "busy" ? "bg-low text-white border-low" : status === "partial" ? "bg-mustard text-ink border-ink" : "bg-cream text-ink/60 border-ink/10"}
-                ${isSelected ? "ring-2 ring-ink ring-offset-1" : ""}`}
-            >
-              {d}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="flex gap-3 mb-4 font-body text-[10px] text-ink/50">
-        <span className="flex items-center gap-1"><i className="w-2.5 h-2.5 rounded-sm bg-low inline-block" />Todo reservado</span>
-        <span className="flex items-center gap-1"><i className="w-2.5 h-2.5 rounded-sm bg-mustard inline-block" />Parcial</span>
-      </div>
-
-      <Card className="p-4 bg-ink border-ink">
-        <div className="font-display font-bold text-mustard text-sm mb-2">{fmtDate(selected)} SEP · Fuera del almacén</div>
-        {dayReservations.length === 0 ? (
-          <p className="font-body text-xs text-cream/50">Sin material reservado este día</p>
-        ) : (
-          dayReservations.map((r) => (
-            <div key={r.id} className="flex justify-between font-body text-xs text-cream/80 py-1.5 border-b border-dashed border-cream/15 last:border-0">
-              <span>{r.itemName} · {r.client}</span>
-              <span>×{r.qty}</span>
-            </div>
-          ))
-        )}
-      </Card>
-    </div>
-  );
-};
-
-/* ---------------- ESCÁNER QR / CÓDIGO DE BARRAS ---------------- */
-const ScannerScreen = ({ inventory, onBack, online, log, addLog }) => {
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const [scanning, setScanning] = useState(false);
-  const [cameraError, setCameraError] = useState("");
-  const [manualCode, setManualCode] = useState("");
-
-  useEffect(() => {
-    let stream;
-    let raf;
-    const start = async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-        setScanning(true);
-        const tick = () => {
-          if (!videoRef.current || videoRef.current.readyState !== 4) {
-            raf = requestAnimationFrame(tick);
-            return;
-          }
-          const canvas = canvasRef.current;
-          canvas.width = videoRef.current.videoWidth;
-          canvas.height = videoRef.current.videoHeight;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const code = window.jsQR && window.jsQR(imgData.data, canvas.width, canvas.height);
-          if (code && code.data) {
-            addLog(code.data, "Escaneado");
-          }
-          raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
-      } catch (e) {
-        setCameraError("Sin acceso a la cámara — usá el ingreso manual.");
-      }
-    };
-    start();
-    return () => {
-      if (raf) cancelAnimationFrame(raf);
-      if (stream) stream.getTracks().forEach((t) => t.stop());
-    };
-  }, []);
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Escáner" onBack={onBack} />
-
-      {!online && (
-        <div className="flex items-center gap-2 bg-ink text-cream rounded-xl px-3 py-2 mb-3 border-2 border-ink">
-          <IconWifiOff className="w-4 h-4 text-mustard flex-shrink-0" />
-          <span className="font-body text-[11px] font-medium">Modo offline: los registros se guardan en el dispositivo</span>
-        </div>
-      )}
-
-      <Card className="overflow-hidden mb-3 bg-ink border-ink relative aspect-[4/3]">
-        <video ref={videoRef} className="w-full h-full object-cover opacity-90" muted playsInline />
-        <canvas ref={canvasRef} className="hidden" />
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-40 h-40 border-2 border-mustard rounded-xl" />
-        </div>
-        {!scanning && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink/90">
-            <IconCamera2 className="w-6 h-6 text-mustard" />
-            <span className="font-body text-xs text-cream/70">{cameraError || "Iniciando cámara..."}</span>
-          </div>
-        )}
-      </Card>
-
-      <div className="flex gap-2 mb-4">
-        <input
-          value={manualCode}
-          onChange={(e) => setManualCode(e.target.value)}
-          placeholder="Ingresar código manual"
-          className="flex-1 bg-white border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none"
-        />
-        <Button variant="ghost" onClick={() => { if (manualCode) { addLog(manualCode, "Manual"); setManualCode(""); } }}>OK</Button>
-      </div>
-
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <Button variant="accent" onClick={() => addLog(log[0]?.code || "—", "Carga vehículo")}>Registrar salida</Button>
-        <Button variant="ghost" onClick={() => addLog(log[0]?.code || "—", "Devolución")}>Registrar devolución</Button>
-      </div>
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Registro</div>
-      <div className="flex flex-col gap-2">
-        {log.length === 0 && <p className="font-body text-xs text-ink/35 text-center py-6">Todavía no escaneaste nada</p>}
-        {log.map((l) => (
-          <Card key={l.id} className="p-3 flex items-center justify-between">
-            <div>
-              <div className="font-body text-sm font-semibold">{l.code}</div>
-              <div className="font-body text-[10px] text-ink/40">{l.action} · {l.time}</div>
-            </div>
-            <div className="flex flex-col items-end gap-1">
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${l.action === "Devolución" ? "bg-low/10 text-low border-low/30" : "bg-ok/10 text-ok border-ok/30"}`}>
-                {l.action === "Devolución" ? "Revisar" : "OK"}
-              </span>
-              <span className={`text-[9px] font-semibold ${l.synced ? "text-ink/30" : "text-mustardDark"}`}>
-                {l.synced ? "Sincronizado" : "Pendiente de sync"}
-              </span>
-            </div>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- PORTAL DE CLIENTES ---------------- */
 const SignaturePad = ({ onSign, signed }) => {
   const canvasRef = useRef(null);
   const drawing = useRef(false);
@@ -684,7 +500,7 @@ const SignaturePad = ({ onSign, signed }) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     const { x, y } = pos(e, canvas);
-    ctx.fillStyle = "#181712";
+    ctx.fillStyle = "#1A1A1A";
     ctx.beginPath();
     ctx.arc(x, y, 1.6, 0, Math.PI * 2);
     ctx.fill();
@@ -712,8 +528,42 @@ const SignaturePad = ({ onSign, signed }) => {
   );
 };
 
-const PortalScreen = ({ onBack, flash }) => {
+const PortalScreen = ({ onBack, flash, onConfirmSale, navigate }) => {
   const [signature, setSignature] = useState(null);
+  const [showPayment, setShowPayment] = useState(false);
+  const eventTotal = 63000;
+  const depositAmount = Math.round(eventTotal * 0.5);
+
+  const paySuccess = (method) => {
+    setShowPayment(false);
+    if (onConfirmSale) {
+      onConfirmSale({
+        id: "#" + Math.floor(1000 + Math.random() * 9000),
+        client: "Organizador de evento",
+        deliveryAddress: "",
+        items: [
+          { name: "Carpa 3x3", qty: 1, price: 45000, illustration: "tent" },
+          { name: "Set Sillas x4", qty: 1, price: 18000, illustration: "chairs" },
+        ],
+        subtotal: eventTotal,
+        discount: 0,
+        total: eventTotal,
+        mode: "seña",
+        paid: depositAmount,
+        pending: eventTotal - depositAmount,
+        date: "12 sept 2026",
+        time: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+        status: "Seña pagada",
+        paymentMethod: method,
+        liveStep: 1,
+        liveStepTime: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+        reviewed: false,
+      });
+    }
+    flash("¡Anticipo pagado! Ya podés ver tu pedido");
+    if (navigate) navigate("ventas");
+    onBack();
+  };
 
   const downloadInvoice = () => {
     const { jsPDF } = window.jspdf;
@@ -739,14 +589,14 @@ const PortalScreen = ({ onBack, flash }) => {
     <div className="px-4 pt-6 pb-28">
       <ToolHeader title="Portal cliente" onBack={onBack} />
 
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Cronograma</div>
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Cronograma</div>
       <Card className="p-4 mb-4 flex flex-col gap-3">
         {steps.map((s, idx) => (
           <div key={idx} className="flex items-center gap-3">
             <div className="w-2.5 h-2.5 rounded-full bg-mustard border-2 border-ink flex-shrink-0" />
             <div className="flex-1 flex justify-between">
               <span className="font-body text-sm font-medium">{s.t}</span>
-              <span className="font-body text-xs text-ink/40">{s.d}</span>
+              <span className="font-body text-xs text-muted">{s.d}</span>
             </div>
           </div>
         ))}
@@ -754,7 +604,7 @@ const PortalScreen = ({ onBack, flash }) => {
 
       <Button variant="ghost" className="w-full mb-4" onClick={downloadInvoice}>Descargar factura</Button>
 
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Firma del contrato</div>
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Firma del contrato</div>
       <Card className="p-3">
         {signature ? (
           <div className="text-center py-3">
@@ -766,381 +616,270 @@ const PortalScreen = ({ onBack, flash }) => {
         )}
       </Card>
 
-      <Button variant="primary" className="w-full mt-4" disabled={!signature}>
+      <Button variant="primary" className="w-full mt-4" disabled={!signature} onClick={() => setShowPayment(true)}>
         Confirmar y pagar anticipo
       </Button>
+
+      {showPayment && (
+        <PaymentGatewayScreen
+          amount={depositAmount}
+          label="Confirmá tu anticipo"
+          onCancel={() => setShowPayment(false)}
+          onSuccess={paySuccess}
+        />
+      )}
     </div>
   );
 };
 
 /* ---------------- PERSONAL Y PROVEEDORES ---------------- */
-const StaffScreen = ({ inventory, onBack, flash }) => {
-  const [staff, setStaff] = useState(INITIAL_STAFF);
-  const [providers, setProviders] = useState(INITIAL_PROVIDERS);
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("Montador");
-  const [date, setDate] = useState("2026-09-12");
-  const [itemId, setItemId] = useState(inventory[0]?.id);
-  const [providerName, setProviderName] = useState("");
-  const [conflictError, setConflictError] = useState("");
+/* ---------------- ILUSTRACIONES DE PRODUCTO ---------------- */
+const AVAILABILITY = {
+  1: [{ from: "2026-09-12", to: "2026-09-15" }],
+  2: [{ from: "2026-09-12", to: "2026-09-15" }],
+  4: [{ from: "2026-09-20", to: "2026-09-20" }],
+};
+const isDateBusy = (productId, dateStr) => (AVAILABILITY[productId] || []).some((r) => dateStr >= r.from && dateStr <= r.to);
 
-  const addStaff = () => {
-    if (!name.trim()) return;
-    setConflictError("");
-    const clash = staff.find((s) => s.name.trim().toLowerCase() === name.trim().toLowerCase() && s.date === date);
-    if (clash) {
-      setConflictError(`${name} ya tiene un turno asignado el ${fmtDate(date)} (${clash.role}) — elegí otra fecha o persona.`);
-      return;
-    }
-    setStaff((p) => [{ id: Date.now(), name, role, date }, ...p]);
-    setName("");
-    flash("Turno asignado");
+const ORDER_LIVE_STEPS = ["Pedido confirmado", "Pago aprobado", "Preparando material", "Equipo en camino", "Entregado", "Evento finalizado"];
+
+const COUPON_CODES = [
+  { code: "BIENVENIDO10", pct: 10, desc: "10% en tu primera compra" },
+  { code: "PRIMAVERA15", pct: 15, desc: "15% temporada de primavera" },
+];
+
+const GALLERY_ITEMS = [
+  { illustration: "tent", title: "Boda al aire libre", desc: "Carpa 6x3 + iluminación cálida para 80 invitados" },
+  { illustration: "table", title: "Cumpleaños de 15", desc: "Mesas redondas con mantel + centro de mesa" },
+  { illustration: "chairs", title: "Evento corporativo", desc: "Sillas plegables en filas para conferencia" },
+  { illustration: "lights", title: "Fiesta con pista de baile", desc: "Iluminación LED RGB sincronizada" },
+  { illustration: "stage", title: "Presentación en vivo", desc: "Tarima modular con sonido incluido" },
+  { illustration: "speaker", title: "Reunión al aire libre", desc: "Sonido portátil para espacios chicos" },
+];
+
+const ProductIllustration = ({ type, className = "w-full h-full" }) => {
+  const bg = <rect width="200" height="140" fill="#F7F4EB" />;
+  const illustrations = {
+    tent: (
+      <svg viewBox="0 0 200 140" className={className}>
+        {bg}
+        <path d="M100 25 L165 95 H35 Z" fill="#F4C430" stroke="#1A1A1A" strokeWidth="3" strokeLinejoin="round" />
+        <path d="M100 25 L100 95" stroke="#1A1A1A" strokeWidth="2.5" />
+        <path d="M60 95 L60 122 M140 95 L140 122" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
+        <path d="M50 95 h20 M130 95 h20" stroke="#1A1A1A" strokeWidth="3" />
+        <rect x="35" y="95" width="130" height="6" fill="#1A1A1A" />
+      </svg>
+    ),
+    table: (
+      <svg viewBox="0 0 200 140" className={className}>
+        {bg}
+        <ellipse cx="100" cy="60" rx="55" ry="18" fill="#FFFFFF" stroke="#1A1A1A" strokeWidth="3" />
+        <path d="M50 60 L60 110 M150 60 L140 110" stroke="#1A1A1A" strokeWidth="3" fill="none" />
+        <path d="M100 60 L100 118" stroke="#1A1A1A" strokeWidth="2" strokeDasharray="3 4" />
+        <ellipse cx="100" cy="60" rx="55" ry="18" fill="none" stroke="#F4C430" strokeWidth="5" strokeDasharray="10 6" opacity="0.7" />
+        <path d="M62 108 h76" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+    ),
+    chairs: (
+      <svg viewBox="0 0 200 140" className={className}>
+        {bg}
+        <g transform="translate(58,20)">
+          <path d="M0 10 h44 v54 h-44 z" fill="none" stroke="#1A1A1A" strokeWidth="3" />
+          <path d="M0 40 h44" stroke="#F4C430" strokeWidth="8" />
+          <path d="M4 64 l-6 30 M40 64 l6 30 M4 94 h36" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
+        </g>
+        <g transform="translate(108,32)" opacity="0.55">
+          <path d="M0 10 h44 v54 h-44 z" fill="none" stroke="#1A1A1A" strokeWidth="3" />
+          <path d="M0 40 h44" stroke="#F4C430" strokeWidth="8" />
+          <path d="M4 64 l-6 30 M40 64 l6 30 M4 94 h36" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
+        </g>
+      </svg>
+    ),
+    lights: (
+      <svg viewBox="0 0 200 140" className={className}>
+        {bg}
+        <path d="M60 20 L40 100 H80 Z" fill="#F4C430" opacity="0.35" />
+        <path d="M140 20 L120 100 H160 Z" fill="#B4402F" opacity="0.3" />
+        <circle cx="60" cy="20" r="10" fill="#1A1A1A" />
+        <circle cx="140" cy="20" r="10" fill="#1A1A1A" />
+        <rect x="20" y="10" width="160" height="8" fill="#1A1A1A" rx="2" />
+        <circle cx="60" cy="20" r="4" fill="#F4C430" />
+        <circle cx="140" cy="20" r="4" fill="#B4402F" />
+      </svg>
+    ),
+    stage: (
+      <svg viewBox="0 0 200 140" className={className}>
+        {bg}
+        <path d="M20 90 L60 55 H150 L180 90 Z" fill="#FFFFFF" stroke="#1A1A1A" strokeWidth="3" />
+        <path d="M60 55 v35 M100 55 v35 M140 55 v35" stroke="#1A1A1A" strokeWidth="1.5" opacity="0.3" />
+        <rect x="20" y="90" width="160" height="10" fill="#1A1A1A" />
+        <rect x="35" y="100" width="8" height="18" fill="#1A1A1A" /><rect x="157" y="100" width="8" height="18" fill="#1A1A1A" />
+        <path d="M60 55 H150" stroke="#F4C430" strokeWidth="4" />
+      </svg>
+    ),
+    speaker: (
+      <svg viewBox="0 0 200 140" className={className}>
+        {bg}
+        <rect x="75" y="15" width="50" height="110" rx="6" fill="#1A1A1A" />
+        <circle cx="100" cy="45" r="16" fill="#F7F4EB" stroke="#F4C430" strokeWidth="4" />
+        <circle cx="100" cy="45" r="6" fill="#1A1A1A" />
+        <circle cx="100" cy="90" r="11" fill="#F7F4EB" stroke="#F4C430" strokeWidth="4" />
+        <circle cx="100" cy="90" r="4" fill="#1A1A1A" />
+      </svg>
+    ),
   };
-
-  const addProvider = () => {
-    if (!providerName.trim()) return;
-    const item = inventory.find((i) => i.id === Number(itemId));
-    setProviders((p) => [{ id: Date.now(), itemName: item?.name, provider: providerName }, ...p]);
-    setProviderName("");
-    flash("Proveedor vinculado");
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Personal" onBack={onBack} />
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Turnos del equipo</div>
-      <Card className="p-3 mb-3 flex flex-col gap-2 bg-cream">
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre" className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        <div className="flex gap-2">
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none">
-            <option>Montador</option><option>Técnico</option><option>Camarero</option>
-          </select>
-          <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-xs outline-none" />
-        </div>
-        {conflictError && (
-          <div className="bg-low/10 border border-low/30 text-low text-[11px] font-medium rounded-lg p-2 leading-relaxed">{conflictError}</div>
-        )}
-        <Button variant="accent" onClick={addStaff}>Asignar turno</Button>
-      </Card>
-      <div className="flex flex-col gap-2 mb-5">
-        {staff.map((s) => (
-          <Card key={s.id} className="p-3 flex items-center justify-between">
-            <div>
-              <div className="font-body text-sm font-semibold">{s.name}</div>
-              <div className="font-body text-[10px] text-ink/40">{s.role}</div>
-            </div>
-            <span className="font-body text-xs font-semibold bg-cream px-2 py-1 rounded-lg">{fmtDate(s.date)} SEP</span>
-          </Card>
-        ))}
-      </div>
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Proveedores por artículo</div>
-      <Card className="p-3 mb-3 flex flex-col gap-2 bg-cream">
-        <select value={itemId} onChange={(e) => setItemId(e.target.value)} className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none">
-          {inventory.map((i) => <option key={i.id} value={i.id}>{i.name}</option>)}
-        </select>
-        <div className="flex gap-2">
-          <input value={providerName} onChange={(e) => setProviderName(e.target.value)} placeholder="Proveedor" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-          <Button variant="ghost" onClick={addProvider}>Vincular</Button>
-        </div>
-      </Card>
-      <div className="flex flex-col gap-2">
-        {providers.map((p) => (
-          <Card key={p.id} className="p-3 flex items-center justify-between">
-            <span className="font-body text-sm font-semibold">{p.itemName}</span>
-            <span className="font-body text-xs text-ink/50">{p.provider}</span>
-          </Card>
-        ))}
-      </div>
-    </div>
+  return illustrations[type] || (
+    <svg viewBox="0 0 200 140" className={className}>{bg}<rect x="70" y="45" width="60" height="50" fill="#EFEBDD" stroke="#1A1A1A" strokeWidth="2" /></svg>
   );
 };
 
-/* ---------------- DOCUMENTOS: ALBARÁN Y HOJA DE RUTA ---------------- */
-const DocsScreen = ({ reservations, onBack, flash }) => {
-  const [event, setEvent] = useState("Feria Primavera");
-  const [address, setAddress] = useState("Predio Ferial, Av. Central 450");
-  const [date, setDate] = useState("2026-09-12");
-
-  const genPdf = (type) => {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text(type === "albaran" ? "Albarán de entrega" : "Hoja de ruta", 14, 20);
-    doc.setFontSize(11);
-    doc.text(`Evento: ${event}`, 14, 34);
-    doc.text(`Fecha: ${date}`, 14, 41);
-    doc.text(`Dirección: ${address}`, 14, 48);
-    doc.text("Material:", 14, 60);
-    let y = 68;
-    reservations.forEach((r) => {
-      doc.text(`- ${r.itemName}  ×${r.qty}`, 16, y);
-      y += 7;
-    });
-    doc.save(`${type}-${event.replace(/\s+/g, "-").toLowerCase()}.pdf`);
-    flash(type === "albaran" ? "Albarán generado" : "Hoja de ruta generada");
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Documentos" onBack={onBack} />
-
-      <Card className="p-3 mb-4 flex flex-col gap-2.5 bg-cream">
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Evento</label>
-          <input value={event} onChange={(e) => setEvent(e.target.value)} className="mt-1 w-full bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        </div>
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Dirección de montaje</label>
-          <input value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1 w-full bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        </div>
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Fecha</label>
-          <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="mt-1 w-full bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        </div>
-      </Card>
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Material incluido</div>
-      <Card className="p-3 mb-5 flex flex-col divide-y-2 divide-dashed divide-ink/10">
-        {reservations.map((r) => (
-          <div key={r.id} className="flex justify-between py-1.5 first:pt-0 last:pb-0 font-body text-sm">
-            <span>{r.itemName}</span><span className="font-semibold">×{r.qty}</span>
-          </div>
-        ))}
-      </Card>
-
-      <div className="flex flex-col gap-2">
-        <Button variant="accent" onClick={() => genPdf("albaran")}>Generar albarán (PDF)</Button>
-        <Button variant="ghost" onClick={() => genPdf("ruta")}>Generar hoja de ruta (PDF)</Button>
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- SCREEN: INVENTARIO ---------------- */
-const InventarioScreen = ({ inventory, onOpenForm }) => {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("todos");
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return inventory.filter((p) => {
-      const matchesQuery = !q || p.name.toLowerCase().includes(q) || (p.sku || "").toLowerCase().includes(q);
-      const matchesFilter =
-        filter === "todos" ? true : filter === "bajo" ? p.low : filter === "sin" ? !p.location : true;
-      return matchesQuery && matchesFilter;
-    });
-  }, [inventory, query, filter]);
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ScreenTitle
-        action={
-          <button onClick={onOpenForm} className="bg-mustard border-2 border-ink rounded-xl p-2 shadow-brutSm active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
-            <IconPlus className="w-5 h-5 text-ink" />
-          </button>
-        }
-      >
-        Inventario
-      </ScreenTitle>
-
-      <div className="flex items-center gap-2 bg-white border-2 border-ink rounded-xl px-3 py-2.5 mb-3">
-        <IconSearch className="w-4 h-4 text-ink/40" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar producto, SKU..."
-          className="flex-1 outline-none font-body text-sm placeholder:text-ink/40 bg-transparent"
-        />
-      </div>
-
-      <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
-        <Chip active={filter === "todos"} onClick={() => setFilter("todos")}>Todos</Chip>
-        <Chip active={filter === "bajo"} onClick={() => setFilter("bajo")}>Stock bajo</Chip>
-        <Chip active={filter === "sin"} onClick={() => setFilter("sin")}>Sin ubicar</Chip>
-      </div>
-
-      <div className="flex flex-col gap-2.5">
-        {filtered.map((p) => (
-          <Card key={p.id} className="p-3 flex items-center gap-3">
-            <div className="w-11 h-11 rounded-lg bg-cream border-2 border-ink/10 flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <div className="font-body font-semibold text-sm text-ink truncate">{p.name}</div>
-              <div className="flex items-center gap-1.5 mt-1">
-                {p.sku && <span className="font-body text-[9px] text-ink/35">{p.sku}</span>}
-                <span
-                  className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-                    p.location ? "bg-ink/5 text-ink/60 border-ink/10" : "bg-low/10 text-low border-low/30"
-                  }`}
-                >
-                  {p.location || "Sin ubicar"}
-                </span>
-              </div>
-            </div>
-            <div className={`font-display font-extrabold text-xl ${p.low ? "text-low" : "text-ink"}`}>{p.stock}</div>
-          </Card>
-        ))}
-        {filtered.length === 0 && (
-          <p className="text-center text-ink/40 font-body text-sm py-10">No se encontraron productos</p>
-        )}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- SCREEN: ALTA RÁPIDA ---------------- */
-const AltaRapidaScreen = ({ onCreate, onClose }) => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [location, setLocation] = useState("");
-  const [showDetails, setShowDetails] = useState(false);
-  const [variants, setVariants] = useState("");
-  const [notes, setNotes] = useState("");
-
-  const submit = (asDraft) => {
-    if (!name.trim()) return;
-    onCreate({
-      id: Date.now(),
-      name,
-      stock: 1,
-      location: location || null,
-      low: false,
-      draft: asDraft,
-    });
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ScreenTitle
-        action={
-          <button onClick={onClose} className="p-2">
-            <IconX className="w-5 h-5 text-ink/50" />
-          </button>
-        }
-      >
-        Alta rápida
-      </ScreenTitle>
-
-      <button className="w-full h-28 rounded-2xl border-2 border-dashed border-ink/30 bg-cream flex flex-col items-center justify-center gap-1.5 mb-4">
-        <IconCamera className="w-6 h-6 text-ink/40" />
-        <span className="font-body text-xs font-medium text-ink/40">Tocar para fotografiar</span>
-      </button>
-
-      <div className="flex flex-col gap-3">
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Nombre</label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Ej. Carpa 3x3"
-            className="mt-1 w-full bg-cream border-2 border-ink/10 focus:border-ink rounded-xl px-3 py-2.5 font-body text-sm outline-none"
-          />
-        </div>
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Precio</label>
-          <input
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder="$0"
-            inputMode="numeric"
-            className="mt-1 w-full bg-cream border-2 border-ink/10 focus:border-ink rounded-xl px-3 py-2.5 font-body text-sm outline-none"
-          />
-        </div>
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Ubicación</label>
-          <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Ej. Local A · Est. 3"
-            className="mt-1 w-full bg-cream border-2 border-ink/10 focus:border-ink rounded-xl px-3 py-2.5 font-body text-sm outline-none"
-          />
-        </div>
-
-        <button
-          onClick={() => setShowDetails((s) => !s)}
-          className="flex items-center justify-between py-2 border-t border-dashed border-ink/20 mt-1"
-        >
-          <span className="font-body text-xs font-semibold text-ink/60">+ Añadir detalles</span>
-          <IconChevron className={`w-4 h-4 text-ink/40 transition-transform ${showDetails ? "rotate-90" : ""}`} />
-        </button>
-
-        {showDetails && (
-          <div className="flex flex-col gap-3 bg-cream rounded-xl p-3 border-2 border-ink/10">
-            <div>
-              <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Variantes</label>
-              <input
-                value={variants}
-                onChange={(e) => setVariants(e.target.value)}
-                placeholder="S, M, L..."
-                className="mt-1 w-full bg-white border-2 border-ink/10 rounded-xl px-3 py-2 font-body text-sm outline-none"
-              />
-            </div>
-            <div>
-              <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50 flex items-center gap-1">
-                <IconLock className="w-3 h-3" /> Notas internas
-              </label>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Solo vos y tu equipo pueden ver esto"
-                rows={2}
-                className="mt-1 w-full bg-white border-2 border-ink/10 rounded-xl px-3 py-2 font-body text-sm outline-none resize-none"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-2 mt-6">
-        <Button variant="accent" onClick={() => submit(false)}>Crear y publicar</Button>
-        <Button variant="ghost" onClick={() => submit(true)}>Crear como borrador</Button>
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- SCREEN: TIENDA ---------------- */
-const ProductCard = ({ p, onAdd, favorite, onToggleFavorite }) => (
-  <Card className="overflow-hidden flex flex-col">
-    <div className="h-24 bg-gradient-to-br from-cream to-mustard/30 relative">
-      {p.badge && (
+const ProductCard = ({ p, onAdd, onOpenDetail, favorite, onToggleFavorite, unavailable }) => (
+  <Card className={`overflow-hidden flex flex-col ${unavailable ? "opacity-60" : ""}`}>
+    <button onClick={() => onOpenDetail(p)} className="h-24 relative overflow-hidden text-left w-full">
+      <ProductIllustration type={p.illustration} />
+      {p.badge && !unavailable && (
         <span className="absolute top-2 left-2 bg-mustard text-ink text-[9px] font-display font-bold uppercase px-2 py-0.5 rounded-full border border-ink">
           {p.badge}
         </span>
       )}
+      {unavailable && (
+        <span className="absolute top-2 left-2 bg-low text-white text-[9px] font-display font-bold uppercase px-2 py-0.5 rounded-full border border-ink">
+          No disponible
+        </span>
+      )}
       {onToggleFavorite && (
-        <button
-          onClick={() => onToggleFavorite(p.id)}
+        <span
+          role="button"
+          onClick={(e) => { e.stopPropagation(); onToggleFavorite(p.id); }}
           className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center"
         >
-          {favorite ? <IconStar className="w-3.5 h-3.5 text-mustard" /> : <IconStarOutline className="w-3.5 h-3.5 text-ink/40" />}
-        </button>
+          {favorite ? <IconStar className="w-3.5 h-3.5 text-mustardDark" /> : <IconStarOutline className="w-3.5 h-3.5 text-muted" />}
+        </span>
       )}
-    </div>
-    <div className="p-3 flex items-center justify-between">
+    </button>
+    <button onClick={() => onOpenDetail(p)} className="p-3 flex items-center justify-between text-left">
       <div>
         <div className="font-body font-semibold text-xs text-ink">{p.name}</div>
         <div className="font-display font-extrabold text-base text-ink">{fmt(p.price)}</div>
       </div>
-      <button
-        onClick={() => onAdd(p)}
+      <span
+        role="button"
+        onClick={(e) => { e.stopPropagation(); onAdd(p); }}
         className="w-8 h-8 flex-shrink-0 rounded-full bg-ink text-mustard flex items-center justify-center active:scale-90 transition"
       >
         <IconPlus className="w-4 h-4" />
-      </button>
-    </div>
+      </span>
+    </button>
   </Card>
 );
 
-const TiendaScreen = ({ onAdd, cartCount, onOpenCart, onOpenBundle }) => {
+const ProductDetailScreen = ({ product, onBack, onAdd, flash }) => {
+  const [qty, setQty] = useState(1);
+  const views = ["hero", "detalle"];
+  const [view, setView] = useState("hero");
+
+  const add = () => {
+    for (let i = 0; i < qty; i++) onAdd(product);
+    flash(`${product.name} agregado${qty > 1 ? ` (x${qty})` : ""}`);
+    onBack();
+  };
+
+  return (
+    <div className="pb-28">
+      <div className="px-4 pt-6 pb-3">
+        <button onClick={onBack} className="w-8 h-8 flex items-center justify-center bg-white border-2 border-ink rounded-xl">
+          <IconBack className="w-4 h-4 text-ink" />
+        </button>
+      </div>
+
+      <div className="h-56 relative">
+        <ProductIllustration type={product.illustration} />
+        {product.badge && (
+          <span className="absolute top-3 left-3 bg-mustard text-ink text-[10px] font-display font-bold uppercase px-2.5 py-1 rounded-full border border-ink">
+            {product.badge}
+          </span>
+        )}
+      </div>
+      <div className="flex gap-2 px-4 -mt-8 relative">
+        {[product.illustration, "stage"].map((ilu, idx) => (
+          <button key={idx} onClick={() => setView(idx === 0 ? "hero" : "detalle")} className={`w-14 h-14 rounded-xl overflow-hidden border-2 ${view === (idx === 0 ? "hero" : "detalle") ? "border-ink" : "border-white"} bg-white shadow`}>
+            <ProductIllustration type={ilu} />
+          </button>
+        ))}
+      </div>
+
+      <div className="px-4 pt-4">
+        <h1 className="font-display font-extrabold text-2xl text-ink leading-tight">{product.name}</h1>
+        <div className="font-display font-extrabold text-xl text-ink mt-1">{fmt(product.price)}</div>
+        {product.description && <p className="font-body text-sm text-ink/60 mt-3 leading-relaxed">{product.description}</p>}
+
+        {product.specs && (
+          <>
+            <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mt-5 mb-2">Especificaciones técnicas</div>
+            <Card className="p-4 flex flex-col divide-y divide-dashed divide-ink/10">
+              {Object.entries({ Medidas: product.specs.medidas, Material: product.specs.material, Capacidad: product.specs.capacidad, Color: product.specs.color }).map(([k, v]) => (
+                <div key={k} className="flex justify-between py-1.5 first:pt-0 last:pb-0 font-body text-sm">
+                  <span className="text-muted">{k}</span><span className="font-semibold text-ink">{v}</span>
+                </div>
+              ))}
+            </Card>
+          </>
+        )}
+
+        {product.includes && (
+          <>
+            <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mt-5 mb-2">Qué incluye</div>
+            <Card className="p-4 flex flex-col gap-2">
+              {product.includes.map((it, idx) => (
+                <div key={idx} className="flex items-center gap-2 font-body text-sm text-ink/70">
+                  <span className="w-1.5 h-1.5 rounded-full bg-ok flex-shrink-0" /> {it}
+                </div>
+              ))}
+            </Card>
+          </>
+        )}
+
+        <p className="font-body text-[10px] text-ink/30 mt-4">Imágenes ilustrativas del producto, no fotos del artículo físico.</p>
+
+        <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t-2 border-ink p-4 flex items-center gap-3">
+          <div className="flex items-center border-2 border-ink rounded-xl">
+            <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-9 h-9 flex items-center justify-center font-display font-bold text-ink">−</button>
+            <span className="w-8 text-center font-display font-bold text-ink">{qty}</span>
+            <button onClick={() => setQty((q) => q + 1)} className="w-9 h-9 flex items-center justify-center font-display font-bold text-ink">+</button>
+          </div>
+          <Button variant="accent" className="flex-1" onClick={add}>Agregar al carrito</Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SORT_OPTIONS = [
+  { id: "relevancia", label: "Relevancia" },
+  { id: "precio_asc", label: "Precio: menor a mayor" },
+  { id: "precio_desc", label: "Precio: mayor a menor" },
+  { id: "vendidos", label: "Más vendidos" },
+];
+
+const TiendaScreen = ({ onAdd, onOpenDetail, cartCount, onOpenCart, onOpenBundle, eventDate, setEventDate }) => {
   const [cat, setCat] = useState("todo");
+  const [sort, setSort] = useState("relevancia");
+  const [showSort, setShowSort] = useState(false);
   const [favorites, setFavorites] = useState([2, 3]);
-  const filtered = STORE_PRODUCTS.filter((p) => (cat === "todo" ? true : p.category === cat));
+
+  const sortFn = (a, b) => {
+    if (sort === "precio_asc") return a.price - b.price;
+    if (sort === "precio_desc") return b.price - a.price;
+    if (sort === "vendidos") return (b.sold || 0) - (a.sold || 0);
+    return 0;
+  };
+
+  const filtered = STORE_PRODUCTS.filter((p) => (cat === "todo" ? true : p.category === cat)).sort(sortFn);
   const favoriteProducts = STORE_PRODUCTS.filter((p) => favorites.includes(p.id));
   const bestsellers = [...STORE_PRODUCTS].sort((a, b) => (b.sold || 0) - (a.sold || 0)).slice(0, 4);
 
   const toggleFavorite = (id) => setFavorites((prev) => (prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]));
+  const currentSortLabel = SORT_OPTIONS.find((s) => s.id === sort).label;
 
   return (
     <div className="px-4 pt-6 pb-28">
@@ -1159,9 +898,22 @@ const TiendaScreen = ({ onAdd, cartCount, onOpenCart, onOpenBundle }) => {
         Tienda
       </ScreenTitle>
 
+      <Card className="p-3 mb-4 flex items-center gap-3">
+        <IconCalendar className="w-4 h-4 text-muted flex-shrink-0" />
+        <div className="flex-1">
+          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted block mb-0.5">Fecha de tu evento</label>
+          <input
+            type="date"
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
+            className="w-full bg-transparent font-body text-sm text-ink outline-none"
+          />
+        </div>
+      </Card>
+
       <button onClick={onOpenBundle} className="w-full mb-4">
         <Card className="p-3.5 flex items-center gap-3 bg-mustard border-ink">
-          <div className="w-9 h-9 rounded-lg bg-ink flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-ink flex items-center justify-center flex-shrink-0">
             <IconBundle className="w-4.5 h-4.5 text-mustard" />
           </div>
           <div className="text-left flex-1">
@@ -1173,16 +925,16 @@ const TiendaScreen = ({ onAdd, cartCount, onOpenCart, onOpenBundle }) => {
       </button>
 
       <div className="mb-1 flex items-center gap-1.5">
-        <IconStar className="w-3.5 h-3.5 text-mustard" />
-        <span className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/45">Más vendidos</span>
+        <IconStar className="w-3.5 h-3.5 text-mustardDark" />
+        <span className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Más vendidos</span>
       </div>
       <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
         {bestsellers.map((p) => (
           <button key={p.id} onClick={() => onAdd(p)} className="flex-shrink-0">
             <Card className="px-3 py-2 flex items-center gap-2 bg-cream">
               <span className="font-body text-xs font-semibold text-ink whitespace-nowrap">{p.name}</span>
-              <span className="font-display font-bold text-xs text-ink/50">{fmt(p.price)}</span>
-              <IconPlus className="w-3.5 h-3.5 text-ink/40" />
+              <span className="font-display font-bold text-xs text-muted">{fmt(p.price)}</span>
+              <IconPlus className="w-3.5 h-3.5 text-muted" />
             </Card>
           </button>
         ))}
@@ -1192,25 +944,49 @@ const TiendaScreen = ({ onAdd, cartCount, onOpenCart, onOpenBundle }) => {
         <>
           <div className="mb-1 flex items-center gap-1.5">
             <IconStar className="w-3.5 h-3.5 text-ink" />
-            <span className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/45">Favoritos</span>
+            <span className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Favoritos</span>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
             {favoriteProducts.map((p) => (
-              <ProductCard key={p.id} p={p} onAdd={onAdd} favorite={favorites.includes(p.id)} onToggleFavorite={toggleFavorite} />
+              <ProductCard key={p.id} p={p} onAdd={onAdd} onOpenDetail={onOpenDetail} favorite={favorites.includes(p.id)} onToggleFavorite={toggleFavorite} unavailable={eventDate && isDateBusy(p.id, eventDate)} />
             ))}
           </div>
         </>
       )}
 
-      <div className="flex gap-2 mb-4">
-        <Chip active={cat === "todo"} onClick={() => setCat("todo")}>Todo</Chip>
-        <Chip active={cat === "paquetes"} onClick={() => setCat("paquetes")}>Paquetes</Chip>
-        <Chip active={cat === "extras"} onClick={() => setCat("extras")}>Extras</Chip>
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar">
+          <Chip active={cat === "todo"} onClick={() => setCat("todo")}>Todo</Chip>
+          <Chip active={cat === "paquetes"} onClick={() => setCat("paquetes")}>Paquetes</Chip>
+          <Chip active={cat === "extras"} onClick={() => setCat("extras")}>Extras</Chip>
+        </div>
+        <div className="relative flex-shrink-0">
+          <button onClick={() => setShowSort((s) => !s)} className="flex items-center gap-1 bg-white border-2 border-ink/10 rounded-full px-2.5 py-1.5">
+            <IconSort className="w-3.5 h-3.5 text-muted" />
+          </button>
+          {showSort && (
+            <>
+              <div className="fixed inset-0 z-20" onClick={() => setShowSort(false)} />
+              <Card className="absolute right-0 top-full mt-1.5 z-30 py-1 w-48">
+                {SORT_OPTIONS.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => { setSort(s.id); setShowSort(false); }}
+                    className={`w-full text-left px-3 py-2 font-body text-xs ${sort === s.id ? "font-bold text-ink" : "text-ink/60"} hover:bg-cream`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </Card>
+            </>
+          )}
+        </div>
       </div>
+      <p className="font-body text-[10px] text-ink/35 -mt-3 mb-3">Ordenado por: {currentSortLabel}</p>
 
       <div className="grid grid-cols-2 gap-3">
         {filtered.map((p) => (
-          <ProductCard key={p.id} p={p} onAdd={onAdd} favorite={favorites.includes(p.id)} onToggleFavorite={toggleFavorite} />
+          <ProductCard key={p.id} p={p} onAdd={onAdd} onOpenDetail={onOpenDetail} favorite={favorites.includes(p.id)} onToggleFavorite={toggleFavorite} unavailable={eventDate && isDateBusy(p.id, eventDate)} />
         ))}
       </div>
     </div>
@@ -1234,14 +1010,17 @@ const BundleScreen = ({ onBack, onAddBundle }) => {
   const discount = Math.round((rawTotal * discountPct) / 100);
   const finalTotal = rawTotal - discount;
 
-  const Group = ({ title, options, value, onChange }) => (
+  const Group = ({ title, options, value, onChange, illustration }) => (
     <div className="mb-4">
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-1.5">{title}</div>
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-1.5">{title}</div>
       <div className="flex flex-col gap-2">
         {options.map((o) => (
           <button key={o.id} onClick={() => onChange(o.id)} className="w-full text-left">
-            <Card className={`p-3 flex items-center justify-between ${value === o.id ? "bg-mustard/20 border-ink" : ""}`}>
-              <span className="font-body text-sm font-medium">{o.label}</span>
+            <Card className={`p-2.5 flex items-center gap-3 ${value === o.id ? "bg-mustard/20 border-ink" : ""}`}>
+              <div className="w-11 h-11 rounded-xl overflow-hidden border border-ink/10 flex-shrink-0">
+                <ProductIllustration type={o.price > 0 ? illustration : "none"} />
+              </div>
+              <span className="font-body text-sm font-medium flex-1">{o.label}</span>
               <div className="flex items-center gap-2">
                 <span className="font-display font-bold text-sm">{o.price > 0 ? fmt(o.price) : "—"}</span>
                 <span className={`w-4 h-4 rounded-full border-2 border-ink flex-shrink-0 ${value === o.id ? "bg-ink" : "bg-white"}`} />
@@ -1256,9 +1035,9 @@ const BundleScreen = ({ onBack, onAddBundle }) => {
   return (
     <div className="px-4 pt-6 pb-28">
       <ToolHeader title="Armá tu paquete" onBack={onBack} />
-      <Group title="Carpa" options={BUNDLE_OPTIONS.carpa} value={carpa} onChange={setCarpa} />
-      <Group title="Sillas" options={BUNDLE_OPTIONS.sillas} value={sillas} onChange={setSillas} />
-      <Group title="Iluminación" options={BUNDLE_OPTIONS.luz} value={luz} onChange={setLuz} />
+      <Group title="Carpa" options={BUNDLE_OPTIONS.carpa} value={carpa} onChange={setCarpa} illustration="tent" />
+      <Group title="Sillas" options={BUNDLE_OPTIONS.sillas} value={sillas} onChange={setSillas} illustration="chairs" />
+      <Group title="Iluminación" options={BUNDLE_OPTIONS.luz} value={luz} onChange={setLuz} illustration="lights" />
 
       <Card className="p-4 bg-ink border-ink">
         <div className="flex justify-between font-body text-xs text-cream/60 py-1">
@@ -1283,6 +1062,7 @@ const BundleScreen = ({ onBack, onAddBundle }) => {
             id: Date.now(),
             name: `Paquete a medida (${chosen.filter((c) => c.price > 0).map((c) => c.label).join(" + ")})`,
             price: finalTotal,
+            illustration: carpa !== "c0" ? "tent" : sillas !== "s0" ? "chairs" : "lights",
           });
           onBack();
         }}
@@ -1294,158 +1074,289 @@ const BundleScreen = ({ onBack, onAddBundle }) => {
 };
 
 /* ---------------- CLIENTES: HISTORIAL Y NOTAS ---------------- */
-const ClientesScreen = ({ onBack, flash }) => {
-  const [clients, setClients] = useState(INITIAL_CLIENTS);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [notes, setNotes] = useState("");
-  const [showMore, setShowMore] = useState(false);
-
-  const addClient = () => {
-    if (!name.trim()) return;
-    setClients((p) => [{ id: Date.now(), name, phone, email, notes, frequent: false }, ...p]);
-    setName(""); setPhone(""); setEmail(""); setNotes(""); setShowMore(false);
-    flash("Cliente guardado");
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Clientes" onBack={onBack} />
-
-      <Card className="p-3 mb-4 flex flex-col gap-2 bg-cream">
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre del cliente / evento" className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        <button onClick={() => setShowMore((s) => !s)} className="flex items-center justify-between py-1">
-          <span className="font-body text-xs font-semibold text-ink/60">+ Teléfono y email (opcional)</span>
-          <IconChevron className={`w-4 h-4 text-ink/40 transition-transform ${showMore ? "rotate-90" : ""}`} />
-        </button>
-        {showMore && (
-          <div className="flex gap-2">
-            <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Teléfono" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-          </div>
-        )}
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Preferencias, restricciones, eventos anteriores..."
-          rows={2}
-          className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none resize-none"
-        />
-        <Button variant="accent" onClick={addClient}>Guardar cliente</Button>
-      </Card>
-
-      <div className="flex flex-col gap-2.5">
-        {clients.map((c) => (
-          <Card key={c.id} className="p-3.5">
-            <div className="font-body font-semibold text-sm text-ink">{c.name}</div>
-            {(c.phone || c.email) && (
-              <div className="flex gap-3 mt-1">
-                {c.phone && <span className="font-body text-[11px] text-ink/45">{c.phone}</span>}
-                {c.email && <span className="font-body text-[11px] text-ink/45">{c.email}</span>}
-              </div>
-            )}
-            <p className="font-body text-xs text-ink/55 mt-1 leading-relaxed">{c.notes || "Sin notas"}</p>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- CAJA CHICA ---------------- */
-const GastosScreen = ({ onBack, flash }) => {
-  const [expenses, setExpenses] = useState(INITIAL_EXPENSES);
-  const [concept, setConcept] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("Transporte");
-
-  const total = expenses.reduce((a, e) => a + e.amount, 0);
-  const revenue = 54000;
-  const balance = revenue - total;
-
-  const addExpense = () => {
-    if (!concept.trim() || !amount) return;
-    setExpenses((p) => [{ id: Date.now(), concept, amount: Number(amount), category }, ...p]);
-    setConcept(""); setAmount("");
-    flash("Gasto registrado");
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Caja chica" onBack={onBack} />
-
-      <Card className="p-4 mb-4 bg-ink border-ink">
-        <div className="flex justify-between font-body text-xs text-cream/60 py-1">
-          <span>Vendido hoy</span><span>{fmt(revenue)}</span>
-        </div>
-        <div className="flex justify-between font-body text-xs text-cream/60 py-1">
-          <span>Gastos del evento</span><span>-{fmt(total)}</span>
-        </div>
-        <div className="flex justify-between font-display font-extrabold text-base text-mustard pt-2 mt-1 border-t border-dashed border-cream/20">
-          <span>Balance real</span><span>{fmt(balance)}</span>
-        </div>
-      </Card>
-
-      <Card className="p-3 mb-4 flex flex-col gap-2 bg-cream">
-        <input value={concept} onChange={(e) => setConcept(e.target.value)} placeholder="Concepto (ej. combustible)" className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        <div className="flex gap-2">
-          <input value={amount} onChange={(e) => setAmount(e.target.value)} type="number" placeholder="Monto" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-          <select value={category} onChange={(e) => setCategory(e.target.value)} className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none">
-            <option>Transporte</option><option>Compra urgente</option><option>Otro</option>
-          </select>
-        </div>
-        <Button variant="accent" onClick={addExpense}>Registrar gasto</Button>
-      </Card>
-
-      <div className="flex flex-col gap-2">
-        {expenses.map((e) => (
-          <Card key={e.id} className="p-3 flex items-center justify-between">
-            <div>
-              <div className="font-body text-sm font-semibold">{e.concept}</div>
-              <div className="font-body text-[10px] text-ink/40">{e.category}</div>
-            </div>
-            <span className="font-display font-bold text-sm text-low">-{fmt(e.amount)}</span>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- SCREEN: CARRITO / VENTAS ---------------- */
-const DISCOUNT_PRESETS = [
-  { id: "none", label: "Sin descuento", type: "percent", value: 0 },
-  { id: "freq", label: "Cliente frecuente", type: "percent", value: 10 },
-  { id: "grande", label: "Evento grande", type: "percent", value: 15 },
-  { id: "custom", label: "Personalizado", type: "custom", value: 0 },
+const CUSTOMER_TYPES = [
+  { id: "particular", label: "Particular", desc: "Estoy organizando mi propio evento", discountPct: 0 },
+  { id: "organizador", label: "Organizador de eventos", desc: "Soy wedding planner, coordinador o productor", discountPct: 5 },
+  { id: "corporativo", label: "Empresa / Corporativo", desc: "Compro para eventos de mi empresa", discountPct: 8 },
+  { id: "mayorista", label: "Mayorista / Revendedor", desc: "Alquilo en volumen para revender", discountPct: 15 },
 ];
 
-const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
+const RegistroScreen = ({ onBack, customer, onSave, flash, orders }) => {
+  const [name, setName] = useState(customer?.name || "");
+  const [email, setEmail] = useState(customer?.email || "");
+  const [phone, setPhone] = useState(customer?.phone || "");
+  const [typeId, setTypeId] = useState(customer?.typeId || "particular");
+
+  const save = () => {
+    if (!name.trim() || !email.trim()) return;
+    const type = CUSTOMER_TYPES.find((t) => t.id === typeId);
+    const referralCode = customer?.referralCode || `REF-${name.trim().split(" ")[0].toUpperCase().replace(/[^A-Z]/g, "").slice(0, 8)}${Math.floor(100 + Math.random() * 900)}`;
+    onSave({ name: name.trim(), email: email.trim(), phone: phone.trim(), typeId, label: type.label, discountPct: type.discountPct, referralCode });
+    flash(type.discountPct > 0 ? `¡Registrado! Tenés ${type.discountPct}% de descuento en tus compras` : "Registro guardado");
+    onBack();
+  };
+
+  const copyReferral = async () => {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(customer.referralCode);
+      flash("Código copiado");
+    }
+  };
+
+  const downloadInvoice = (o) => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(18); doc.text("Factura — Quick Sale", 14, 20);
+    doc.setFontSize(11);
+    doc.text(`Pedido: ${o.id}`, 14, 34);
+    doc.text(`Fecha: ${o.date}`, 14, 41);
+    doc.text(`Total: ${fmt(o.total)}  |  Pagado: ${fmt(o.paid)}`, 14, 48);
+    doc.text(`Cliente: ${o.client}`, 14, 55);
+    let y = 66;
+    (o.items || []).forEach((it) => { doc.text(`- ${it.qty}x ${it.name} — ${fmt(it.price * it.qty)}`, 14, y); y += 7; });
+    doc.save(`factura-${o.id.replace("#", "")}.pdf`);
+    flash("Factura descargada");
+  };
+
+  return (
+    <div className="px-4 pt-6 pb-28">
+      <ToolHeader title="Mi registro" onBack={onBack} />
+      <p className="font-body text-sm text-muted mb-4 -mt-2">Contanos para qué necesitás el alquiler y te aplicamos el descuento que corresponda en cada compra.</p>
+
+      <Card className="p-4 mb-5 flex flex-col gap-3">
+        <div>
+          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Nombre completo</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Tu nombre" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
+        </div>
+        <div>
+          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Email</label>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="tu@email.com" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
+        </div>
+        <div>
+          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Teléfono (opcional)</label>
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+54 9 ..." className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
+        </div>
+      </Card>
+
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">¿Para qué necesitás el alquiler?</div>
+      <div className="flex flex-col gap-2 mb-5">
+        {CUSTOMER_TYPES.map((t) => (
+          <button key={t.id} onClick={() => setTypeId(t.id)} className="text-left">
+            <Card className={`p-3.5 ${typeId === t.id ? "bg-mustard/15 border-ink" : ""}`}>
+              <div className="flex items-center justify-between">
+                <span className="font-display font-bold text-sm text-ink">{t.label}</span>
+                {t.discountPct > 0 && (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-ok/10 text-ok border border-ok/30">-{t.discountPct}%</span>
+                )}
+              </div>
+              <p className="font-body text-xs text-muted mt-1">{t.desc}</p>
+            </Card>
+          </button>
+        ))}
+      </div>
+
+      <Button variant="accent" className="w-full mb-6" onClick={save}>Guardar y aplicar descuento</Button>
+
+      {customer?.referralCode && (
+        <>
+          <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Invitá a un amigo</div>
+          <Card className="p-4 mb-6 bg-ink border-ink">
+            <p className="font-body text-xs text-cream/60 mb-2">Compartí tu código — tu amigo obtiene {REFERRAL_DISCOUNT_PCT}% de descuento en su primera compra.</p>
+            <div className="flex items-center justify-between bg-cream/10 rounded-xl px-3 py-2.5">
+              <span className="font-display font-bold text-mustard tracking-wide">{customer.referralCode}</span>
+              <button onClick={copyReferral} className="font-body text-xs font-semibold text-cream/80 hover:text-cream">Copiar</button>
+            </div>
+          </Card>
+        </>
+      )}
+
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Mis facturas y contratos</div>
+      {orders.length === 0 ? (
+        <Card className="p-6 text-center">
+          <p className="font-body text-sm text-muted">Todavía no tenés pedidos facturados</p>
+        </Card>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {orders.map((o) => (
+            <Card key={o.id} className="p-3.5 flex items-center justify-between">
+              <div>
+                <div className="font-body text-sm font-semibold text-ink">{o.id} · {fmt(o.total)}</div>
+                <div className="font-body text-[11px] text-muted mt-0.5">{o.date}</div>
+              </div>
+              <button onClick={() => downloadInvoice(o)} className="flex items-center gap-1.5 font-body text-xs font-semibold text-ink/60 hover:text-ink flex-shrink-0">
+                <IconFile className="w-3.5 h-3.5" /> Factura
+              </button>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const REFERRAL_DISCOUNT_PCT = 5;
+
+/* ---------------- PASARELA DE PAGO ---------------- */
+const PAYMENT_METHODS = [
+  { id: "mercadopago", label: "Mercado Pago", desc: "Tarjeta de crédito o débito", icon: "💳" },
+  { id: "transferencia", label: "Transferencia bancaria", desc: "CBU / alias", icon: "🏦" },
+  { id: "efectivo", label: "Efectivo al retirar", desc: "Pagás en el evento", icon: "💵" },
+];
+
+const PaymentGatewayScreen = ({ amount, label, onSuccess, onCancel }) => {
+  const [step, setStep] = useState("method"); // method | card | processing | success
+  const [method, setMethod] = useState(null);
+  const [holder, setHolder] = useState("");
+  const [number, setNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvv, setCvv] = useState("");
+
+  const chooseMethod = (m) => {
+    setMethod(m);
+    if (m.id === "mercadopago") setStep("card");
+    else { setStep("processing"); setTimeout(() => setStep("success"), 1100); }
+  };
+
+  const submitCard = () => {
+    if (!holder.trim() || number.replace(/\D/g, "").length < 12 || !expiry || cvv.length < 3) return;
+    // El número y el CVV nunca se guardan — solo se usan para simular el envío a la pasarela.
+    setStep("processing");
+    setTimeout(() => setStep("success"), 1400);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-cream overflow-y-auto">
+      <div className="max-w-md mx-auto px-4 pt-6 pb-10 min-h-screen flex flex-col">
+        {step !== "processing" && step !== "success" && (
+          <button onClick={onCancel} className="w-8 h-8 flex items-center justify-center bg-white border-2 border-ink rounded-xl mb-4 flex-shrink-0">
+            <IconX className="w-4 h-4 text-ink" />
+          </button>
+        )}
+
+        {step === "method" && (
+          <>
+            <h1 className="font-display font-extrabold text-xl text-ink mb-1">{label}</h1>
+            <p className="font-body text-sm text-muted mb-5">Vas a pagar <span className="font-semibold text-ink">{fmt(amount)}</span></p>
+            <div className="flex flex-col gap-2">
+              {PAYMENT_METHODS.map((m) => (
+                <button key={m.id} onClick={() => chooseMethod(m)} className="text-left">
+                  <Card className="p-4 flex items-center gap-3">
+                    <span className="text-2xl">{m.icon}</span>
+                    <div className="flex-1">
+                      <div className="font-display font-bold text-sm text-ink">{m.label}</div>
+                      <div className="font-body text-xs text-muted">{m.desc}</div>
+                    </div>
+                    <IconChevron className="w-4 h-4 text-ink/30" />
+                  </Card>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {step === "card" && (
+          <>
+            <h1 className="font-display font-extrabold text-xl text-ink mb-1">Pagar con tarjeta</h1>
+            <p className="font-body text-sm text-muted mb-5">{fmt(amount)} vía Mercado Pago</p>
+            <Card className="p-4 flex flex-col gap-3">
+              <div>
+                <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Nombre del titular</label>
+                <input value={holder} onChange={(e) => setHolder(e.target.value)} className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
+              </div>
+              <div>
+                <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Número de tarjeta</label>
+                <input
+                  value={number}
+                  onChange={(e) => setNumber(e.target.value.replace(/[^\d\s]/g, "").slice(0, 19))}
+                  placeholder="1234 5678 9012 3456"
+                  inputMode="numeric"
+                  className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none"
+                />
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Vencimiento</label>
+                  <input value={expiry} onChange={(e) => setExpiry(e.target.value)} placeholder="MM/AA" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
+                </div>
+                <div className="w-24">
+                  <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">CVV</label>
+                  <input value={cvv} onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))} type="password" inputMode="numeric" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
+                </div>
+              </div>
+              <p className="font-body text-[10px] text-muted leading-relaxed flex items-start gap-1.5">
+                <span>🔒</span><span>Tus datos se envían directo a Mercado Pago para procesar el cobro. No los guardamos.</span>
+              </p>
+            </Card>
+            <Button variant="accent" className="w-full mt-4" onClick={submitCard}>Pagar {fmt(amount)}</Button>
+          </>
+        )}
+
+        {step === "processing" && (
+          <div className="flex-1 flex flex-col items-center justify-center gap-3">
+            <div className="w-10 h-10 border-4 border-ink/15 border-t-ink rounded-full animate-spin" />
+            <p className="font-body text-sm text-muted">
+              {method?.id === "transferencia" ? "Confirmando transferencia..." : method?.id === "efectivo" ? "Registrando pedido..." : "Procesando pago..."}
+            </p>
+          </div>
+        )}
+
+        {step === "success" && (
+          <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 px-4">
+            <div className="w-16 h-16 rounded-full bg-ok/15 border-2 border-ok flex items-center justify-center">
+              <span className="text-3xl">✓</span>
+            </div>
+            <h1 className="font-display font-extrabold text-xl text-ink">
+              {method?.id === "transferencia" ? "Transferencia registrada" : "¡Pago aprobado!"}
+            </h1>
+            <p className="font-body text-sm text-muted">
+              {method?.id === "transferencia" ? "Verificaremos tu transferencia y confirmaremos tu pedido a la brevedad." : `Pagaste ${fmt(amount)} con ${method?.label.toLowerCase()}.`}
+            </p>
+            <Button variant="accent" className="w-full mt-2" onClick={() => onSuccess(method?.id)}>Ver mi pedido</Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale, customer }) => {
   const [mode, setMode] = useState("total"); // total | seña
-  const [preset, setPreset] = useState("none");
-  const [customType, setCustomType] = useState("percent"); // percent | fixed
-  const [customValue, setCustomValue] = useState("");
+  const [promoInput, setPromoInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null); // { code, pct, label }
+  const [promoError, setPromoError] = useState("");
+  const [showPromo, setShowPromo] = useState(false);
   const [client, setClient] = useState("");
+  const [address, setAddress] = useState("");
   const [confirming, setConfirming] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
   const subtotal = cart.reduce((a, i) => a + i.price * i.qty, 0);
 
-  const discountAmount = useMemo(() => {
-    if (preset === "custom") {
-      const v = Number(customValue) || 0;
-      return customType === "percent" ? Math.round((subtotal * v) / 100) : v;
-    }
-    const p = DISCOUNT_PRESETS.find((d) => d.id === preset);
-    if (!p || p.value === 0) return 0;
-    return Math.round((subtotal * p.value) / 100);
-  }, [preset, customType, customValue, subtotal]);
+  const profileDiscountPct = customer?.discountPct || 0;
+  const promoDiscount = appliedPromo ? Math.round((subtotal * appliedPromo.pct) / 100) : 0;
+
+  const profileDiscountAmount = Math.round((subtotal * profileDiscountPct) / 100);
+  const discountAmount = profileDiscountAmount + promoDiscount;
 
   const discountedTotal = Math.max(subtotal - discountAmount, 0);
   const amountNow = mode === "seña" ? Math.round(discountedTotal * 0.5) : discountedTotal;
   const pending = mode === "seña" ? discountedTotal - amountNow : 0;
+
+  const applyPromo = () => {
+    const code = promoInput.trim().toUpperCase();
+    if (!code) return;
+    const coupon = COUPON_CODES.find((c) => c.code === code);
+    if (coupon) {
+      setAppliedPromo({ code, pct: coupon.pct, label: coupon.desc });
+      setPromoError("");
+    } else if (code.startsWith("REF-")) {
+      setAppliedPromo({ code, pct: REFERRAL_DISCOUNT_PCT, label: "Código de referido" });
+      setPromoError("");
+    } else {
+      setAppliedPromo(null);
+      setPromoError("Código no válido");
+    }
+  };
 
   const ticketText = () => {
     const lines = cart.map((i) => `${i.qty}x ${i.name} — ${fmt(i.price * i.qty)}`).join("\n");
@@ -1462,31 +1373,31 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
     }
   };
 
-  const confirmSale = () => {
-    if (submitting) return; // evita doble clic
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setConfirming(false);
-      setConfirmed(true);
-      if (onConfirmSale) {
-        onConfirmSale({
-          id: "#" + Math.floor(1000 + Math.random() * 9000),
-          client: client.trim() || "Sin nombre",
-          items: cart,
-          subtotal,
-          discount: discountAmount,
-          total: discountedTotal,
-          mode,
-          paid: amountNow,
-          pending,
-          date: new Date().toLocaleDateString("es-AR"),
-          time: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
-          status: mode === "seña" ? "Seña pagada" : "Pago total",
-        });
-      }
-      flash("Venta registrada");
-    }, 500);
+  const confirmSale = (paymentMethod) => {
+    setConfirming(false);
+    setConfirmed(true);
+    if (onConfirmSale) {
+      onConfirmSale({
+        id: "#" + Math.floor(1000 + Math.random() * 9000),
+        client: client.trim() || "Sin nombre",
+        deliveryAddress: address.trim(),
+        items: cart,
+        subtotal,
+        discount: discountAmount,
+        total: discountedTotal,
+        mode,
+        paid: amountNow,
+        pending,
+        date: new Date().toLocaleDateString("es-AR"),
+        time: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+        status: mode === "seña" ? "Seña pagada" : "Pago total",
+        paymentMethod,
+        liveStep: 1,
+        liveStepTime: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+        reviewed: false,
+      });
+    }
+    flash("Venta registrada");
   };
 
   return (
@@ -1495,7 +1406,7 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
         action={
           onClose && (
             <button onClick={onClose} className="p-2">
-              <IconX className="w-5 h-5 text-ink/50" />
+              <IconX className="w-5 h-5 text-muted" />
             </button>
           )
         }
@@ -1505,18 +1416,21 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
 
       {cart.length === 0 ? (
         <Card className="p-8 text-center">
-          <p className="font-body text-sm text-ink/40">Todavía no agregaste nada</p>
+          <p className="font-body text-sm text-muted">Todavía no agregaste nada</p>
         </Card>
       ) : (
         <>
           <Card className="p-4 flex flex-col divide-y-2 divide-dashed divide-ink/10">
             {cart.map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
-                <div>
-                  <div className="font-body font-semibold text-sm text-ink">{item.name}</div>
-                  <div className="font-body text-xs text-ink/40">Cant. {item.qty}</div>
+              <div key={item.id} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
+                <div className="w-10 h-10 rounded-xl overflow-hidden border border-ink/10 flex-shrink-0">
+                  <ProductIllustration type={item.illustration} />
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="font-body font-semibold text-sm text-ink truncate">{item.name}</div>
+                  <div className="font-body text-xs text-muted">Cant. {item.qty}</div>
+                </div>
+                <div className="flex items-center gap-3 flex-shrink-0">
                   <span className="font-display font-bold text-sm">{fmt(item.price * item.qty)}</span>
                   <button onClick={() => onRemove(item.id)} className="text-ink/30">
                     <IconX className="w-4 h-4" />
@@ -1527,7 +1441,7 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
           </Card>
 
           <div className="mt-4">
-            <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Cliente (opcional)</label>
+            <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Cliente (opcional)</label>
             <input
               value={client}
               onChange={(e) => setClient(e.target.value)}
@@ -1537,35 +1451,66 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
           </div>
 
           <div className="mt-4">
-            <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50 flex items-center gap-1">
-              <IconTag className="w-3 h-3" /> Descuento por cliente / volumen
+            <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted flex items-center gap-1">
+              <IconMapPin className="w-3 h-3" /> Dirección de entrega (opcional)
             </label>
-            <div className="flex gap-1.5 mt-1.5 overflow-x-auto no-scrollbar">
-              {DISCOUNT_PRESETS.map((d) => (
-                <Chip key={d.id} active={preset === d.id} onClick={() => setPreset(d.id)}>
-                  {d.label}{d.type === "percent" && d.value > 0 ? ` -${d.value}%` : ""}
-                </Chip>
-              ))}
-            </div>
-            {preset === "custom" && (
-              <div className="flex gap-2 mt-2">
-                <div className="flex border-2 border-ink rounded-lg overflow-hidden">
-                  <button onClick={() => setCustomType("percent")} className={`px-2.5 py-2 font-display text-xs font-bold ${customType === "percent" ? "bg-ink text-mustard" : "bg-white text-ink"}`}>%</button>
-                  <button onClick={() => setCustomType("fixed")} className={`px-2.5 py-2 font-display text-xs font-bold border-l-2 border-ink ${customType === "fixed" ? "bg-ink text-mustard" : "bg-white text-ink"}`}>$</button>
+            <input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Dónde armamos el evento"
+              className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none"
+            />
+          </div>
+
+          <div className="mt-4">
+            <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted flex items-center gap-1">
+              <IconTag className="w-3 h-3" /> Descuento
+            </label>
+            {customer ? (
+              <div className="mt-1.5 flex items-center justify-between bg-ok/10 border border-ok/30 rounded-xl px-3 py-2.5">
+                <span className="font-body text-xs text-ink/70">Por tu perfil ({customer.label})</span>
+                <span className="font-display font-bold text-sm text-ok">-{profileDiscountPct}%</span>
+              </div>
+            ) : (
+              <div className="mt-1.5 bg-cream border border-ink/10 rounded-xl px-3 py-2.5">
+                <span className="font-body text-xs text-muted">Registrate para acceder a descuentos según tu perfil</span>
+              </div>
+            )}
+
+            {!showPromo ? (
+              <button onClick={() => setShowPromo(true)} className="font-body text-xs font-semibold text-muted hover:text-ink mt-2">
+                + Tengo un código promocional o de referido
+              </button>
+            ) : appliedPromo ? (
+              <div className="mt-2 flex items-center justify-between bg-ok/10 border border-ok/30 rounded-xl px-3 py-2.5">
+                <div>
+                  <span className="font-body text-xs font-semibold text-ink">{appliedPromo.code}</span>
+                  <span className="font-body text-[11px] text-muted block">{appliedPromo.label}</span>
                 </div>
-                <input
-                  value={customValue}
-                  onChange={(e) => setCustomValue(e.target.value)}
-                  type="number"
-                  placeholder={customType === "percent" ? "% de rebaja" : "Monto fijo"}
-                  className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-3 py-2 font-body text-sm outline-none"
-                />
+                <div className="flex items-center gap-2">
+                  <span className="font-display font-bold text-sm text-ok">-{appliedPromo.pct}%</span>
+                  <button onClick={() => { setAppliedPromo(null); setPromoInput(""); }} className="text-ink/30 hover:text-low"><IconX className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-2">
+                <div className="flex gap-2">
+                  <input
+                    value={promoInput}
+                    onChange={(e) => { setPromoInput(e.target.value); setPromoError(""); }}
+                    onKeyDown={(e) => e.key === "Enter" && applyPromo()}
+                    placeholder="Ej. BIENVENIDO10 o REF-JUAN123"
+                    className="flex-1 bg-white border-2 border-ink/10 rounded-xl px-3 py-2 font-body text-sm outline-none uppercase"
+                  />
+                  <Button variant="ghost" onClick={applyPromo}>Aplicar</Button>
+                </div>
+                {promoError && <p className="font-body text-[11px] text-low mt-1">{promoError}</p>}
               </div>
             )}
           </div>
 
           <div className="mt-4">
-            <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Forma de pago</label>
+            <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Forma de pago</label>
             <div className="mt-1.5 grid grid-cols-2 border-2 border-ink rounded-xl overflow-hidden">
               <button
                 onClick={() => setMode("total")}
@@ -1602,7 +1547,7 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
           </Card>
 
           {mode === "seña" && (
-            <p className="font-body text-[11px] text-ink/40 mt-2 text-center">
+            <p className="font-body text-[11px] text-muted mt-2 text-center">
               El saldo restante se abona al retirar / en el evento.
             </p>
           )}
@@ -1610,7 +1555,7 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
           {confirmed ? (
             <Card className="mt-4 p-4 text-center bg-ok/5 border-ok/30">
               <div className="font-display font-bold text-sm text-ok">✓ Venta confirmada</div>
-              <p className="font-body text-xs text-ink/50 mt-1">Pagaste {fmt(amountNow)}{mode === "seña" ? ` de ${fmt(discountedTotal)}` : ""}</p>
+              <p className="font-body text-xs text-muted mt-1">Pagaste {fmt(amountNow)}{mode === "seña" ? ` de ${fmt(discountedTotal)}` : ""}</p>
               <Button variant="ghost" className="w-full mt-3 flex items-center justify-center gap-2" onClick={shareTicket}>
                 <IconShare className="w-4 h-4" /> Compartir ticket
               </Button>
@@ -1622,38 +1567,208 @@ const CartScreen = ({ cart, onRemove, onClose, flash, onConfirmSale }) => {
       )}
 
       {confirming && (
-        <div className="fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4 bg-ink/40" onClick={() => !submitting && setConfirming(false)}>
-          <Card className="w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
-            <div className="font-display font-bold text-base text-ink mb-1">Confirmar venta</div>
-            <p className="font-body text-xs text-ink/50 mb-4">Vas a cobrar {fmt(amountNow)}{mode === "seña" ? " como seña" : ""}. Confirmá para evitar cobros duplicados.</p>
-            <div className="flex gap-2">
-              <Button variant="ghost" className="flex-1" onClick={() => setConfirming(false)} disabled={submitting}>Cancelar</Button>
-              <Button variant="accent" className="flex-1" onClick={confirmSale} disabled={submitting}>
-                {submitting ? "Procesando..." : "Confirmar"}
-              </Button>
-            </div>
-          </Card>
-        </div>
+        <PaymentGatewayScreen
+          amount={amountNow}
+          label={mode === "seña" ? "Confirmá tu seña" : "Confirmá tu pago"}
+          onCancel={() => setConfirming(false)}
+          onSuccess={(method) => confirmSale(method)}
+        />
       )}
     </div>
   );
 };
 
 /* ---------------- PEDIDOS (historial de ventas) ---------------- */
+/* ---------------- CALCULADORA DE CAPACIDAD ---------------- */
+const CapacidadScreen = ({ onBack, onGoToTienda }) => {
+  const [guests, setGuests] = useState("50");
+  const n = Math.max(Number(guests) || 0, 0);
+
+  const sillas = n;
+  const mesas = Math.ceil(n / 8);
+  const carpas33 = Math.ceil((n * 1.5) / 9); // ~1.5 m² por invitado, carpa 3x3 = 9 m²
+  const setsSillasX4 = Math.ceil(sillas / 4);
+
+  return (
+    <div className="px-4 pt-6 pb-28">
+      <ToolHeader title="Calculadora de capacidad" onBack={onBack} />
+      <p className="font-body text-sm text-muted mb-4 -mt-2">Decinos cuántos invitados esperás y te sugerimos las cantidades.</p>
+
+      <Card className="p-4 mb-5">
+        <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Cantidad de invitados</label>
+        <input
+          value={guests}
+          onChange={(e) => setGuests(e.target.value.replace(/\D/g, ""))}
+          type="number"
+          inputMode="numeric"
+          className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-display font-bold text-2xl text-ink outline-none"
+        />
+      </Card>
+
+      {n > 0 && (
+        <>
+          <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Te recomendamos</div>
+          <div className="flex flex-col gap-2 mb-5">
+            <Card className="p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-ink/10 flex-shrink-0"><ProductIllustration type="chairs" /></div>
+              <div className="flex-1">
+                <div className="font-body text-sm font-semibold text-ink">Sillas</div>
+                <div className="font-body text-[11px] text-muted">{setsSillasX4} set{setsSillasX4 > 1 ? "s" : ""} de 4 unidades</div>
+              </div>
+              <span className="font-display font-extrabold text-lg text-ink">{sillas}</span>
+            </Card>
+            <Card className="p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-ink/10 flex-shrink-0"><ProductIllustration type="table" /></div>
+              <div className="flex-1">
+                <div className="font-body text-sm font-semibold text-ink">Mesas</div>
+                <div className="font-body text-[11px] text-muted">8 personas por mesa</div>
+              </div>
+              <span className="font-display font-extrabold text-lg text-ink">{mesas}</span>
+            </Card>
+            <Card className="p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-ink/10 flex-shrink-0"><ProductIllustration type="tent" /></div>
+              <div className="flex-1">
+                <div className="font-body text-sm font-semibold text-ink">Carpas 3x3</div>
+                <div className="font-body text-[11px] text-muted">~1.5 m² por invitado</div>
+              </div>
+              <span className="font-display font-extrabold text-lg text-ink">{carpas33}</span>
+            </Card>
+          </div>
+          <p className="font-body text-[11px] text-ink/35 mb-4">Es una estimación orientativa — el equipo puede ajustarla según el espacio real de tu evento.</p>
+          <Button variant="accent" className="w-full" onClick={onGoToTienda}>Ver estos productos en la tienda</Button>
+        </>
+      )}
+    </div>
+  );
+};
+
+/* ---------------- GALERÍA DE INSPIRACIÓN ---------------- */
+const GaleriaScreen = ({ onBack }) => (
+  <div className="px-4 pt-6 pb-28">
+    <ToolHeader title="Galería de inspiración" onBack={onBack} />
+    <p className="font-body text-sm text-muted mb-4 -mt-2">Ideas de cómo combinar nuestros packs según el tipo de evento.</p>
+    <div className="grid grid-cols-2 gap-3">
+      {GALLERY_ITEMS.map((g, idx) => (
+        <Card key={idx} className="overflow-hidden">
+          <div className="h-28"><ProductIllustration type={g.illustration} /></div>
+          <div className="p-2.5">
+            <div className="font-body text-xs font-semibold text-ink">{g.title}</div>
+            <div className="font-body text-[10px] text-muted mt-0.5">{g.desc}</div>
+          </div>
+        </Card>
+      ))}
+    </div>
+    <p className="font-body text-[10px] text-ink/30 mt-4 text-center">Imágenes ilustrativas del estilo de cada combinación, no fotos de eventos reales.</p>
+  </div>
+);
+
+/* ---------------- LISTA DE INVITADOS (RSVP) ---------------- */
+const RSVP_STATUSES = ["Pendiente", "Confirmado", "No asiste"];
+const InvitadosScreen = ({ onBack, flash }) => {
+  const [guests, setGuests] = useState([]);
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+
+  const add = () => {
+    if (!name.trim()) return;
+    setGuests((p) => [{ id: Date.now(), name: name.trim(), contact: contact.trim(), status: "Pendiente" }, ...p]);
+    setName(""); setContact("");
+  };
+
+  const setStatus = (id, status) => setGuests((p) => p.map((g) => (g.id === id ? { ...g, status } : g)));
+  const remove = (id) => setGuests((p) => p.filter((g) => g.id !== id));
+
+  const confirmados = guests.filter((g) => g.status === "Confirmado").length;
+  const pendientes = guests.filter((g) => g.status === "Pendiente").length;
+
+  return (
+    <div className="px-4 pt-6 pb-28">
+      <ToolHeader title="Lista de invitados" onBack={onBack} />
+
+      {guests.length > 0 && (
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          <Card className="p-2.5 text-center"><div className="font-display font-extrabold text-lg text-ink">{guests.length}</div><div className="font-body text-[9px] text-muted">Total</div></Card>
+          <Card className="p-2.5 text-center"><div className="font-display font-extrabold text-lg text-ok">{confirmados}</div><div className="font-body text-[9px] text-muted">Confirmados</div></Card>
+          <Card className="p-2.5 text-center"><div className="font-display font-extrabold text-lg text-mustardDark">{pendientes}</div><div className="font-body text-[9px] text-muted">Pendientes</div></Card>
+        </div>
+      )}
+
+      <Card className="p-3 mb-4 flex gap-2 items-end">
+        <div className="flex-1">
+          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Nombre</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && add()} className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-2.5 py-2 font-body text-sm outline-none" />
+        </div>
+        <div className="flex-1">
+          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-muted">Contacto</label>
+          <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="Tel. o email" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-2.5 py-2 font-body text-sm outline-none" />
+        </div>
+        <button onClick={add} className="w-9 h-9 rounded-xl bg-ink text-mustard flex items-center justify-center flex-shrink-0"><IconPlus className="w-4 h-4" /></button>
+      </Card>
+
+      {guests.length === 0 ? (
+        <Card className="p-8 text-center"><p className="font-body text-sm text-muted">Todavía no agregaste invitados</p></Card>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {guests.map((g) => (
+            <Card key={g.id} className="p-3">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <div className="font-body text-sm font-semibold text-ink">{g.name}</div>
+                  {g.contact && <div className="font-body text-[11px] text-muted">{g.contact}</div>}
+                </div>
+                <button onClick={() => remove(g.id)} className="text-ink/30 hover:text-low flex-shrink-0"><IconX className="w-4 h-4" /></button>
+              </div>
+              <div className="grid grid-cols-3 gap-1.5">
+                {RSVP_STATUSES.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setStatus(g.id, s)}
+                    className={`text-[10px] font-semibold px-2 py-1.5 rounded-xl border text-center ${g.status === s ? "bg-ink text-mustard border-ink" : "bg-white text-ink/60 border-ink/15"}`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const PedidosScreen = ({ orders, setOrders, onOpenCart, cartCount }) => {
   const [selected, setSelected] = useState(null);
+  const [showAddExtras, setShowAddExtras] = useState(false);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
   const totalHoy = orders.reduce((a, o) => a + o.paid, 0);
   const [filter, setFilter] = useState("todos");
 
-  const updateFulfillment = (id, fulfillment) => {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, fulfillment } : o)));
-    setSelected((s) => (s ? { ...s, fulfillment } : s));
+  const addExtra = (product) => {
+    setOrders((prev) => prev.map((o) => {
+      if (o.id !== selected.id) return o;
+      const existing = o.items.find((i) => i.name === product.name);
+      const items = existing
+        ? o.items.map((i) => (i.name === product.name ? { ...i, qty: i.qty + 1 } : i))
+        : [...o.items, { name: product.name, qty: 1, price: product.price, illustration: product.illustration }];
+      const newSubtotal = items.reduce((a, i) => a + i.price * i.qty, 0);
+      const updated = { ...o, items, subtotal: newSubtotal, total: newSubtotal - (o.discount || 0), pending: (o.pending || 0) + product.price };
+      setSelected(updated);
+      return updated;
+    }));
+  };
+
+  const submitReview = () => {
+    const updated = { ...selected, reviewed: true, rating: reviewRating, comment: reviewComment };
+    setOrders((prev) => prev.map((o) => (o.id === selected.id ? updated : o)));
+    setSelected(updated);
   };
 
   const filtered = orders.filter((o) => {
     if (filter === "todos") return true;
-    if (filter === "entregar") return (o.fulfillment || "Pendiente de entrega") === "Pendiente de entrega";
-    if (filter === "devolver") return o.fulfillment === "Entregado";
+    if (filter === "entregar") return (o.liveStep ?? 1) < 4;
+    if (filter === "finalizados") return (o.liveStep ?? 1) >= 5;
     return true;
   });
 
@@ -1688,84 +1803,171 @@ const PedidosScreen = ({ orders, setOrders, onOpenCart, cartCount }) => {
       {orders.length > 0 && (
         <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
           <Chip active={filter === "todos"} onClick={() => setFilter("todos")}>Todos</Chip>
-          <Chip active={filter === "entregar"} onClick={() => setFilter("entregar")}>Por entregar</Chip>
-          <Chip active={filter === "devolver"} onClick={() => setFilter("devolver")}>Por devolver</Chip>
+          <Chip active={filter === "entregar"} onClick={() => setFilter("entregar")}>En curso</Chip>
+          <Chip active={filter === "finalizados"} onClick={() => setFilter("finalizados")}>Finalizados</Chip>
         </div>
       )}
 
       {orders.length === 0 ? (
         <Card className="p-8 text-center">
-          <p className="font-body text-sm text-ink/40">Todavía no hay pedidos — se registran acá apenas confirmás una venta en Tienda.</p>
+          <p className="font-body text-sm text-muted">Todavía no hay pedidos — se registran acá apenas confirmás una venta en Tienda.</p>
         </Card>
       ) : filtered.length === 0 ? (
         <Card className="p-8 text-center">
-          <p className="font-body text-sm text-ink/40">Nada en este filtro</p>
+          <p className="font-body text-sm text-muted">Nada en este filtro</p>
         </Card>
       ) : (
         <div className="flex flex-col gap-2.5">
-          {filtered.map((o) => (
-            <button key={o.id} onClick={() => setSelected(o)} className="text-left">
-              <Card className="p-3.5 flex items-center justify-between">
-                <div>
-                  <div className="font-body font-semibold text-sm text-ink">{o.client}</div>
-                  <div className="font-body text-[11px] text-ink/40 mt-0.5">{o.id} · {o.date} {o.time}</div>
-                  <span className={`inline-block mt-1.5 text-[9px] font-semibold px-2 py-0.5 rounded-full border ${
-                    (o.fulfillment || "Pendiente de entrega") === "Devuelto" ? "bg-ok/10 text-ok border-ok/30" :
-                    o.fulfillment === "Entregado" ? "bg-mustard/15 text-ink/70 border-mustard/40" : "bg-ink/5 text-ink/50 border-ink/15"
-                  }`}>
-                    {o.fulfillment || "Pendiente de entrega"}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <div className="font-display font-bold text-sm text-ink">{fmt(o.paid)}</div>
-                  <span className={`inline-block mt-1 text-[9px] font-semibold px-2 py-0.5 rounded-full border ${o.status === "Seña pagada" ? "bg-mustard/15 text-ink/70 border-mustard/40" : "bg-ok/10 text-ok border-ok/30"}`}>
-                    {o.status}
-                  </span>
-                </div>
-              </Card>
-            </button>
-          ))}
+          {filtered.map((o) => {
+            const step = o.liveStep ?? 1;
+            return (
+              <button key={o.id} onClick={() => { setSelected(o); setShowAddExtras(false); }} className="text-left">
+                <Card className="p-3.5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-body font-semibold text-sm text-ink">{o.client}</div>
+                      <div className="font-body text-[11px] text-muted mt-0.5">{o.id} · {o.date} {o.time}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-display font-bold text-sm text-ink">{fmt(o.paid)}</div>
+                      <span className={`inline-block mt-1 text-[9px] font-semibold px-2 py-0.5 rounded-full border ${o.status === "Seña pagada" ? "bg-mustard/15 text-ink/70 border-mustard/40" : "bg-ok/10 text-ok border-ok/30"}`}>
+                        {o.status}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 mt-3">
+                    {ORDER_LIVE_STEPS.map((_, idx) => (
+                      <span key={idx} className={`flex-1 h-1.5 rounded-full ${idx <= step ? "bg-ok" : "bg-ink/10"}`} />
+                    ))}
+                  </div>
+                  <div className="font-body text-[10px] font-semibold text-muted mt-1.5">{ORDER_LIVE_STEPS[step]}</div>
+                </Card>
+              </button>
+            );
+          })}
         </div>
       )}
 
       {selected && (
-        <div className="fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4 bg-ink/40" onClick={() => setSelected(null)}>
-          <Card className="w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4 bg-ink/40 overflow-y-auto" onClick={() => setSelected(null)}>
+          <Card className="w-full max-w-sm p-5 my-8" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
               <div className="font-display font-bold text-base text-ink">{selected.id}</div>
-              <button onClick={() => setSelected(null)}><IconX className="w-4 h-4 text-ink/40" /></button>
+              <button onClick={() => setSelected(null)}><IconX className="w-4 h-4 text-muted" /></button>
             </div>
             <div className="font-body text-sm font-semibold text-ink">{selected.client}</div>
-            <div className="font-body text-xs text-ink/40 mb-3">{selected.date} · {selected.time}</div>
-            <div className="flex flex-col divide-y divide-dashed divide-ink/10">
-              {selected.items.map((i) => (
-                <div key={i.id} className="flex justify-between py-1.5 font-body text-sm">
-                  <span>{i.qty}x {i.name}</span><span>{fmt(i.price * i.qty)}</span>
-                </div>
-              ))}
-            </div>
-            <div className="border-t border-dashed border-ink/10 mt-2 pt-2 flex flex-col gap-1">
-              <div className="flex justify-between font-body text-xs text-ink/50"><span>Subtotal</span><span>{fmt(selected.subtotal)}</span></div>
-              {selected.discount > 0 && <div className="flex justify-between font-body text-xs text-ink/50"><span>Descuento</span><span>-{fmt(selected.discount)}</span></div>}
-              {selected.pending > 0 && <div className="flex justify-between font-body text-xs text-ink/50"><span>Pendiente</span><span>{fmt(selected.pending)}</span></div>}
-              <div className="flex justify-between font-display font-bold text-sm text-ink pt-1"><span>Pagado</span><span>{fmt(selected.paid)}</span></div>
-            </div>
-            <div className="border-t border-dashed border-ink/10 mt-3 pt-3">
-              <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Estado de entrega</div>
-              <div className="grid grid-cols-3 gap-1.5">
-                {["Pendiente de entrega", "Entregado", "Devuelto"].map((f) => (
-                  <button
-                    key={f}
-                    onClick={() => updateFulfillment(selected.id, f)}
-                    className={`text-[10px] font-semibold px-2 py-2 rounded-lg border text-center leading-tight ${
-                      (selected.fulfillment || "Pendiente de entrega") === f ? "bg-ink text-mustard border-ink" : "bg-white text-ink/60 border-ink/15"
-                    }`}
-                  >
-                    {f}
-                  </button>
-                ))}
+            <div className="font-body text-xs text-muted mb-3">{selected.date} · {selected.time}</div>
+
+            <div className="border-t border-dashed border-ink/10 pt-3">
+              <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2.5">Estado de tu pedido</div>
+              <div className="flex flex-col gap-0.5 mb-1">
+                {ORDER_LIVE_STEPS.map((step, idx) => {
+                  const current = selected.liveStep ?? 1;
+                  const done = idx <= current;
+                  return (
+                    <div key={step} className="flex items-center gap-2.5">
+                      <div className="flex flex-col items-center">
+                        <span className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${done ? "bg-ok border-ok" : "bg-white border-ink/20"}`} />
+                        {idx < ORDER_LIVE_STEPS.length - 1 && <span className={`w-0.5 h-4 ${idx < current ? "bg-ok" : "bg-ink/10"}`} />}
+                      </div>
+                      <span className={`font-body text-xs py-1 ${done ? "font-semibold text-ink" : "text-ink/35"}`}>{step}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
+
+            <div className="border-t border-dashed border-ink/10 mt-3 pt-3">
+              <div className="flex flex-col divide-y divide-dashed divide-ink/10">
+                {selected.items.map((i, idx) => (
+                  <div key={idx} className="flex items-center gap-2 py-1.5 font-body text-sm">
+                    <div className="w-7 h-7 rounded-xl overflow-hidden border border-ink/10 flex-shrink-0"><ProductIllustration type={i.illustration} /></div>
+                    <span className="flex-1">{i.qty}x {i.name}</span><span>{fmt(i.price * i.qty)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-2 pt-2 flex flex-col gap-1">
+                <div className="flex justify-between font-body text-xs text-muted"><span>Subtotal</span><span>{fmt(selected.subtotal)}</span></div>
+                {selected.discount > 0 && <div className="flex justify-between font-body text-xs text-muted"><span>Descuento</span><span>-{fmt(selected.discount)}</span></div>}
+                {selected.pending > 0 && <div className="flex justify-between font-body text-xs text-muted"><span>Pendiente</span><span>{fmt(selected.pending)}</span></div>}
+                <div className="flex justify-between font-display font-bold text-sm text-ink pt-1"><span>Pagado</span><span>{fmt(selected.paid)}</span></div>
+              </div>
+            </div>
+
+            {(selected.liveStep ?? 1) < 4 && (
+              <div className="border-t border-dashed border-ink/10 mt-3 pt-3">
+                {!showAddExtras ? (
+                  <Button variant="ghost" className="w-full" onClick={() => setShowAddExtras(true)}>+ Añadir extras a este pedido</Button>
+                ) : (
+                  <>
+                    <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Añadir extras</div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {STORE_PRODUCTS.filter((p) => p.category === "extras").map((p) => (
+                        <button key={p.id} onClick={() => addExtra(p)} className="text-center">
+                          <Card className="p-1.5">
+                            <div className="w-full h-10 rounded-xl overflow-hidden mb-1"><ProductIllustration type={p.illustration} /></div>
+                            <div className="font-body text-[9px] font-semibold text-ink truncate">{p.name}</div>
+                            <div className="font-body text-[9px] text-muted">{fmt(p.price)}</div>
+                          </Card>
+                        </button>
+                      ))}
+                    </div>
+                    <p className="font-body text-[10px] text-ink/35 mt-2">Los extras se suman al saldo pendiente a cobrar en la entrega.</p>
+                  </>
+                )}
+              </div>
+            )}
+
+            {selected.deliveryAddress && (
+              <div className="border-t border-dashed border-ink/10 mt-3 pt-3">
+                <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Lugar de entrega</div>
+                <div className="h-24 rounded-xl bg-cream border-2 border-dashed border-ink/15 flex items-center justify-center relative overflow-hidden mb-2">
+                  <IconMapPin className="w-6 h-6 text-low" />
+                </div>
+                <p className="font-body text-xs text-ink/60 mb-2">{selected.deliveryAddress}</p>
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(selected.deliveryAddress)}`}
+                  target="_blank" rel="noreferrer"
+                  className="flex items-center justify-center gap-1.5 font-display font-bold text-xs uppercase text-center border-2 border-ink rounded-xl py-2.5 text-ink"
+                >
+                  <IconMapPin className="w-3.5 h-3.5" /> Cómo llegar
+                </a>
+              </div>
+            )}
+
+            {(selected.liveStep ?? 1) >= 5 && (
+              <div className="border-t border-dashed border-ink/10 mt-3 pt-3">
+                <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">¿Cómo estuvo tu evento?</div>
+                {selected.reviewed ? (
+                  <Card className="p-3 bg-ok/5 border-ok/25">
+                    <div className="flex gap-0.5 mb-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <IconStar key={i} className={`w-4 h-4 ${i < selected.rating ? "text-mustardDark" : "text-ink/15"}`} />
+                      ))}
+                    </div>
+                    <p className="font-body text-xs text-ink/60">{selected.comment || "Sin comentario"}</p>
+                  </Card>
+                ) : (
+                  <>
+                    <div className="flex gap-1 mb-2">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <button key={i} onClick={() => setReviewRating(i + 1)}>
+                          <IconStar className={`w-6 h-6 ${i < reviewRating ? "text-mustardDark" : "text-ink/15"}`} />
+                        </button>
+                      ))}
+                    </div>
+                    <textarea
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      placeholder="Contanos cómo te fue (opcional)"
+                      rows={2}
+                      className="w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2 font-body text-sm outline-none resize-none mb-2"
+                    />
+                    <Button variant="accent" className="w-full" onClick={submitReview}>Enviar reseña</Button>
+                  </>
+                )}
+              </div>
+            )}
           </Card>
         </div>
       )}
@@ -1774,298 +1976,24 @@ const PedidosScreen = ({ orders, setOrders, onOpenCart, cartCount }) => {
 };
 
 /* ---------------- FICHAJE DE TRABAJADORES ---------------- */
-const WORKERS = ["Marcos Ríos", "Lucía Paz", "Iván Soto"];
-
-const FichajeScreen = ({ onBack, flash }) => {
-  const [worker, setWorker] = useState(WORKERS[0]);
-  const [log, setLog] = useState([]);
-  const [locating, setLocating] = useState(false);
-  const [error, setError] = useState("");
-
-  const lastEntry = [...log].reverse().find((l) => l.worker === worker);
-  const isIn = lastEntry?.type === "Entrada";
-
-  const doFichaje = (type) => {
-    setError("");
-    if (!navigator.geolocation) {
-      setError("Este dispositivo no soporta geolocalización.");
-      return;
-    }
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude, accuracy } = pos.coords;
-        setLog((prev) => [
-          {
-            id: Date.now(),
-            worker,
-            type,
-            date: new Date().toLocaleDateString("es-AR"),
-            time: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
-            lat: latitude.toFixed(5),
-            lng: longitude.toFixed(5),
-            accuracy: Math.round(accuracy),
-          },
-          ...prev,
-        ]);
-        setLocating(false);
-        flash(`${type} registrada · ${worker}`);
-      },
-      () => {
-        setLocating(false);
-        setError("No se pudo obtener tu ubicación. Activá el GPS y los permisos de ubicación para fichar.");
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Fichaje" onBack={onBack} />
-
-      <Card className="p-4 mb-5 flex flex-col gap-3">
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Trabajador</label>
-          <select
-            value={worker}
-            onChange={(e) => setWorker(e.target.value)}
-            className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none"
-          >
-            {WORKERS.map((w) => <option key={w}>{w}</option>)}
-          </select>
-        </div>
-
-        <span
-          className={`inline-block self-start text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-            isIn ? "bg-ok/10 text-ok border-ok/30" : "bg-ink/5 text-ink/50 border-ink/15"
-          }`}
-        >
-          {isIn ? "Dentro del turno" : "Fuera de turno"}
-        </span>
-
-        {error && (
-          <div className="bg-low/10 border border-low/30 text-low text-[11px] font-medium rounded-lg p-2.5 leading-relaxed">
-            {error}
-          </div>
-        )}
-
-        <div className="grid grid-cols-2 gap-2 mt-1">
-          <Button
-            variant={isIn ? "ghost" : "accent"}
-            disabled={isIn || locating}
-            onClick={() => doFichaje("Entrada")}
-            className={isIn || locating ? "opacity-50" : ""}
-          >
-            {locating ? "Ubicando..." : "Fichar entrada"}
-          </Button>
-          <Button
-            variant={!isIn ? "ghost" : "accent"}
-            disabled={!isIn || locating}
-            onClick={() => doFichaje("Salida")}
-            className={!isIn || locating ? "opacity-50" : ""}
-          >
-            {locating ? "Ubicando..." : "Fichar salida"}
-          </Button>
-        </div>
-        <p className="font-body text-[10px] text-ink/40 text-center leading-relaxed">
-          Necesitamos tu ubicación en el momento del fichaje para confirmar que estás en el evento.
-        </p>
-      </Card>
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Registro de fichajes</div>
-      <div className="flex flex-col gap-2">
-        {log.length === 0 && (
-          <p className="font-body text-xs text-ink/35 text-center py-6">Todavía no hay fichajes registrados</p>
-        )}
-        {log.map((l) => (
-          <Card key={l.id} className="p-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="font-body text-sm font-semibold">{l.worker}</div>
-                <div className="font-body text-[10px] text-ink/40">{l.date} · {l.time}</div>
-              </div>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${l.type === "Entrada" ? "bg-ok/10 text-ok border-ok/30" : "bg-ink/5 text-ink/60 border-ink/15"}`}>
-                {l.type}
-              </span>
-            </div>
-            <a
-              href={`https://www.google.com/maps?q=${l.lat},${l.lng}`}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-1.5 mt-2 pt-2 border-t border-dashed border-ink/10 font-body text-[10px] text-ink/45 underline"
-            >
-              <IconMapPin className="w-3 h-3" /> {l.lat}, {l.lng} (±{l.accuracy} m) · Ver en el mapa
-            </a>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- CUADRE DE CAJA / ARQUEO ---------------- */
-const ArqueoScreen = ({ onBack, flash }) => {
-  const ventasSistema = 54000;
-  const [efectivo, setEfectivo] = useState("");
-  const [transferencia, setTransferencia] = useState("");
-  const [tarjeta, setTarjeta] = useState("");
-  const [history, setHistory] = useState([]);
-  const [closed, setClosed] = useState(false);
-
-  const contado = (Number(efectivo) || 0) + (Number(transferencia) || 0) + (Number(tarjeta) || 0);
-  const diferencia = contado - ventasSistema;
-  const cuadra = efectivo !== "" && Math.abs(diferencia) === 0;
-
-  const cerrarCaja = () => {
-    setHistory((prev) => [{ id: Date.now(), date: new Date().toLocaleDateString("es-AR"), ventasSistema, contado, diferencia }, ...prev]);
-    setClosed(true);
-    flash(diferencia === 0 ? "Caja cerrada — cuadra perfecto" : `Caja cerrada — diferencia de ${fmt(diferencia)}`);
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Cuadre de caja" onBack={onBack} />
-
-      <Card className="p-4 mb-4 bg-ink border-ink">
-        <div className="flex justify-between font-body text-xs text-cream/60 py-1">
-          <span>Ventas registradas por el sistema</span><span>{fmt(ventasSistema)}</span>
-        </div>
-      </Card>
-
-      <div className="flex flex-col gap-3 mb-4">
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Efectivo contado</label>
-          <input value={efectivo} onChange={(e) => setEfectivo(e.target.value)} type="number" placeholder="$0" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
-        </div>
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Transferencias contadas</label>
-          <input value={transferencia} onChange={(e) => setTransferencia(e.target.value)} type="number" placeholder="$0" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
-        </div>
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Tarjeta contada</label>
-          <input value={tarjeta} onChange={(e) => setTarjeta(e.target.value)} type="number" placeholder="$0" className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none" />
-        </div>
-      </div>
-
-      <Card className={`p-4 mb-4 ${diferencia === 0 ? "bg-ok/5 border-ok/30" : "bg-low/5 border-low/30"}`}>
-        <div className="flex justify-between font-body text-xs text-ink/60 py-1"><span>Total contado</span><span className="font-semibold">{fmt(contado)}</span></div>
-        <div className="flex justify-between font-display font-extrabold text-base pt-2 mt-1 border-t border-dashed border-ink/10">
-          <span className={diferencia === 0 ? "text-ok" : "text-low"}>Diferencia</span>
-          <span className={diferencia === 0 ? "text-ok" : "text-low"}>{diferencia > 0 ? "+" : ""}{fmt(diferencia)}</span>
-        </div>
-        {cuadra && <div className="mt-1.5 text-[11px] font-semibold text-ok">✓ Cuadra perfecto</div>}
-      </Card>
-
-      {closed && (
-        <div className="bg-ok/10 border border-ok/30 text-ok text-xs font-semibold rounded-lg p-2.5 mb-3 text-center">
-          Caja cerrada hoy — volvé a abrir mañana para el próximo arqueo
-        </div>
-      )}
-
-      <Button variant={closed ? "ghost" : "accent"} className="w-full" onClick={cerrarCaja} disabled={closed}>
-        {closed ? "Caja ya cerrada" : "Cerrar caja del día"}
-      </Button>
-
-      {history.length > 0 && (
-        <>
-          <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mt-6 mb-2">Historial de arqueos</div>
-          <div className="flex flex-col gap-2">
-            {history.map((h) => (
-              <Card key={h.id} className="p-3 flex items-center justify-between">
-                <span className="font-body text-sm font-semibold">{h.date}</span>
-                <span className={`font-display font-bold text-sm ${h.diferencia === 0 ? "text-ok" : "text-low"}`}>
-                  {h.diferencia > 0 ? "+" : ""}{fmt(h.diferencia)}
-                </span>
-              </Card>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-/* ---------------- ANULACIONES Y DEVOLUCIONES ---------------- */
-const AnulacionesScreen = ({ inventory, onBack, flash }) => {
-  const [itemId, setItemId] = useState(inventory[0]?.id);
-  const [qty, setQty] = useState(1);
-  const [reason, setReason] = useState(RETURN_REASONS[0]);
-  const [note, setNote] = useState("");
-  const [log, setLog] = useState([]);
-
-  const register = () => {
-    const item = inventory.find((i) => i.id === Number(itemId));
-    setLog((prev) => [
-      { id: Date.now(), item: item?.name, qty: Number(qty), reason, note, time: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }), date: new Date().toLocaleDateString("es-AR") },
-      ...prev,
-    ]);
-    setNote("");
-    flash("Anulación registrada");
-  };
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Anulaciones" onBack={onBack} />
-
-      <Card className="p-3 mb-4 flex flex-col gap-2.5 bg-cream">
-        <select value={itemId} onChange={(e) => setItemId(e.target.value)} className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none">
-          {inventory.map((i) => <option key={i.id} value={i.id}>{i.name}</option>)}
-        </select>
-        <div className="flex gap-2">
-          <input value={qty} onChange={(e) => setQty(e.target.value)} type="number" min="1" placeholder="Cant." className="w-24 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-          <select value={reason} onChange={(e) => setReason(e.target.value)} className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none">
-            {RETURN_REASONS.map((r) => <option key={r}>{r}</option>)}
-          </select>
-        </div>
-        <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Nota adicional (opcional)" className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        <Button variant="accent" onClick={register}>Registrar anulación</Button>
-      </Card>
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Bitácora</div>
-      <div className="flex flex-col gap-2">
-        {log.length === 0 && <p className="font-body text-xs text-ink/35 text-center py-6">Sin anulaciones registradas</p>}
-        {log.map((l) => (
-          <Card key={l.id} className="p-3">
-            <div className="flex items-center justify-between">
-              <span className="font-body text-sm font-semibold">{l.item} ×{l.qty}</span>
-              <span className="font-body text-[10px] text-ink/40">{l.date} · {l.time}</span>
-            </div>
-            <span className="inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border bg-low/10 text-low border-low/30">{l.reason}</span>
-            {l.note && <p className="font-body text-xs text-ink/50 mt-1.5">{l.note}</p>}
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- NOTIFICACIONES ---------------- */
-const NotificacionesScreen = ({ inventory, reservations, orders, onBack, navigate }) => {
-  const critical = inventory
-    .filter((i) => i.low)
-    .map((i) => ({ ...i, nextReservation: reservations.filter((r) => r.itemId === i.id).sort((a, b) => (a.from > b.from ? 1 : -1))[0] }))
-    .filter((i) => i.nextReservation);
-  const pendingOrders = orders.filter((o) => o.pending > 0);
-  const nextReservation = [...reservations].sort((a, b) => (a.from > b.from ? 1 : -1))[0];
-
-  const items = [
-    ...critical.map((i) => ({ tone: "low", text: `Stock crítico: ${i.name} — reservado ${fmtDate(i.nextReservation.from)}`, go: "inventario" })),
-    ...pendingOrders.map((o) => ({ tone: "warn", text: `Seña pendiente de ${o.client} · ${o.id}`, go: "ventas" })),
-    ...(nextReservation ? [{ tone: "ok", text: `Próximo evento: ${nextReservation.client} (${fmtDate(nextReservation.from)})`, go: null }] : []),
-  ];
+const NotificacionesScreen = ({ orders, onBack, navigate }) => {
+  const items = getNotificationItems(orders);
 
   return (
     <div className="px-4 pt-6 pb-28">
       <ToolHeader title="Notificaciones" onBack={onBack} />
       {items.length === 0 ? (
-        <Card className="p-8 text-center"><p className="font-body text-sm text-ink/40">Sin novedades por ahora</p></Card>
+        <Card className="p-8 text-center"><p className="font-body text-sm text-muted">Sin novedades por ahora</p></Card>
       ) : (
         <div className="flex flex-col gap-2">
           {items.map((it, idx) => (
             <button key={idx} onClick={() => { if (it.go) { navigate(it.go); onBack(); } }} className="text-left">
-              <Card className="p-3 flex items-center gap-3">
-                <span className={`w-2 h-2 rounded-full flex-shrink-0 ${it.tone === "low" ? "bg-low" : it.tone === "warn" ? "bg-mustard" : "bg-ok"}`} />
-                <span className="font-body text-sm text-ink/80">{it.text}</span>
+              <Card className="p-3 flex items-start gap-3">
+                <span className={`w-2 h-2 rounded-full flex-shrink-0 mt-1.5 ${it.tone === "low" ? "bg-low" : it.tone === "warn" ? "bg-mustardDark" : "bg-ok"}`} />
+                <div>
+                  <span className="font-body text-sm text-ink/80 block">{it.text}</span>
+                  <span className="font-body text-[11px] text-muted">{it.time}</span>
+                </div>
               </Card>
             </button>
           ))}
@@ -2075,78 +2003,55 @@ const NotificacionesScreen = ({ inventory, reservations, orders, onBack, navigat
   );
 };
 
-/* ---------------- BORRADORES DE PEDIDO ---------------- */
-const INITIAL_DRAFTS = [];
-const BorradoresScreen = ({ onBack, flash }) => {
-  const [drafts, setDrafts] = useState(INITIAL_DRAFTS);
-  const [client, setClient] = useState("");
-  const [itemName, setItemName] = useState("");
-  const [itemPrice, setItemPrice] = useState("");
-  const [lines, setLines] = useState([]);
+const FAQ_ITEMS = [
+  { q: "¿Cómo pago la seña?", a: "Elegís tus productos, vas al carrito y seleccioná \"Seña 50%\". Podés pagar con Mercado Pago, transferencia o efectivo al retirar." },
+  { q: "¿Puedo cambiar la fecha de mi evento?", a: "Sí, escribinos por WhatsApp con tu número de pedido y coordinamos el cambio según disponibilidad." },
+  { q: "¿Cómo firmo el contrato?", a: "Entrá a \"Mi evento\" desde Inicio — ahí podés firmar digitalmente antes de pagar el anticipo." },
+  { q: "¿Cuándo me devuelven la fianza?", a: "Dentro de las 48hs después de que el material vuelva revisado y sin daños." },
+];
 
-  const addLine = () => {
-    if (!itemName.trim() || !itemPrice) return;
-    setLines((p) => [...p, { id: Date.now(), name: itemName, price: Number(itemPrice) }]);
-    setItemName(""); setItemPrice("");
-  };
-  const removeLine = (id) => setLines((p) => p.filter((l) => l.id !== id));
-  const total = lines.reduce((a, l) => a + l.price, 0);
-
-  const saveDraft = () => {
-    if (!client.trim() || lines.length === 0) return;
-    setDrafts((p) => [{ id: Date.now(), client, lines, total, date: new Date().toLocaleDateString("es-AR") }, ...p]);
-    setClient(""); setLines([]);
-    flash("Presupuesto guardado como borrador");
-  };
-
-  const shareDraft = async (d) => {
-    const text = `Presupuesto Quick Sale — ${d.client}\n\n${d.lines.map((l) => `${l.name} — ${fmt(l.price)}`).join("\n")}\n\nTotal: ${fmt(d.total)}`;
-    if (navigator.share) { try { await navigator.share({ title: "Presupuesto", text }); } catch (e) {} }
-    else if (navigator.clipboard) { await navigator.clipboard.writeText(text); flash("Presupuesto copiado"); }
-  };
+const SoporteScreen = ({ onBack }) => {
+  const [openFaq, setOpenFaq] = useState(null);
+  const whatsappUrl = "https://wa.me/5491100000000?text=" + encodeURIComponent("Hola! Necesito ayuda con mi pedido en Quick Sale.");
 
   return (
     <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Borradores" onBack={onBack} />
-      <Card className="p-3 mb-4 flex flex-col gap-2.5 bg-cream">
-        <input value={client} onChange={(e) => setClient(e.target.value)} placeholder="Cliente / evento" className="bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        <div className="flex gap-2">
-          <input value={itemName} onChange={(e) => setItemName(e.target.value)} placeholder="Artículo o servicio" className="flex-1 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-          <input value={itemPrice} onChange={(e) => setItemPrice(e.target.value)} type="number" placeholder="$" className="w-20 bg-white border-2 border-ink/10 rounded-lg px-2.5 py-2 font-body text-sm outline-none" />
-        </div>
-        <Button variant="ghost" onClick={addLine}>+ Agregar línea</Button>
-        {lines.length > 0 && (
-          <div className="flex flex-col divide-y divide-dashed divide-ink/10">
-            {lines.map((l) => (
-              <div key={l.id} className="flex justify-between items-center py-1.5 font-body text-sm">
-                <span>{l.name}</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold">{fmt(l.price)}</span>
-                  <button onClick={() => removeLine(l.id)}><IconX className="w-3.5 h-3.5 text-ink/30" /></button>
-                </div>
-              </div>
-            ))}
-            <div className="flex justify-between pt-1.5 font-display font-bold text-sm"><span>Total</span><span>{fmt(total)}</span></div>
-          </div>
-        )}
-        <Button variant="accent" onClick={saveDraft}>Guardar borrador</Button>
-      </Card>
+      <ToolHeader title="Soporte" onBack={onBack} />
 
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Presupuestos guardados</div>
-      <div className="flex flex-col gap-2">
-        {drafts.length === 0 && <p className="font-body text-xs text-ink/35 text-center py-6">Sin borradores todavía</p>}
-        {drafts.map((d) => (
-          <Card key={d.id} className="p-3.5">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="font-body text-sm font-semibold">{d.client}</div>
-                <div className="font-body text-[10px] text-ink/40">{d.date} · {d.lines.length} línea{d.lines.length > 1 ? "s" : ""}</div>
-              </div>
-              <span className="font-display font-bold text-sm">{fmt(d.total)}</span>
+      <div className="grid grid-cols-2 gap-3 mb-5">
+        <a href={whatsappUrl} target="_blank" rel="noreferrer">
+          <Card className="p-4 h-full flex flex-col items-start gap-2.5 bg-ok/10 border-ok/30">
+            <div className="w-10 h-10 rounded-xl bg-ok border-2 border-ink flex items-center justify-center">
+              <IconChat className="w-5 h-5 text-white" />
             </div>
-            <Button variant="ghost" className="w-full mt-2 flex items-center justify-center gap-2" onClick={() => shareDraft(d)}>
-              <IconShare className="w-3.5 h-3.5" /> Compartir presupuesto
-            </Button>
+            <div className="text-left">
+              <div className="font-display font-bold text-sm text-ink leading-tight">WhatsApp</div>
+              <div className="font-body text-[10px] text-muted mt-0.5">Respuesta rápida</div>
+            </div>
+          </Card>
+        </a>
+        <a href="mailto:hola@quicksale.com">
+          <Card className="p-4 h-full flex flex-col items-start gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-mustard border-2 border-ink flex items-center justify-center">
+              <IconMail className="w-5 h-5 text-ink" />
+            </div>
+            <div className="text-left">
+              <div className="font-display font-bold text-sm text-ink leading-tight">Email</div>
+              <div className="font-body text-[10px] text-muted mt-0.5">hola@quicksale.com</div>
+            </div>
+          </Card>
+        </a>
+      </div>
+
+      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-muted mb-2">Preguntas frecuentes</div>
+      <div className="flex flex-col gap-2">
+        {FAQ_ITEMS.map((f, idx) => (
+          <Card key={idx} className="overflow-hidden">
+            <button onClick={() => setOpenFaq(openFaq === idx ? null : idx)} className="w-full flex items-center justify-between p-3.5 text-left">
+              <span className="font-body text-sm font-semibold text-ink pr-2">{f.q}</span>
+              <IconChevron className={`w-4 h-4 text-muted flex-shrink-0 transition-transform ${openFaq === idx ? "rotate-90" : ""}`} />
+            </button>
+            {openFaq === idx && <p className="font-body text-xs text-ink/55 px-3.5 pb-3.5 leading-relaxed">{f.a}</p>}
           </Card>
         ))}
       </div>
@@ -2154,117 +2059,29 @@ const BorradoresScreen = ({ onBack, flash }) => {
   );
 };
 
-/* ---------------- ANALÍTICAS ---------------- */
-const AnaliticasScreen = ({ orders, onBack }) => {
-  const weekData = [
-    { d: "Lun", v: 18000 }, { d: "Mar", v: 24000 }, { d: "Mié", v: 15000 }, { d: "Jue", v: 32000 },
-    { d: "Vie", v: 41000 }, { d: "Sáb", v: orders.reduce((a, o) => a + o.paid, 0) || 54000 }, { d: "Dom", v: 29000 },
-  ];
-  const max = Math.max(...weekData.map((d) => d.v));
-
-  const productTotals = {};
-  orders.forEach((o) => o.items.forEach((i) => {
-    productTotals[i.name] = productTotals[i.name] || { qty: 0, revenue: 0 };
-    productTotals[i.name].qty += i.qty;
-    productTotals[i.name].revenue += i.price * i.qty;
-  }));
-  const top = Object.entries(productTotals).sort((a, b) => b[1].revenue - a[1].revenue).slice(0, 5);
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Analíticas" onBack={onBack} />
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Ventas de la semana</div>
-      <Card className="p-4 mb-5">
-        <div className="flex items-end gap-2 h-32">
-          {weekData.map((d) => (
-            <div key={d.d} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
-              <div className="w-full bg-ink rounded-t-md" style={{ height: `${(d.v / max) * 100}%` }} />
-              <span className="font-body text-[9px] font-semibold text-ink/45">{d.d}</span>
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Más vendidos (pedidos registrados)</div>
-      {top.length === 0 ? (
-        <Card className="p-6 text-center"><p className="font-body text-xs text-ink/40">Confirmá ventas para ver el ranking acá</p></Card>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {top.map(([name, d]) => (
-            <Card key={name} className="p-3 flex items-center justify-between">
-              <div>
-                <div className="font-body text-sm font-semibold">{name}</div>
-                <div className="font-body text-[10px] text-ink/40">{d.qty} unidades</div>
-              </div>
-              <span className="font-display font-bold text-sm">{fmt(d.revenue)}</span>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-/* ---------------- AJUSTES ---------------- */
-const AjustesScreen = ({ onBack, flash }) => {
-  const [deposito, setDeposito] = useState(50);
-  const [moneda, setMoneda] = useState("ARS");
-  const [notif, setNotif] = useState({ stockCritico: true, senasVencidas: true, nuevoPedido: false });
-
-  const save = () => flash("Ajustes guardados");
-
-  return (
-    <div className="px-4 pt-6 pb-28">
-      <ToolHeader title="Ajustes" onBack={onBack} />
-
-      <Card className="p-4 mb-4 flex flex-col gap-4">
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Seña por defecto: {deposito}%</label>
-          <input type="range" min="0" max="100" step="5" value={deposito} onChange={(e) => setDeposito(e.target.value)} className="w-full mt-1.5 accent-ink" />
-        </div>
-        <div>
-          <label className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/50">Moneda</label>
-          <select value={moneda} onChange={(e) => setMoneda(e.target.value)} className="mt-1 w-full bg-cream border-2 border-ink/10 rounded-xl px-3 py-2.5 font-body text-sm outline-none">
-            <option value="ARS">Peso argentino (ARS)</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dólar (USD)</option>
-          </select>
-        </div>
-      </Card>
-
-      <div className="font-body text-[10px] font-bold uppercase tracking-wide text-ink/40 mb-2">Notificaciones</div>
-      <Card className="p-1 mb-4">
-        {[
-          ["stockCritico", "Stock crítico antes de un evento"],
-          ["senasVencidas", "Señas pendientes por vencer"],
-          ["nuevoPedido", "Nuevo pedido recibido"],
-        ].map(([k, label]) => (
-          <label key={k} className="flex items-center justify-between px-3 py-2.5 border-b border-ink/5 last:border-0">
-            <span className="font-body text-sm text-ink">{label}</span>
-            <input type="checkbox" checked={notif[k]} onChange={() => setNotif((n) => ({ ...n, [k]: !n[k] }))} className="w-4 h-4 accent-ink" />
-          </label>
-        ))}
-      </Card>
-
-      <Button variant="accent" className="w-full" onClick={save}>Guardar ajustes</Button>
-    </div>
-  );
-};
-
 /* ---------------- APP ---------------- */
+const SAMPLE_ORDER = {
+  id: "#4821", client: "Boda Martínez", date: "20 sept 2026", time: "11:20",
+  deliveryAddress: "Salón Los Aromos, Ruta 8 km 45", items: [
+    { name: "Pack Premium", qty: 1, price: 68000, illustration: "table" },
+    { name: "Iluminación LED", qty: 1, price: 15000, illustration: "lights" },
+  ],
+  subtotal: 83000, discount: 0, total: 83000, mode: "seña",
+  paid: 41500, pending: 41500, status: "Seña pagada", paymentMethod: "mercadopago",
+  liveStep: 2, liveStepTime: "09:05", reviewed: false,
+};
+
 function App() {
   const [tab, setTab] = useState("inicio");
-  const [inventory, setInventory] = useState(INITIAL_INVENTORY);
-  const [reservations, setReservations] = useState(INITIAL_RESERVATIONS);
-  const [orders, setOrders] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+  const [orders, setOrders] = useState([SAMPLE_ORDER]);
+  const [customer, setCustomer] = useState(null);
   const [showCart, setShowCart] = useState(false);
   const [tool, setTool] = useState(null);
   const [cart, setCart] = useState([]);
   const [toast, setToast] = useState(null);
   const [online, setOnline] = useState(navigator.onLine);
-  const [scanLog, setScanLog] = useState([]);
+  const [eventDate, setEventDate] = useState("");
+  const [productDetail, setProductDetail] = useState(null);
 
   const flash = (msg) => {
     setToast(msg);
@@ -2272,14 +2089,7 @@ function App() {
   };
 
   useEffect(() => {
-    const goOnline = () => {
-      setOnline(true);
-      setScanLog((prev) => {
-        const pending = prev.filter((l) => !l.synced).length;
-        if (pending > 0) flash(`${pending} registro${pending > 1 ? "s" : ""} sincronizado${pending > 1 ? "s" : ""}`);
-        return prev.map((l) => ({ ...l, synced: true }));
-      });
-    };
+    const goOnline = () => setOnline(true);
     const goOffline = () => setOnline(false);
     window.addEventListener("online", goOnline);
     window.addEventListener("offline", goOffline);
@@ -2288,19 +2098,6 @@ function App() {
       window.removeEventListener("offline", goOffline);
     };
   }, []);
-
-  const addScanLog = (code, action) => {
-    setScanLog((prev) => [
-      { id: Date.now(), code, action, synced: online, time: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) },
-      ...prev,
-    ]);
-  };
-
-  const handleCreate = (product) => {
-    setInventory((prev) => [product, ...prev]);
-    setShowForm(false);
-    flash(product.draft ? "Guardado como borrador" : "Listo, ya está en tu inventario");
-  };
 
   const addToCart = (p) => {
     setCart((prev) => {
@@ -2314,11 +2111,6 @@ function App() {
   const removeFromCart = (id) => setCart((prev) => prev.filter((i) => i.id !== id));
   const cartCount = cart.reduce((a, i) => a + i.qty, 0);
 
-  const addReservation = (r) => {
-    setReservations((prev) => [...prev, r]);
-    flash(`Bloqueado: ${r.itemName} · ${fmtDate(r.from)}–${fmtDate(r.to)} SEP`);
-  };
-
   const confirmSale = (order) => {
     setOrders((prev) => [order, ...prev]);
     setCart([]);
@@ -2327,39 +2119,30 @@ function App() {
   const navigate = (key) => { setTool(null); setShowCart(false); setTab(key); };
 
   let screen;
-  if (tool) {
+  if (productDetail) {
+    screen = <ProductDetailScreen product={productDetail} onBack={() => setProductDetail(null)} onAdd={addToCart} flash={flash} />;
+  } else if (tool) {
     const back = () => setTool(null);
-    if (tool === "calendario") screen = <CalendarioScreen inventory={inventory} reservations={reservations} onAddReservation={addReservation} onBack={back} />;
-    else if (tool === "scanner") screen = <ScannerScreen inventory={inventory} onBack={back} online={online} log={scanLog} addLog={addScanLog} />;
-    else if (tool === "portal") screen = <PortalScreen onBack={back} flash={flash} />;
-    else if (tool === "staff") screen = <StaffScreen inventory={inventory} onBack={back} flash={flash} />;
-    else if (tool === "docs") screen = <DocsScreen reservations={reservations} onBack={back} flash={flash} />;
-    else if (tool === "clientes") screen = <ClientesScreen onBack={back} flash={flash} />;
-    else if (tool === "gastos") screen = <GastosScreen onBack={back} flash={flash} />;
-    else if (tool === "fichaje") screen = <FichajeScreen onBack={back} flash={flash} />;
-    else if (tool === "arqueo") screen = <ArqueoScreen onBack={back} flash={flash} />;
-    else if (tool === "anulaciones") screen = <AnulacionesScreen inventory={inventory} onBack={back} flash={flash} />;
+    if (tool === "portal") screen = <PortalScreen onBack={back} flash={flash} onConfirmSale={confirmSale} navigate={navigate} />;
     else if (tool === "bundle") screen = <BundleScreen onBack={back} onAddBundle={addToCart} />;
-    else if (tool === "notificaciones") screen = <NotificacionesScreen inventory={inventory} reservations={reservations} orders={orders} onBack={back} navigate={navigate} />;
-    else if (tool === "borradores") screen = <BorradoresScreen onBack={back} flash={flash} />;
-    else if (tool === "analiticas") screen = <AnaliticasScreen orders={orders} onBack={back} />;
-    else if (tool === "ajustes") screen = <AjustesScreen onBack={back} flash={flash} />;
-  } else if (showForm) {
-    screen = <AltaRapidaScreen onCreate={handleCreate} onClose={() => setShowForm(false)} />;
+    else if (tool === "notificaciones") screen = <NotificacionesScreen orders={orders} onBack={back} navigate={navigate} />;
+    else if (tool === "registro") screen = <RegistroScreen customer={customer} onSave={setCustomer} onBack={back} flash={flash} orders={orders} />;
+    else if (tool === "soporte") screen = <SoporteScreen onBack={back} />;
+    else if (tool === "capacidad") screen = <CapacidadScreen onBack={back} onGoToTienda={() => navigate("tienda")} />;
+    else if (tool === "galeria") screen = <GaleriaScreen onBack={back} />;
+    else if (tool === "invitados") screen = <InvitadosScreen onBack={back} flash={flash} />;
   } else if (showCart) {
-    screen = <CartScreen cart={cart} onRemove={removeFromCart} onClose={() => setShowCart(false)} flash={flash} onConfirmSale={confirmSale} />;
+    screen = <CartScreen cart={cart} onRemove={removeFromCart} onClose={() => setShowCart(false)} flash={flash} onConfirmSale={confirmSale} customer={customer} />;
   } else if (tab === "inicio") {
-    screen = <InicioScreen inventory={inventory} reservations={reservations} orders={orders} onOpenTool={setTool} onOpenNotifications={() => setTool("notificaciones")} online={online} navigate={navigate} />;
-  } else if (tab === "inventario") {
-    screen = <InventarioScreen inventory={inventory} onOpenForm={() => setShowForm(true)} />;
+    screen = <InicioScreen orders={orders} customer={customer} onOpenTool={setTool} onOpenNotifications={() => setTool("notificaciones")} online={online} navigate={navigate} />;
   } else if (tab === "tienda") {
-    screen = <TiendaScreen onAdd={addToCart} cartCount={cartCount} onOpenCart={() => setShowCart(true)} onOpenBundle={() => setTool("bundle")} />;
+    screen = <TiendaScreen onAdd={addToCart} onOpenDetail={setProductDetail} cartCount={cartCount} onOpenCart={() => setShowCart(true)} onOpenBundle={() => setTool("bundle")} eventDate={eventDate} setEventDate={setEventDate} />;
   } else if (tab === "ventas") {
     screen = <PedidosScreen orders={orders} setOrders={setOrders} cartCount={cartCount} onOpenCart={() => setShowCart(true)} />;
   }
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-[#E7E2D3] relative font-body">
+    <div className="max-w-md mx-auto min-h-screen bg-[#F7F4EB] relative font-body">
       <div className="min-h-screen bg-cream">{screen}</div>
 
       {toast && (
@@ -2368,7 +2151,7 @@ function App() {
         </div>
       )}
 
-      {!showForm && !showCart && !tool && <BottomNav active={tab} onChange={setTab} />}
+      {!showCart && !tool && !productDetail && <BottomNav active={tab} onChange={setTab} />}
     </div>
   );
 }
